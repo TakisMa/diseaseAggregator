@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/diseaseAggregator.dir/main.cpp.o CMakeFiles/diseaseAggregator.dir/Functions.cpp.o CMakeFiles/diseaseAggregator.dir/Record.cpp.o CMakeFiles/diseaseAggregator.dir/FileManagement.cpp.o  -o diseaseAggregator 

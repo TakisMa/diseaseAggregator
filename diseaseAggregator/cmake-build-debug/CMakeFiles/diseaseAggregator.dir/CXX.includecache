@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/FileManagement.h
+string
+-
+unistd.h
+-
+sys/types.h
+-
+
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Functions.h
+
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/main.cpp
+iostream
+-
+unistd.h
+-
+dirent.h
+-
+sys/wait.h
+-
+sys/stat.h
+-
+fcntl.h
+-
+cstring
+-
+string
+-
+Functions.h
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Functions.h
+FileManagement.h
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/FileManagement.h
+

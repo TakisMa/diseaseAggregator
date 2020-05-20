@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/test.dir/test.cpp.o CMakeFiles/test.dir/Functions.cpp.o CMakeFiles/test.dir/Record.cpp.o  -o test 

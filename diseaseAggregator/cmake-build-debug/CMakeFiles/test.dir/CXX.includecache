@@ -1,0 +1,60 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Functions.cpp
+string
+-
+Functions.h
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Functions.h
+Record.h
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Record.h
+iostream
+-
+cstring
+-
+
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Functions.h
+
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Record.cpp
+string
+-
+sstream
+-
+Record.h
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Record.h
+Functions.h
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Functions.h
+iostream
+-
+cstring
+-
+
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Record.h
+string
+-
+
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/test.cpp
+iostream
+-
+unistd.h
+-
+dirent.h
+-
+sys/wait.h
+-
+sys/stat.h
+-
+fcntl.h
+-
+cstring
+-
+fstream
+-
+Record.h
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Record.h
+
