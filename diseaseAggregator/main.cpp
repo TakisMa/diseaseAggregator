@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
     int share = dir_count/numWorkers;
     int count = 0;
 
-    cout << "Parent ID is: " << parentpid << " and current process ID is: " << getpid() << endl;
+
     if(parentpid == getpid()) {
 
         char *auxfifo = "auxfifo";
@@ -141,5 +141,9 @@ int main(int argc, char *argv[]) {
             unlink("auxfifo");
         }
         wait(&wstatus);
+        closedir(dirp);
     }
+    wait(&wstatus);
+    cout << "before return main" << endl;
+    return 0;
 }

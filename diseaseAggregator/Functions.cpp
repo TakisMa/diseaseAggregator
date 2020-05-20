@@ -3,6 +3,8 @@
 #include "Record.h"
 #include <iostream>
 #include <cstring>
+#include <unistd.h>
+#include <dirent.h>
 
 using namespace std;
 
@@ -109,4 +111,55 @@ void quickS(struct Date **array, int low, int high) {
         quickS(array, low, pi - 1);
         quickS(array, pi+1, high);
     }
+}
+
+/* Read from fd and copy to readbuf. First message is no bytes to read(stored in size) */
+int read_line(int fd, char *readbuf) {
+    int size;
+    read(fd, &size, sizeof(int));
+    cout << "read size child process: " << size << endl;
+    int toread = size;
+    while (toread != 0) {
+        int er = read(fd, readbuf, size);
+        cout << "er after read: " << er << endl;
+//            cout << "toread child process received: " << toread << endl;
+        if (er == -1) {
+            cout << "read() error: " << errno << endl;
+            return errno;
+        } else toread -= er;
+//            cout << "readbuf child process received: " << readbuf << endl;
+//            break;
+    }
+    return 0;
+}
+
+int initialize_record(char *filepath, char *countryS, Record *record) {
+    DIR *dirp;
+    struct dirent *entry;
+    dirp = opendir(filepath);
+    char filename[20];
+    char *line = NULL;
+    std::size_t lenght = 0;
+    FILE *fp;
+    if (!dirp) {
+        cout << "Failed to open directory" << endl;
+        return errno;
+    }
+    while ((entry = readdir(dirp)) != NULL) {
+        if (entry->d_type == DT_REG && strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".")) {
+            cout << "tmp: " << countryS << endl;
+            sprintf(filename, "%s/%s", filepath, entry->d_name);
+            cout << "tmp: " << countryS << endl;
+            cout << "Filename is: " << filename << endl;
+            fp = fopen(filename, "r");
+            while (getline(&line, &lenght, fp) != -1) {
+                if (record->initialize(line, entry->d_name, countryS))
+                    cout << "Country = " << record->getCountry() << endl;
+                else cout << "Failed to initialize record " << endl;
+            }
+            fclose(fp);
+        }
+    }
+    closedir(dirp);
+    return 0;
 }

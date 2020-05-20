@@ -23,25 +23,14 @@
 int main(int argc, char* argv[]) {
     int numWorkers, bufferSize = 20;
     string filePath;
-    /*if(checkArguments(argc, argv, numWorkers, bufferSize, filePath ) != 0) {
-        return -10;
-    }*/
-
-    DIR *dirp, *aux_dipr;
-    struct dirent *entry, *aux_entry;
-    char *line = NULL;
-    FILE* fp = NULL;
     char filepath[20];
-//    strcpy(filepath, "input/");
-    char filename[20];
-    std::size_t lenght = 0;
     string w, countryS;
     char readbuf[bufferSize];
     char writebuf[3];
 
 
     Record *record = new Record();
-    ID_Hashtable* idHT = new ID_Hashtable(SIZE);
+    ID_Hashtable *idHT = new ID_Hashtable(SIZE);
     Hashtable *diseaseHT = new Hashtable(DISEASE_NUM, BUCKET_SIZE, disease);
     Hashtable *countryHT = new Hashtable(COUNTRY_NUM, BUCKET_SIZE, country);
 
@@ -52,65 +41,57 @@ int main(int argc, char* argv[]) {
     char auxfifo[20] = "auxfifo";
     sprintf(myfifo, "%s%d", myfifo, getpid());
     cout << "pipe name child process: " << myfifo << endl;
-    if(mkfifo(myfifo, 0666) == -1 && errno != EEXIST) {
+    if (mkfifo(myfifo, 0666) == -1 && errno != EEXIST) {
         cout << "Error with main mkfifo: " << errno << endl;
         return errno;
     }
-    if(mkfifo(auxfifo, 0666) == -1 && errno != EEXIST) {
+    if (mkfifo(auxfifo, 0666) == -1 && errno != EEXIST) {
         cout << "Error with main auxfifo: " << errno << endl;
     }
     int fd2 = open(auxfifo, O_WRONLY);
     int fd = open(myfifo, O_RDONLY);
-    while(true) {
-//        strcpy(filepath, "input/");
-        read(fd, &size, sizeof(int));
+
+
+    while (true) {
+        if(read_line(fd, readbuf) != 0) {
+            cout << "error in read" << endl;
+            return errno;
+        }
+        /*read(fd, &size, sizeof(int));
         cout << "read size child process: " << size << endl;
         int toread = size;
-        while(toread != 0) {
+        while (toread != 0) {
             int er = read(fd, readbuf, size);
-            cout << "er after read: " << er <<endl;
+            cout << "er after read: " << er << endl;
 //            cout << "toread child process received: " << toread << endl;
-            if(er == -1) {
-                cout<< "read() error: " << errno << endl;
+            if (er == -1) {
+                cout << "read() error: " << errno << endl;
                 break;
-            }
-            else toread -= er;
+            } else toread -= er;
 //            cout << "readbuf child process received: " << readbuf << endl;
 //            break;
-        }
-        string countryS(readbuf);
-//        strcpy(countryS, readbuf);
-        sprintf(filepath, "%s", readbuf);
-        if(strcmp(readbuf, "OK") == 0) break;
-        else{
-            cout << "filepath in child process is: " << filepath << endl;
-            dirp = opendir(filepath);
-            if(!dirp) {
-                cout << "Failed to open directory" << endl;
-//                return errno;
-            }
-            while ((entry = readdir(dirp)) != NULL) {
-                if (entry->d_type == DT_REG && strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".")) {
-                    cout << "tmp: " << countryS << endl;
-                    sprintf(filename, "%s/%s", filepath, entry->d_name);
-                    cout << "tmp: " << countryS << endl;
-                    cout << "Filename is: " << filename << endl;
-                    fp = fopen(filename, "r");
-                    while(getline(&line, &lenght, fp) != -1 ) {
-                        if(record->initialize(line, entry->d_name, countryS)) cout << "Country = " << record->getCountry() << endl;
-                        else cout << "Failed to initialize record " << endl;
+        }*/
 
-                    }
-                }
-            }
+//        strcpy(countryS, readbuf);
+        if (strcmp(readbuf, "OK") == 0) break;
+        else {
+            sprintf(filepath, "%s", readbuf);
+            char *c = strtok(readbuf, "/");
+            c = strtok(NULL, "/");
+            cout << "c = " << c << endl;
+            string countryS(c);
+            cout << "countryS = " << countryS << endl;
+            cout << "filepath in child process is: " << filepath << endl;
+            initialize_record(filepath, c, record);
+
         }
         cout << "String received in child process: " << readbuf << endl;
 //        printf("String received in child process: %s\n", arr);
         sent = strlen("OK");
         cout << "sent size child process: " << sent << endl;
         int k = write(fd2, &sent, sizeof(int));
-        cout << "child process write(fd2) k = " << k << endl;
-        while(sent != 0) {
+        cout << "child process write(fd2) k = " << k << " & sent = " << sent << endl;
+        while (sent != 0) {
             sent -= write(fd2, "OK", sent);
         }
         break;
@@ -118,12 +99,13 @@ int main(int argc, char* argv[]) {
     }
 
     /* Closing and removing named pipes */
-    if(close(fd) < 0) {
+    if (close(fd) < 0) {
         cout << "Error on child process close(fd) with code: " << errno << endl;
     }
-    if(close(fd2) < 0) {
+    if (close(fd2) < 0) {
         cout << "Error on child process close(fd2) with code: " << errno << endl;
     }
+    cout << "before unlink child process " << endl;
     unlink(myfifo);
 
     /*const char *cfilepath = filePath.c_str();
@@ -481,6 +463,6 @@ int main(int argc, char* argv[]) {
         }
 
     } while(true);*/
-
+    cout << "before return child process " << endl;
     return 0;
 }
