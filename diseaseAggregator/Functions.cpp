@@ -5,6 +5,7 @@
 #include <cstring>
 #include <unistd.h>
 #include <dirent.h>
+#include <sstream>
 
 using namespace std;
 
@@ -121,6 +122,8 @@ int read_line(int fd, char *readbuf) {
     int toread = size;
     while (toread != 0) {
         int er = read(fd, readbuf, size);
+        readbuf[size] = '\0';
+        cout << "readbuf inside read_line: " << readbuf << endl;
         cout << "er after read: " << er << endl;
 //            cout << "toread child process received: " << toread << endl;
         if (er == -1) {
@@ -136,30 +139,81 @@ int read_line(int fd, char *readbuf) {
 int initialize_record(char *filepath, char *countryS, Record *record) {
     DIR *dirp;
     struct dirent *entry;
-    dirp = opendir(filepath);
     char filename[20];
     char *line = NULL;
     std::size_t lenght = 0;
     FILE *fp;
-    if (!dirp) {
-        cout << "Failed to open directory" << endl;
-        return errno;
-    }
-    while ((entry = readdir(dirp)) != NULL) {
-        if (entry->d_type == DT_REG && strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".")) {
-            cout << "tmp: " << countryS << endl;
-            sprintf(filename, "%s/%s", filepath, entry->d_name);
-            cout << "tmp: " << countryS << endl;
-            cout << "Filename is: " << filename << endl;
-            fp = fopen(filename, "r");
-            while (getline(&line, &lenght, fp) != -1) {
-                if (record->initialize(line, entry->d_name, countryS))
-                    cout << "Country = " << record->getCountry() << endl;
-                else cout << "Failed to initialize record " << endl;
-            }
-            fclose(fp);
+    struct Date **file_array;
+    int file_count = 0;
+
+    file_count = sort_files(filepath, file_array);
+    for (int z = 0; z < file_count; z++) {
+        sprintf(filename, "%s/%s", filepath, file_array[z]->date.c_str());
+        cout << "filename is: " << filename << endl;
+        fp = fopen(filename, "r");
+        if (!fp) cout << "errno: " << errno << endl;
+        while (getline(&line, &lenght, fp) != -1) {
+            if (!record->initialize(line, file_array[z]->date.c_str(), countryS))
+                cout << "Failed to initialize record " << endl;
         }
+        fclose(fp);
     }
-    closedir(dirp);
     return 0;
+}
+int sort_files(char *filepath, Date **&file_array) {
+        DIR *dirp;
+        struct dirent *entry;
+        int file_count = 0, pos = 0;
+        string word, i, j, k;
+
+        cout << "sort_files filepath: " << filepath << endl;
+        dirp = opendir(filepath);
+        if (!dirp) {
+            cout << "Failed to open directory" << endl;
+            return errno;
+        }
+        while ((entry = readdir(dirp)) != NULL) {
+            if (entry->d_type == DT_REG && strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".")) {
+                file_count++;
+            }
+        }
+        closedir(dirp);
+
+        file_array = new Date* [file_count];
+        dirp = opendir(filepath);
+        while ((entry = readdir(dirp)) != NULL) {
+            if (entry->d_type == DT_REG && strcmp(entry->d_name, "..") != 0 &&
+                strcmp(entry->d_name, ".") != 0) {
+                stringstream date(entry->d_name);
+                date >> word;
+                i = word.substr(0, 2);
+                j = word.substr(3, 2);
+                k = word.substr(6, 4);
+                if (check_int(i) && check_int(j) && check_int(k)) {
+                    file_array[pos] = new struct Date;
+                    file_array[pos]->date = entry->d_name;
+                    file_array[pos]->day = stoi(i);
+                    file_array[pos]->month = stoi(j);
+                    file_array[pos]->year = stoi(k);
+                    pos++;
+                } else {
+                    cout << "Wrong filename. Date is not INT" << endl;
+                    return -3;
+                }
+            }
+        }
+        quickS(file_array, 0, file_count - 1);
+        return file_count;
+}
+
+char *create_fifo(pid_t childpid) {
+    int digits = 0, total = childpid;
+    cout << "create_fifo: " << childpid << endl;
+    while(total != 0) {
+        total /= 10;
+        digits++;
+    }
+    char *myfifo = new char[digits + 1 + strlen("myfifo_")];
+    sprintf(myfifo, "myfifo_%d", childpid);
+    return myfifo;
 }

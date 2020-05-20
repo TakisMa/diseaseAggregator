@@ -14,7 +14,8 @@ void quickS(struct Date *array[], int low, int high);
 
 int read_line(int fd, char *readbuf);
 int initialize_record(char *filepath, char *country, Record *record);
-
+int sort_files(char* filepath, Date **&file_array);
+char *create_fifo(pid_t childpid);
 static int compare_dates(const void *p, const void *q);
 
 #endif //DISEASEAGGREGATOR_FUNCTIONS_H

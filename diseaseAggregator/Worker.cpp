@@ -27,19 +27,18 @@ int main(int argc, char* argv[]) {
     string w, countryS;
     char readbuf[bufferSize];
     char writebuf[3];
-
+    int fd, fd2;
 
     Record *record = new Record();
     ID_Hashtable *idHT = new ID_Hashtable(SIZE);
     Hashtable *diseaseHT = new Hashtable(DISEASE_NUM, BUCKET_SIZE, disease);
     Hashtable *countryHT = new Hashtable(COUNTRY_NUM, BUCKET_SIZE, country);
 
-    int file_count = 0, pos = 0, size, sent;
+    int sent;
     string word, i, j, k;
 
-    char myfifo[20] = "myfifo_";
+    char *myfifo = create_fifo(getpid());
     char auxfifo[20] = "auxfifo";
-    sprintf(myfifo, "%s%d", myfifo, getpid());
     cout << "pipe name child process: " << myfifo << endl;
     if (mkfifo(myfifo, 0666) == -1 && errno != EEXIST) {
         cout << "Error with main mkfifo: " << errno << endl;
@@ -48,8 +47,8 @@ int main(int argc, char* argv[]) {
     if (mkfifo(auxfifo, 0666) == -1 && errno != EEXIST) {
         cout << "Error with main auxfifo: " << errno << endl;
     }
-    int fd2 = open(auxfifo, O_WRONLY);
-    int fd = open(myfifo, O_RDONLY);
+    fd = open(myfifo, O_RDONLY);
+    fd2 = open(auxfifo, O_WRONLY);
 
 
     while (true) {
@@ -72,12 +71,12 @@ int main(int argc, char* argv[]) {
 //            break;
         }*/
 
-//        strcpy(countryS, readbuf);
         if (strcmp(readbuf, "OK") == 0) break;
         else {
             sprintf(filepath, "%s", readbuf);
             char *c = strtok(readbuf, "/");
             c = strtok(NULL, "/");
+            cout << "filepath: " << filepath<< endl;
             cout << "c = " << c << endl;
             string countryS(c);
             cout << "countryS = " << countryS << endl;
@@ -89,13 +88,14 @@ int main(int argc, char* argv[]) {
 //        printf("String received in child process: %s\n", arr);
         sent = strlen("OK");
         cout << "sent size child process: " << sent << endl;
+
+
         int k = write(fd2, &sent, sizeof(int));
         cout << "child process write(fd2) k = " << k << " & sent = " << sent << endl;
         while (sent != 0) {
             sent -= write(fd2, "OK", sent);
         }
         break;
-
     }
 
     /* Closing and removing named pipes */

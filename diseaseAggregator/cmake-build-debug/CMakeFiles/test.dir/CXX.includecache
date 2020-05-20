@@ -21,6 +21,8 @@ unistd.h
 -
 dirent.h
 -
+sstream
+-
 
 /home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Functions.h
 Record.h
