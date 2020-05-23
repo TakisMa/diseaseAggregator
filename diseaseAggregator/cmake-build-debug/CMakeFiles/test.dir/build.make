@@ -96,11 +96,151 @@ CMakeFiles/test.dir/Record.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/Record.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Record.cpp" -o CMakeFiles/test.dir/Record.cpp.s
 
+CMakeFiles/test.dir/Hashtable.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/Hashtable.cpp.o: ../Hashtable.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/test.dir/Hashtable.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/Hashtable.cpp.o -c "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Hashtable.cpp"
+
+CMakeFiles/test.dir/Hashtable.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/Hashtable.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Hashtable.cpp" > CMakeFiles/test.dir/Hashtable.cpp.i
+
+CMakeFiles/test.dir/Hashtable.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/Hashtable.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Hashtable.cpp" -o CMakeFiles/test.dir/Hashtable.cpp.s
+
+CMakeFiles/test.dir/RecordIDManagement.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/RecordIDManagement.cpp.o: ../RecordIDManagement.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/test.dir/RecordIDManagement.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/RecordIDManagement.cpp.o -c "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/RecordIDManagement.cpp"
+
+CMakeFiles/test.dir/RecordIDManagement.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/RecordIDManagement.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/RecordIDManagement.cpp" > CMakeFiles/test.dir/RecordIDManagement.cpp.i
+
+CMakeFiles/test.dir/RecordIDManagement.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/RecordIDManagement.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/RecordIDManagement.cpp" -o CMakeFiles/test.dir/RecordIDManagement.cpp.s
+
+CMakeFiles/test.dir/Bucket.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/Bucket.cpp.o: ../Bucket.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/test.dir/Bucket.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/Bucket.cpp.o -c "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Bucket.cpp"
+
+CMakeFiles/test.dir/Bucket.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/Bucket.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Bucket.cpp" > CMakeFiles/test.dir/Bucket.cpp.i
+
+CMakeFiles/test.dir/Bucket.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/Bucket.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Bucket.cpp" -o CMakeFiles/test.dir/Bucket.cpp.s
+
+CMakeFiles/test.dir/BucketList.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/BucketList.cpp.o: ../BucketList.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/test.dir/BucketList.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/BucketList.cpp.o -c "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/BucketList.cpp"
+
+CMakeFiles/test.dir/BucketList.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/BucketList.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/BucketList.cpp" > CMakeFiles/test.dir/BucketList.cpp.i
+
+CMakeFiles/test.dir/BucketList.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/BucketList.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/BucketList.cpp" -o CMakeFiles/test.dir/BucketList.cpp.s
+
+CMakeFiles/test.dir/ListNode.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/ListNode.cpp.o: ../ListNode.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/test.dir/ListNode.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/ListNode.cpp.o -c "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/ListNode.cpp"
+
+CMakeFiles/test.dir/ListNode.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/ListNode.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/ListNode.cpp" > CMakeFiles/test.dir/ListNode.cpp.i
+
+CMakeFiles/test.dir/ListNode.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/ListNode.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/ListNode.cpp" -o CMakeFiles/test.dir/ListNode.cpp.s
+
+CMakeFiles/test.dir/Tree.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/Tree.cpp.o: ../Tree.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/test.dir/Tree.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/Tree.cpp.o -c "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Tree.cpp"
+
+CMakeFiles/test.dir/Tree.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/Tree.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Tree.cpp" > CMakeFiles/test.dir/Tree.cpp.i
+
+CMakeFiles/test.dir/Tree.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/Tree.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Tree.cpp" -o CMakeFiles/test.dir/Tree.cpp.s
+
+CMakeFiles/test.dir/TreeNode.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/TreeNode.cpp.o: ../TreeNode.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/test.dir/TreeNode.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/TreeNode.cpp.o -c "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/TreeNode.cpp"
+
+CMakeFiles/test.dir/TreeNode.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/TreeNode.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/TreeNode.cpp" > CMakeFiles/test.dir/TreeNode.cpp.i
+
+CMakeFiles/test.dir/TreeNode.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/TreeNode.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/TreeNode.cpp" -o CMakeFiles/test.dir/TreeNode.cpp.s
+
+CMakeFiles/test.dir/Heap.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/Heap.cpp.o: ../Heap.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/test.dir/Heap.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/Heap.cpp.o -c "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Heap.cpp"
+
+CMakeFiles/test.dir/Heap.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/Heap.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Heap.cpp" > CMakeFiles/test.dir/Heap.cpp.i
+
+CMakeFiles/test.dir/Heap.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/Heap.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Heap.cpp" -o CMakeFiles/test.dir/Heap.cpp.s
+
+CMakeFiles/test.dir/HeapNode.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/HeapNode.cpp.o: ../HeapNode.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/test.dir/HeapNode.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/HeapNode.cpp.o -c "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/HeapNode.cpp"
+
+CMakeFiles/test.dir/HeapNode.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/HeapNode.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/HeapNode.cpp" > CMakeFiles/test.dir/HeapNode.cpp.i
+
+CMakeFiles/test.dir/HeapNode.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/HeapNode.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/HeapNode.cpp" -o CMakeFiles/test.dir/HeapNode.cpp.s
+
+CMakeFiles/test.dir/Commands.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/Commands.cpp.o: ../Commands.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/test.dir/Commands.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/Commands.cpp.o -c "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Commands.cpp"
+
+CMakeFiles/test.dir/Commands.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/Commands.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Commands.cpp" > CMakeFiles/test.dir/Commands.cpp.i
+
+CMakeFiles/test.dir/Commands.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/Commands.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Commands.cpp" -o CMakeFiles/test.dir/Commands.cpp.s
+
 # Object files for target test
 test_OBJECTS = \
 "CMakeFiles/test.dir/test.cpp.o" \
 "CMakeFiles/test.dir/Functions.cpp.o" \
-"CMakeFiles/test.dir/Record.cpp.o"
+"CMakeFiles/test.dir/Record.cpp.o" \
+"CMakeFiles/test.dir/Hashtable.cpp.o" \
+"CMakeFiles/test.dir/RecordIDManagement.cpp.o" \
+"CMakeFiles/test.dir/Bucket.cpp.o" \
+"CMakeFiles/test.dir/BucketList.cpp.o" \
+"CMakeFiles/test.dir/ListNode.cpp.o" \
+"CMakeFiles/test.dir/Tree.cpp.o" \
+"CMakeFiles/test.dir/TreeNode.cpp.o" \
+"CMakeFiles/test.dir/Heap.cpp.o" \
+"CMakeFiles/test.dir/HeapNode.cpp.o" \
+"CMakeFiles/test.dir/Commands.cpp.o"
 
 # External object files for target test
 test_EXTERNAL_OBJECTS =
@@ -108,9 +248,19 @@ test_EXTERNAL_OBJECTS =
 test: CMakeFiles/test.dir/test.cpp.o
 test: CMakeFiles/test.dir/Functions.cpp.o
 test: CMakeFiles/test.dir/Record.cpp.o
+test: CMakeFiles/test.dir/Hashtable.cpp.o
+test: CMakeFiles/test.dir/RecordIDManagement.cpp.o
+test: CMakeFiles/test.dir/Bucket.cpp.o
+test: CMakeFiles/test.dir/BucketList.cpp.o
+test: CMakeFiles/test.dir/ListNode.cpp.o
+test: CMakeFiles/test.dir/Tree.cpp.o
+test: CMakeFiles/test.dir/TreeNode.cpp.o
+test: CMakeFiles/test.dir/Heap.cpp.o
+test: CMakeFiles/test.dir/HeapNode.cpp.o
+test: CMakeFiles/test.dir/Commands.cpp.o
 test: CMakeFiles/test.dir/build.make
 test: CMakeFiles/test.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable test"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/test.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

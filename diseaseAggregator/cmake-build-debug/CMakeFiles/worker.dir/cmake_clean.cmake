@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/worker.dir/Bucket.cpp.o"
   "CMakeFiles/worker.dir/BucketList.cpp.o"
+  "CMakeFiles/worker.dir/Commands.cpp.o"
   "CMakeFiles/worker.dir/Functions.cpp.o"
   "CMakeFiles/worker.dir/Hashtable.cpp.o"
   "CMakeFiles/worker.dir/Heap.cpp.o"

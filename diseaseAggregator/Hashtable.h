@@ -48,6 +48,12 @@ public:
 
     int diseaseFrequencyC(string virus, Date *entry, Date *exit, string country);
 
+    string getCountry() {
+        char *countries;
+        for(int i = 0; i < bucketsNum; i++) {
+            if(table[i]) table[i]->getCountry();
+        }
+    }
 
     void insertHashTable(Record *rec);
 

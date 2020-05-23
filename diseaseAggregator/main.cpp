@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
     }
 
     int wstatus;
+    string w;
     pid_t childpid[numWorkers];
     pid_t parentpid = getpid();
     int dir_count = 0;
@@ -28,6 +29,8 @@ int main(int argc, char *argv[]) {
     struct dirent * entry;
     int sent, size;
     int fd = -1, fd2 = -1;
+    char readbuf[3];
+    char writebuf[200];
 
 
     /* Determine number of directories */
@@ -69,10 +72,6 @@ int main(int argc, char *argv[]) {
         }
         delete[] myfifo;
     }
-
-
-    char readbuf[3];
-    char writebuf[20];
 
 
     if(parentpid == getpid()) {
@@ -119,8 +118,30 @@ int main(int argc, char *argv[]) {
         }
 
     }
-    wait(&wstatus);
 
+
+    while(true) {
+        cout << "Enter command: ";
+        if (!getline(cin, w)) cout << "exiting" << endl;
+        else {
+            if(w == "/exit") break;
+            strcpy(writebuf, w.c_str());
+            sent = w.length();
+            write(fd, &sent, sizeof(int));
+            while (sent != 0) sent -= write(fd, writebuf, w.length());
+        }
+        int k = read(fd2, &size, sizeof(int));
+        if (k == -1) cout << "main process read(fd2) errno: " << errno << endl;
+        cout << "read size main process: " << size << endl;
+        int toread = size;
+        while (true) {
+            toread -= read(fd2, readbuf, k);
+            printf("String received in main process: %s\n ", readbuf);
+            if ((strcmp(readbuf, "OK") == 0) || toread <= 0) break;
+        }
+    }
+
+    wait(&wstatus);
 
     if(close(fd) < 0) {
         cout << "Error on main process close(fd) with code: " << errno << endl;
@@ -129,6 +150,5 @@ int main(int argc, char *argv[]) {
         cout << "Error on main process close(fd2) with code: " << errno << endl;
     }
     unlink("auxfifo");
-    cout << "before return main" << endl;
     return 0;
 }

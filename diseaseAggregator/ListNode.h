@@ -37,6 +37,10 @@ public:
 
     int countIncidents(Date *entry, Date *exit);
 
+    string getCountry() {
+        return record->getCountry();
+    }
+
     Record *getRecord() const {
         return record;
     }

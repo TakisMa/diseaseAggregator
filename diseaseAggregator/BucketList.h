@@ -27,6 +27,9 @@ public:
 
     int numPatientDischarges(string virus, Date *date1, Date *date2, string countries);
 
+    string getCountry() {
+        if(first) return first->getCountry();
+    }
 
     int countIncident(string virus, Date *entry, Date *exit, string country);
 

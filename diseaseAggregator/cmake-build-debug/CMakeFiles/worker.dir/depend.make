@@ -20,9 +20,32 @@ CMakeFiles/worker.dir/BucketList.cpp.o: ../Record.h
 CMakeFiles/worker.dir/BucketList.cpp.o: ../Tree.h
 CMakeFiles/worker.dir/BucketList.cpp.o: ../TreeNode.h
 
+CMakeFiles/worker.dir/Commands.cpp.o: ../Bucket.h
+CMakeFiles/worker.dir/Commands.cpp.o: ../BucketList.h
+CMakeFiles/worker.dir/Commands.cpp.o: ../Commands.cpp
+CMakeFiles/worker.dir/Commands.cpp.o: ../Commands.h
+CMakeFiles/worker.dir/Commands.cpp.o: ../Functions.h
+CMakeFiles/worker.dir/Commands.cpp.o: ../Hashtable.h
+CMakeFiles/worker.dir/Commands.cpp.o: ../Heap.h
+CMakeFiles/worker.dir/Commands.cpp.o: ../HeapNode.h
+CMakeFiles/worker.dir/Commands.cpp.o: ../ListNode.h
+CMakeFiles/worker.dir/Commands.cpp.o: ../Record.h
+CMakeFiles/worker.dir/Commands.cpp.o: ../RecordIDManagement.h
+CMakeFiles/worker.dir/Commands.cpp.o: ../Tree.h
+CMakeFiles/worker.dir/Commands.cpp.o: ../TreeNode.h
+
+CMakeFiles/worker.dir/Functions.cpp.o: ../Bucket.h
+CMakeFiles/worker.dir/Functions.cpp.o: ../BucketList.h
 CMakeFiles/worker.dir/Functions.cpp.o: ../Functions.cpp
 CMakeFiles/worker.dir/Functions.cpp.o: ../Functions.h
+CMakeFiles/worker.dir/Functions.cpp.o: ../Hashtable.h
+CMakeFiles/worker.dir/Functions.cpp.o: ../Heap.h
+CMakeFiles/worker.dir/Functions.cpp.o: ../HeapNode.h
+CMakeFiles/worker.dir/Functions.cpp.o: ../ListNode.h
 CMakeFiles/worker.dir/Functions.cpp.o: ../Record.h
+CMakeFiles/worker.dir/Functions.cpp.o: ../RecordIDManagement.h
+CMakeFiles/worker.dir/Functions.cpp.o: ../Tree.h
+CMakeFiles/worker.dir/Functions.cpp.o: ../TreeNode.h
 
 CMakeFiles/worker.dir/Hashtable.cpp.o: ../Bucket.h
 CMakeFiles/worker.dir/Hashtable.cpp.o: ../BucketList.h
@@ -52,9 +75,18 @@ CMakeFiles/worker.dir/ListNode.cpp.o: ../Record.h
 CMakeFiles/worker.dir/ListNode.cpp.o: ../Tree.h
 CMakeFiles/worker.dir/ListNode.cpp.o: ../TreeNode.h
 
+CMakeFiles/worker.dir/Record.cpp.o: ../Bucket.h
+CMakeFiles/worker.dir/Record.cpp.o: ../BucketList.h
 CMakeFiles/worker.dir/Record.cpp.o: ../Functions.h
+CMakeFiles/worker.dir/Record.cpp.o: ../Hashtable.h
+CMakeFiles/worker.dir/Record.cpp.o: ../Heap.h
+CMakeFiles/worker.dir/Record.cpp.o: ../HeapNode.h
+CMakeFiles/worker.dir/Record.cpp.o: ../ListNode.h
 CMakeFiles/worker.dir/Record.cpp.o: ../Record.cpp
 CMakeFiles/worker.dir/Record.cpp.o: ../Record.h
+CMakeFiles/worker.dir/Record.cpp.o: ../RecordIDManagement.h
+CMakeFiles/worker.dir/Record.cpp.o: ../Tree.h
+CMakeFiles/worker.dir/Record.cpp.o: ../TreeNode.h
 
 CMakeFiles/worker.dir/RecordIDManagement.cpp.o: ../Record.h
 CMakeFiles/worker.dir/RecordIDManagement.cpp.o: ../RecordIDManagement.cpp
@@ -75,6 +107,7 @@ CMakeFiles/worker.dir/TreeNode.cpp.o: ../TreeNode.h
 
 CMakeFiles/worker.dir/Worker.cpp.o: ../Bucket.h
 CMakeFiles/worker.dir/Worker.cpp.o: ../BucketList.h
+CMakeFiles/worker.dir/Worker.cpp.o: ../Commands.h
 CMakeFiles/worker.dir/Worker.cpp.o: ../Functions.h
 CMakeFiles/worker.dir/Worker.cpp.o: ../Hashtable.h
 CMakeFiles/worker.dir/Worker.cpp.o: ../Heap.h

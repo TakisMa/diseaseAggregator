@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = "/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAg
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/snap/clion/112/bin/cmake/linux/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -77,6 +66,17 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/snap/clion/112/bin/cmake/linux/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -111,32 +111,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named diseaseAggregator
-
-# Build rule for target.
-diseaseAggregator: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 diseaseAggregator
-.PHONY : diseaseAggregator
-
-# fast build rule for target.
-diseaseAggregator/fast:
-	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/build
-.PHONY : diseaseAggregator/fast
-
-#=============================================================================
-# Target rules for targets named test
-
-# Build rule for target.
-test: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test
-.PHONY : test
-
-# fast build rule for target.
-test/fast:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
-.PHONY : test/fast
-
-#=============================================================================
 # Target rules for targets named worker
 
 # Build rule for target.
@@ -149,6 +123,19 @@ worker/fast:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/build
 .PHONY : worker/fast
 
+#=============================================================================
+# Target rules for targets named diseaseAggregator
+
+# Build rule for target.
+diseaseAggregator: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 diseaseAggregator
+.PHONY : diseaseAggregator
+
+# fast build rule for target.
+diseaseAggregator/fast:
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/build
+.PHONY : diseaseAggregator/fast
+
 Bucket.o: Bucket.cpp.o
 
 .PHONY : Bucket.o
@@ -156,6 +143,7 @@ Bucket.o: Bucket.cpp.o
 # target to build an object file
 Bucket.cpp.o:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Bucket.cpp.o
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Bucket.cpp.o
 .PHONY : Bucket.cpp.o
 
 Bucket.i: Bucket.cpp.i
@@ -165,6 +153,7 @@ Bucket.i: Bucket.cpp.i
 # target to preprocess a source file
 Bucket.cpp.i:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Bucket.cpp.i
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Bucket.cpp.i
 .PHONY : Bucket.cpp.i
 
 Bucket.s: Bucket.cpp.s
@@ -174,6 +163,7 @@ Bucket.s: Bucket.cpp.s
 # target to generate assembly for a file
 Bucket.cpp.s:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Bucket.cpp.s
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Bucket.cpp.s
 .PHONY : Bucket.cpp.s
 
 BucketList.o: BucketList.cpp.o
@@ -183,6 +173,7 @@ BucketList.o: BucketList.cpp.o
 # target to build an object file
 BucketList.cpp.o:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/BucketList.cpp.o
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/BucketList.cpp.o
 .PHONY : BucketList.cpp.o
 
 BucketList.i: BucketList.cpp.i
@@ -192,6 +183,7 @@ BucketList.i: BucketList.cpp.i
 # target to preprocess a source file
 BucketList.cpp.i:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/BucketList.cpp.i
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/BucketList.cpp.i
 .PHONY : BucketList.cpp.i
 
 BucketList.s: BucketList.cpp.s
@@ -201,7 +193,38 @@ BucketList.s: BucketList.cpp.s
 # target to generate assembly for a file
 BucketList.cpp.s:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/BucketList.cpp.s
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/BucketList.cpp.s
 .PHONY : BucketList.cpp.s
+
+Commands.o: Commands.cpp.o
+
+.PHONY : Commands.o
+
+# target to build an object file
+Commands.cpp.o:
+	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Commands.cpp.o
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Commands.cpp.o
+.PHONY : Commands.cpp.o
+
+Commands.i: Commands.cpp.i
+
+.PHONY : Commands.i
+
+# target to preprocess a source file
+Commands.cpp.i:
+	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Commands.cpp.i
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Commands.cpp.i
+.PHONY : Commands.cpp.i
+
+Commands.s: Commands.cpp.s
+
+.PHONY : Commands.s
+
+# target to generate assembly for a file
+Commands.cpp.s:
+	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Commands.cpp.s
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Commands.cpp.s
+.PHONY : Commands.cpp.s
 
 FileManagement.o: FileManagement.cpp.o
 
@@ -236,9 +259,8 @@ Functions.o: Functions.cpp.o
 
 # target to build an object file
 Functions.cpp.o:
-	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Functions.cpp.o
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/Functions.cpp.o
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Functions.cpp.o
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Functions.cpp.o
 .PHONY : Functions.cpp.o
 
 Functions.i: Functions.cpp.i
@@ -247,9 +269,8 @@ Functions.i: Functions.cpp.i
 
 # target to preprocess a source file
 Functions.cpp.i:
-	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Functions.cpp.i
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/Functions.cpp.i
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Functions.cpp.i
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Functions.cpp.i
 .PHONY : Functions.cpp.i
 
 Functions.s: Functions.cpp.s
@@ -258,9 +279,8 @@ Functions.s: Functions.cpp.s
 
 # target to generate assembly for a file
 Functions.cpp.s:
-	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Functions.cpp.s
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/Functions.cpp.s
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Functions.cpp.s
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Functions.cpp.s
 .PHONY : Functions.cpp.s
 
 Hashtable.o: Hashtable.cpp.o
@@ -270,6 +290,7 @@ Hashtable.o: Hashtable.cpp.o
 # target to build an object file
 Hashtable.cpp.o:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Hashtable.cpp.o
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Hashtable.cpp.o
 .PHONY : Hashtable.cpp.o
 
 Hashtable.i: Hashtable.cpp.i
@@ -279,6 +300,7 @@ Hashtable.i: Hashtable.cpp.i
 # target to preprocess a source file
 Hashtable.cpp.i:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Hashtable.cpp.i
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Hashtable.cpp.i
 .PHONY : Hashtable.cpp.i
 
 Hashtable.s: Hashtable.cpp.s
@@ -288,6 +310,7 @@ Hashtable.s: Hashtable.cpp.s
 # target to generate assembly for a file
 Hashtable.cpp.s:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Hashtable.cpp.s
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Hashtable.cpp.s
 .PHONY : Hashtable.cpp.s
 
 Heap.o: Heap.cpp.o
@@ -297,6 +320,7 @@ Heap.o: Heap.cpp.o
 # target to build an object file
 Heap.cpp.o:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Heap.cpp.o
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Heap.cpp.o
 .PHONY : Heap.cpp.o
 
 Heap.i: Heap.cpp.i
@@ -306,6 +330,7 @@ Heap.i: Heap.cpp.i
 # target to preprocess a source file
 Heap.cpp.i:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Heap.cpp.i
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Heap.cpp.i
 .PHONY : Heap.cpp.i
 
 Heap.s: Heap.cpp.s
@@ -315,6 +340,7 @@ Heap.s: Heap.cpp.s
 # target to generate assembly for a file
 Heap.cpp.s:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Heap.cpp.s
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Heap.cpp.s
 .PHONY : Heap.cpp.s
 
 HeapNode.o: HeapNode.cpp.o
@@ -324,6 +350,7 @@ HeapNode.o: HeapNode.cpp.o
 # target to build an object file
 HeapNode.cpp.o:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/HeapNode.cpp.o
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/HeapNode.cpp.o
 .PHONY : HeapNode.cpp.o
 
 HeapNode.i: HeapNode.cpp.i
@@ -333,6 +360,7 @@ HeapNode.i: HeapNode.cpp.i
 # target to preprocess a source file
 HeapNode.cpp.i:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/HeapNode.cpp.i
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/HeapNode.cpp.i
 .PHONY : HeapNode.cpp.i
 
 HeapNode.s: HeapNode.cpp.s
@@ -342,6 +370,7 @@ HeapNode.s: HeapNode.cpp.s
 # target to generate assembly for a file
 HeapNode.cpp.s:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/HeapNode.cpp.s
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/HeapNode.cpp.s
 .PHONY : HeapNode.cpp.s
 
 ListNode.o: ListNode.cpp.o
@@ -351,6 +380,7 @@ ListNode.o: ListNode.cpp.o
 # target to build an object file
 ListNode.cpp.o:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/ListNode.cpp.o
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/ListNode.cpp.o
 .PHONY : ListNode.cpp.o
 
 ListNode.i: ListNode.cpp.i
@@ -360,6 +390,7 @@ ListNode.i: ListNode.cpp.i
 # target to preprocess a source file
 ListNode.cpp.i:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/ListNode.cpp.i
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/ListNode.cpp.i
 .PHONY : ListNode.cpp.i
 
 ListNode.s: ListNode.cpp.s
@@ -369,6 +400,7 @@ ListNode.s: ListNode.cpp.s
 # target to generate assembly for a file
 ListNode.cpp.s:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/ListNode.cpp.s
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/ListNode.cpp.s
 .PHONY : ListNode.cpp.s
 
 Record.o: Record.cpp.o
@@ -377,9 +409,8 @@ Record.o: Record.cpp.o
 
 # target to build an object file
 Record.cpp.o:
-	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Record.cpp.o
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/Record.cpp.o
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Record.cpp.o
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Record.cpp.o
 .PHONY : Record.cpp.o
 
 Record.i: Record.cpp.i
@@ -388,9 +419,8 @@ Record.i: Record.cpp.i
 
 # target to preprocess a source file
 Record.cpp.i:
-	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Record.cpp.i
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/Record.cpp.i
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Record.cpp.i
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Record.cpp.i
 .PHONY : Record.cpp.i
 
 Record.s: Record.cpp.s
@@ -399,9 +429,8 @@ Record.s: Record.cpp.s
 
 # target to generate assembly for a file
 Record.cpp.s:
-	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Record.cpp.s
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/Record.cpp.s
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Record.cpp.s
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Record.cpp.s
 .PHONY : Record.cpp.s
 
 RecordIDManagement.o: RecordIDManagement.cpp.o
@@ -411,6 +440,7 @@ RecordIDManagement.o: RecordIDManagement.cpp.o
 # target to build an object file
 RecordIDManagement.cpp.o:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/RecordIDManagement.cpp.o
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/RecordIDManagement.cpp.o
 .PHONY : RecordIDManagement.cpp.o
 
 RecordIDManagement.i: RecordIDManagement.cpp.i
@@ -420,6 +450,7 @@ RecordIDManagement.i: RecordIDManagement.cpp.i
 # target to preprocess a source file
 RecordIDManagement.cpp.i:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/RecordIDManagement.cpp.i
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/RecordIDManagement.cpp.i
 .PHONY : RecordIDManagement.cpp.i
 
 RecordIDManagement.s: RecordIDManagement.cpp.s
@@ -429,6 +460,7 @@ RecordIDManagement.s: RecordIDManagement.cpp.s
 # target to generate assembly for a file
 RecordIDManagement.cpp.s:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/RecordIDManagement.cpp.s
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/RecordIDManagement.cpp.s
 .PHONY : RecordIDManagement.cpp.s
 
 Tree.o: Tree.cpp.o
@@ -438,6 +470,7 @@ Tree.o: Tree.cpp.o
 # target to build an object file
 Tree.cpp.o:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Tree.cpp.o
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Tree.cpp.o
 .PHONY : Tree.cpp.o
 
 Tree.i: Tree.cpp.i
@@ -447,6 +480,7 @@ Tree.i: Tree.cpp.i
 # target to preprocess a source file
 Tree.cpp.i:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Tree.cpp.i
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Tree.cpp.i
 .PHONY : Tree.cpp.i
 
 Tree.s: Tree.cpp.s
@@ -456,6 +490,7 @@ Tree.s: Tree.cpp.s
 # target to generate assembly for a file
 Tree.cpp.s:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/Tree.cpp.s
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/Tree.cpp.s
 .PHONY : Tree.cpp.s
 
 TreeNode.o: TreeNode.cpp.o
@@ -465,6 +500,7 @@ TreeNode.o: TreeNode.cpp.o
 # target to build an object file
 TreeNode.cpp.o:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/TreeNode.cpp.o
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/TreeNode.cpp.o
 .PHONY : TreeNode.cpp.o
 
 TreeNode.i: TreeNode.cpp.i
@@ -474,6 +510,7 @@ TreeNode.i: TreeNode.cpp.i
 # target to preprocess a source file
 TreeNode.cpp.i:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/TreeNode.cpp.i
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/TreeNode.cpp.i
 .PHONY : TreeNode.cpp.i
 
 TreeNode.s: TreeNode.cpp.s
@@ -483,6 +520,7 @@ TreeNode.s: TreeNode.cpp.s
 # target to generate assembly for a file
 TreeNode.cpp.s:
 	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/TreeNode.cpp.s
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/TreeNode.cpp.s
 .PHONY : TreeNode.cpp.s
 
 Worker.o: Worker.cpp.o
@@ -539,50 +577,25 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/main.cpp.s
 .PHONY : main.cpp.s
 
-test.o: test.cpp.o
-
-.PHONY : test.o
-
-# target to build an object file
-test.cpp.o:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/test.cpp.o
-.PHONY : test.cpp.o
-
-test.i: test.cpp.i
-
-.PHONY : test.i
-
-# target to preprocess a source file
-test.cpp.i:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/test.cpp.i
-.PHONY : test.cpp.i
-
-test.s: test.cpp.s
-
-.PHONY : test.s
-
-# target to generate assembly for a file
-test.cpp.s:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/test.cpp.s
-.PHONY : test.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... edit_cache"
+	@echo "... worker"
 	@echo "... rebuild_cache"
 	@echo "... diseaseAggregator"
-	@echo "... test"
-	@echo "... worker"
-	@echo "... edit_cache"
 	@echo "... Bucket.o"
 	@echo "... Bucket.i"
 	@echo "... Bucket.s"
 	@echo "... BucketList.o"
 	@echo "... BucketList.i"
 	@echo "... BucketList.s"
+	@echo "... Commands.o"
+	@echo "... Commands.i"
+	@echo "... Commands.s"
 	@echo "... FileManagement.o"
 	@echo "... FileManagement.i"
 	@echo "... FileManagement.s"
@@ -619,9 +632,6 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... test.o"
-	@echo "... test.i"
-	@echo "... test.s"
 .PHONY : help
 
 

@@ -124,19 +124,14 @@ int read_line(int fd, char *readbuf) {
         int er = read(fd, readbuf, size);
         readbuf[size] = '\0';
         cout << "readbuf inside read_line: " << readbuf << endl;
-        cout << "er after read: " << er << endl;
-//            cout << "toread child process received: " << toread << endl;
         if (er == -1) {
             cout << "read() error: " << errno << endl;
             return errno;
         } else toread -= er;
-//            cout << "readbuf child process received: " << readbuf << endl;
-//            break;
     }
     return 0;
 }
-
-int initialize_record(char *filepath, char *countryS, Record *record) {
+int initialize_record(char *filepath, char *countryS, Record *record, Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT) {
     DIR *dirp;
     struct dirent *entry;
     char filename[20];
@@ -155,6 +150,12 @@ int initialize_record(char *filepath, char *countryS, Record *record) {
         while (getline(&line, &lenght, fp) != -1) {
             if (!record->initialize(line, file_array[z]->date.c_str(), countryS))
                 cout << "Failed to initialize record " << endl;
+            else{
+                idHT->insertID(record);
+                diseaseHT->insertHashTable(record);
+                countryHT->insertHashTable(record);
+            }
+            record = new Record();
         }
         fclose(fp);
     }
@@ -205,7 +206,6 @@ int sort_files(char *filepath, Date **&file_array) {
         quickS(file_array, 0, file_count - 1);
         return file_count;
 }
-
 char *create_fifo(pid_t childpid) {
     int digits = 0, total = childpid;
     cout << "create_fifo: " << childpid << endl;

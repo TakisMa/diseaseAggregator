@@ -47,6 +47,11 @@ public:
         return next;
     }
 
+    string getCountry() {
+        if(head) return head->getCountry();
+        else if(next) return next->getCountry();
+    }
+
     void setNext(Bucket *n);
 
     void insertBucket(Record *rec, type_t t);
@@ -58,6 +63,7 @@ public:
     void bucketPrint(type_t type);
 
     Bucket(int size);
+
     ~Bucket();
 };
 
