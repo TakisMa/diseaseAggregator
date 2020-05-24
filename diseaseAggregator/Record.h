@@ -25,6 +25,10 @@ class Record {
 private:
     int recordID;
     int age;
+public:
+    int getAge() const;
+
+private:
     string state;
     string firstName;
     string lastName;

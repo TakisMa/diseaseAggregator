@@ -13,7 +13,7 @@ void numPatientAdmissions(string virusName, string date1, string date2, string c
 
 void numPatientDischarges(string virusName, string date1, string date2, string country, Hashtable *diseaseHT, char *filepath);
 
-int select_command(Hashtable *diseaseHT, Hashtable* countryHT, ID_Hashtable *idHT, Record *record, char *filepath, string w, int fd2);
+int select_command(Hashtable *diseaseHT, Hashtable* countryHT, ID_Hashtable *idHT, char *filepath, string w, int fd2);
 
 
 

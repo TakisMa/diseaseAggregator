@@ -102,9 +102,17 @@ Record.h
 Tree.h
 /home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Tree.h
 
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Heap.cpp
+Heap.h
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Heap.h
+
 /home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Heap.h
 math.h
 -
+HeapNode.h
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/HeapNode.h
+
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/HeapNode.cpp
 HeapNode.h
 /home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/HeapNode.h
 
@@ -146,15 +154,27 @@ cstring
 string
 -
 
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/RecordIDManagement.cpp
+RecordIDManagement.h
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/RecordIDManagement.h
+
 /home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/RecordIDManagement.h
 iostream
 -
 Record.h
 /home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Record.h
 
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Tree.cpp
+Tree.h
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Tree.h
+
 /home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Tree.h
 cstdlib
 -
+TreeNode.h
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/TreeNode.h
+
+/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/TreeNode.cpp
 TreeNode.h
 /home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/TreeNode.h
 

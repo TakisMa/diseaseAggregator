@@ -81,27 +81,25 @@ int main(int argc, char *argv[]) {
 
     if((dirp = opendir(cfilepath)) != NULL) {
         int pos = 0;
-//            while ((entry = readdir(dirp)) != NULL) {
-            entry = readdir(dirp);
-            if (entry->d_type == DT_DIR && strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".") != 0) {
-                char *tosend = new char[strlen(cfilepath) + strlen(entry->d_name) + 2];
-                sprintf(tosend, "%s/%s", cfilepath, entry->d_name);
-                sent = strlen(tosend);
-                writebuf = new char[sent];
-                strcpy(writebuf, tosend);
-                write(fd[pos], &sent, sizeof(int));
-                cout << "main will send: " << sent << " bytes throught fd: " << fd[0] << endl;
-                write(fd[pos], writebuf, sent);
-                cout << "main will send: " << writebuf << endl;
-
-                delete[] tosend;
+            while ((entry = readdir(dirp)) != NULL) {
+                if (entry->d_type == DT_DIR && strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".") != 0) {
+                    char *tosend = new char[strlen(cfilepath) + strlen(entry->d_name) + 2];
+                    sprintf(tosend, "%s/%s", cfilepath, entry->d_name);
+                    sent = strlen(tosend);
+                    writebuf = new char[sent];
+                    strcpy(writebuf, tosend);
+                    write(fd[pos], &sent, sizeof(int));
+                    cout << "main will send: " << sent << " bytes throught fd: " << fd[0] << endl;
+                    write(fd[pos], writebuf, sent);
+                    cout << "main will send: " << writebuf << endl;
+                    delete[] tosend;
+                }
             }
-            sent = strlen("OK");
-            write(fd[0], &sent, sizeof(int));
-            write(fd[0], "OK", sent);
-            cout << endl;
-            closedir(dirp);
-
+        sent = strlen("OK");
+        write(fd[0], &sent, sizeof(int));
+        write(fd[0], "OK", sent);
+        cout << endl;
+        closedir(dirp);
     }
     wait(&wstatus);
     return 0;

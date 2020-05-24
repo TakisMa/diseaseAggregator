@@ -38,8 +38,9 @@ int main(int argc, char* argv[]) {
     string w, countryS;
     char *readbuf, *writebuf;
     char *myfifo, *auxfifo;
+    int *ages[4];
 
-    Record *record = new Record();
+    for(int z = 0; z < 4; z++) *ages[z] = 0;
     ID_Hashtable *idHT = new ID_Hashtable(SIZE);
     Hashtable *diseaseHT = new Hashtable(DISEASE_NUM, BUCKET_SIZE, disease);
     Hashtable *countryHT = new Hashtable(COUNTRY_NUM, BUCKET_SIZE, country);
@@ -70,10 +71,12 @@ int main(int argc, char* argv[]) {
             char *c = strtok(readbuf, "/");
             c = strtok(NULL, "/");
             string countryS(c);
-            initialize_record(filepath, c, record, diseaseHT, countryHT, idHT);
+            char *country=new char[strlen(c)+1];
+            strcpy(country,c);
+            initialize_record(filepath, country, diseaseHT, countryHT, idHT, ages);
         }
     }
-    cout << countryHT->getCountry() << endl;
+    for(int z = 0; z < 4; z++) cout << *ages[z] << " ";
     return 0;
 
     while(true) {
@@ -89,7 +92,7 @@ int main(int argc, char* argv[]) {
         }
         cout << "read size child process: " << size << endl;
         string g(readbuf);
-        select_command(diseaseHT, countryHT, idHT, record, filepath, g, fd2);
+        select_command(diseaseHT, countryHT, idHT, filepath, g, fd2);
         int k = write(fd2, &sent, sizeof(int));
         cout << "child process write(fd2) k = " << k << " & sent = " << sent << endl;
         while (sent != 0) {

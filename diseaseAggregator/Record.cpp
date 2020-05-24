@@ -111,3 +111,7 @@ Date *Record::getExitDate() {
     return &exitDate;
 }
 
+int Record::getAge() const {
+    return age;
+}
+

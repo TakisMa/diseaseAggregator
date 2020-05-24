@@ -154,7 +154,7 @@ void write_line(int fd, char *&writebuf, int bufferSize, char *message) {
 
 }
 
-int initialize_record(char *filepath, char *countryS, Record *record, Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT) {
+int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT, int *ages[]) {
     DIR *dirp;
     struct dirent *entry;
     char filename[20];
@@ -163,22 +163,28 @@ int initialize_record(char *filepath, char *countryS, Record *record, Hashtable 
     FILE *fp;
     struct Date **file_array;
     int file_count = 0;
+    Record *record;
 
     file_count = sort_files(filepath, file_array);
     for (int z = 0; z < file_count; z++) {
         sprintf(filename, "%s/%s", filepath, file_array[z]->date.c_str());
-        cout << "filename is: " << filename << endl;
+        cout << filename << endl;
         fp = fopen(filename, "r");
         if (!fp) cout << "errno: " << errno << endl;
         while (getline(&line, &lenght, fp) != -1) {
-            if (!record->initialize(line, file_array[z]->date.c_str(), countryS))
+            record = new Record();
+            if (!record->initialize(line, file_array[z]->date.c_str(), countryS)) {
                 cout << "Failed to initialize record " << endl;
+            }
             else{
+                if(record->getAge() > 60) ages[3] ++;
+                else if(record->getAge() > 40) ages[2] ++;
+                else if(record->getAge() > 20) ages[1] ++;
+                else ages[0] ++;
                 idHT->insertID(record);
                 diseaseHT->insertHashTable(record);
                 countryHT->insertHashTable(record);
             }
-            record = new Record();
         }
         fclose(fp);
     }
@@ -190,7 +196,7 @@ int sort_files(char *filepath, Date **&file_array) {
         int file_count = 0, pos = 0;
         string word, i, j, k;
 
-        cout << "sort_files filepath: " << filepath << endl;
+
         dirp = opendir(filepath);
         if (!dirp) {
             cout << "Failed to open directory" << endl;

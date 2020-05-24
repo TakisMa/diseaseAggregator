@@ -19,7 +19,7 @@ Record *searchPatientRecord(string w, ID_Hashtable *idHT) {
 }
 
 
-int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT, Record *record, char *filepath, string w, int fd2) {
+int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT, char *filepath, string w, int fd2) {
 //        cout << "Enter command: ";
     DIR *dirp;
     struct dirent *entry;
@@ -36,7 +36,6 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         else cout << "ID not found " << endl;
     }
     else if(w == "/diseaseFrequency") {
-        cout << "inside diseaseFrequency" << endl;
         string virusName, date1, date2, country;
         int total = 0;
         int c = w.length();
