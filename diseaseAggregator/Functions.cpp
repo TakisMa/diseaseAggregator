@@ -154,7 +154,7 @@ void write_line(int fd, char *&writebuf, int bufferSize, char *message) {
 
 }
 
-int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT, int *ages[]) {
+int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT) {
     DIR *dirp;
     struct dirent *entry;
     char filename[20];
@@ -177,10 +177,10 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
                 cout << "Failed to initialize record " << endl;
             }
             else{
-                if(record->getAge() > 60) ages[3] ++;
+                /*if(record->getAge() > 60) ages[3] ++;
                 else if(record->getAge() > 40) ages[2] ++;
                 else if(record->getAge() > 20) ages[1] ++;
-                else ages[0] ++;
+                else ages[0] ++;*/
                 idHT->insertID(record);
                 diseaseHT->insertHashTable(record);
                 countryHT->insertHashTable(record);

@@ -38,9 +38,7 @@ int main(int argc, char* argv[]) {
     string w, countryS;
     char *readbuf, *writebuf;
     char *myfifo, *auxfifo;
-    int *ages[4];
 
-    for(int z = 0; z < 4; z++) *ages[z] = 0;
     ID_Hashtable *idHT = new ID_Hashtable(SIZE);
     Hashtable *diseaseHT = new Hashtable(DISEASE_NUM, BUCKET_SIZE, disease);
     Hashtable *countryHT = new Hashtable(COUNTRY_NUM, BUCKET_SIZE, country);
@@ -73,10 +71,10 @@ int main(int argc, char* argv[]) {
             string countryS(c);
             char *country=new char[strlen(c)+1];
             strcpy(country,c);
-            initialize_record(filepath, country, diseaseHT, countryHT, idHT, ages);
+            initialize_record(filepath, country, diseaseHT, countryHT, idHT);
         }
     }
-    for(int z = 0; z < 4; z++) cout << *ages[z] << " ";
+    select_command(diseaseHT, countryHT, idHT, filepath, "/listCountries", fd2);
     return 0;
 
     while(true) {
