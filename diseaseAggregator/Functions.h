@@ -13,11 +13,12 @@ void swapD(struct Date *a, struct Date *b);
 int partition(struct Date *array[], int low, int high);
 void quickS(struct Date *array[], int low, int high);
 
-int read_line(int fd, char *readbuf);
-int read_line(int fd, char *readbuf, int size);
+int read_line(int fd, char *&readbuf, int bufferSize);
+int read_line(int fd, char *&readbuf, int size, int bufferSize);
+void write_line(int fd, char *&writebuf, int bufferSize, char *message);
 int initialize_record(char *filepath, char *country, Record *record, Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT);
 int sort_files(char* filepath, Date **&file_array);
-char *create_fifo(pid_t childpid);
+char *create_fifo(char *fifo_name, pid_t childpid);
 /*int commands() {
     if(!getline(cin, w)) {
         cout << "exiting" << endl;

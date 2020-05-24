@@ -48,8 +48,12 @@ public:
     }
 
     string getCountry() {
-        if(head) return head->getCountry();
-        else if(next) return next->getCountry();
+        string countries;
+        if(head) {
+            countries += head->getCountry();
+        }
+        if(next) countries += next->getCountry();
+        return countries;
     }
 
     void setNext(Bucket *n);

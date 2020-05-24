@@ -115,35 +115,43 @@ void quickS(struct Date **array, int low, int high) {
 }
 
 /* Read from fd and copy to readbuf. First message is no bytes to read(stored in size) */
-int read_line(int fd, char *readbuf) {
+int read_line(int fd, char *&readbuf, int bufferSize) {
     int size;
     read(fd, &size, sizeof(int));
-    cout << "read size child process: " << size << endl;
-    int toread = size;
-    while (toread != 0) {
-        int er = read(fd, readbuf, size);
-        readbuf[size] = '\0';
-        cout << "readbuf inside read_line: " << readbuf << endl;
-        if (er == -1) {
-            cout << "read() error: " << errno << endl;
-            return errno;
-        } else toread -= er;
+    cout << "read_line received: " << size << " bytes through fd: " << fd <<  endl;
+    readbuf = new char[size+1];
+    int toread = 0;
+    while (toread < size) {
+        if(size-toread <= bufferSize) toread += read(fd, readbuf + toread, size-toread);
+        else toread += read(fd, readbuf + toread, bufferSize);
     }
+    readbuf[size] = '\0';
+    cout << "readbuf inside read_line: " << readbuf << endl;
     return 0;
 }
 
-int read_line(int fd, char *readbuf, int size) {
-    int toread = size;
-    while (toread != 0) {
-        int er = read(fd, readbuf, size);
-        readbuf[size] = '\0';
-        cout << "readbuf inside read_line: " << readbuf << endl;
-        if (er == -1) {
-            cout << "read() error: " << errno << endl;
-            return errno;
-        } else toread -= er;
+int read_line(int fd, char *&readbuf, int size, int bufferSize) {
+    readbuf = new char[size+1];
+    int toread = 0;
+    while (toread < size) {
+        if(size-toread <= bufferSize) toread += read(fd, readbuf + toread, size-toread);
+        else toread += read(fd, readbuf + toread, bufferSize);
     }
+    readbuf[size] = '\0';
     return 0;
+}
+
+void write_line(int fd, char *&writebuf, int bufferSize, char *message) {
+    int size = strlen(message);
+    writebuf = new char[size];
+    strcpy(writebuf, message);
+    write(fd, &size, sizeof(int));
+    int tosend = 0;
+    while(tosend < size) {
+        if(size-tosend <= bufferSize) tosend += write(fd, writebuf + tosend, size-tosend);
+        else tosend += write(fd, writebuf + tosend, bufferSize);
+    }
+
 }
 
 int initialize_record(char *filepath, char *countryS, Record *record, Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT) {
@@ -221,14 +229,16 @@ int sort_files(char *filepath, Date **&file_array) {
         quickS(file_array, 0, file_count - 1);
         return file_count;
 }
-char *create_fifo(pid_t childpid) {
+char *create_fifo(char *fifo_name, pid_t childpid) {
+    char *name = new char[strlen(fifo_name) + 1];
+    strcpy(name, fifo_name);
     int digits = 0, total = childpid;
-    cout << "create_fifo: " << childpid << endl;
     while(total != 0) {
         total /= 10;
         digits++;
     }
-    char *myfifo = new char[digits + 1 + strlen("myfifo_")];
-    sprintf(myfifo, "myfifo_%d", childpid);
+    char *myfifo = new char[digits + 1 + strlen(name)];
+    sprintf(myfifo, "%s_%d", name, childpid);
+    delete[] name;
     return myfifo;
 }

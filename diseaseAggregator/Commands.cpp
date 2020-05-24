@@ -52,8 +52,7 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
 
     }
     else if(w == "/listCountries") {
-        listCountries(filepath);
-//        if(int er = listCountries(filepath) != 0) return er;
+        cout << countryHT->getCountry() << endl;
     }
     else if(w == "/numPatientAdmissions") {
         string virusName, date1, date2, country;

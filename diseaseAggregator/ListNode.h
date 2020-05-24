@@ -38,7 +38,11 @@ public:
     int countIncidents(Date *entry, Date *exit);
 
     string getCountry() {
-        return record->getCountry();
+        string countries;
+        countries += record->getCountry();
+        countries += "?";
+        if(next) countries += next->getCountry();
+        return countries;
     }
 
     Record *getRecord() const {

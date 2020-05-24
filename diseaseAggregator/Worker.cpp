@@ -31,40 +31,36 @@ int main(int argc, char* argv[]) {
     act.sa_flags = SA_SIGINFO;
     if(sigaction(SIGUSR1, &act, NULL) == - 1) cout << "Error with sigaction: " << errno << endl;
     signals = 0;
-    int numWorkers, bufferSize = 20;
-    string filePath;
+    int bufferSize = 20, fd , fd2, sent;
+    string filePath, word, i, j, k;
     char filepath[20];
     char command[30];
     string w, countryS;
-    char readbuf[bufferSize];
-    char writebuf[3];
-    int fd, fd2;
+    char *readbuf, *writebuf;
+    char *myfifo, *auxfifo;
 
     Record *record = new Record();
     ID_Hashtable *idHT = new ID_Hashtable(SIZE);
     Hashtable *diseaseHT = new Hashtable(DISEASE_NUM, BUCKET_SIZE, disease);
     Hashtable *countryHT = new Hashtable(COUNTRY_NUM, BUCKET_SIZE, country);
 
-    int sent;
-    string word, i, j, k;
 
-    char *myfifo = create_fifo(getpid());
-    char auxfifo[20] = "auxfifo";
-    cout << "pipe name child process: " << myfifo << endl;
+    myfifo = create_fifo("myfifo", getpid());
+    auxfifo = create_fifo("auxfifo", getpid());
+
     if (mkfifo(myfifo, 0666) == -1 && errno != EEXIST) {
         cout << "Error with main mkfifo: " << errno << endl;
         return errno;
     }
+    fd = open(myfifo, O_RDONLY);
     if (mkfifo(auxfifo, 0666) == -1 && errno != EEXIST) {
         cout << "Error with main auxfifo: " << errno << endl;
     }
-    fd = open(myfifo, O_RDONLY);
-    fd2 = open(auxfifo, O_WRONLY);
+//    fd2 = open(auxfifo, O_WRONLY);
 
 
     while (true) {
-
-        if(read_line(fd, readbuf) != 0) {
+        if(read_line(fd, readbuf, bufferSize) != 0) {
             cout << "error in read" << endl;
             return errno;
         }
@@ -76,19 +72,9 @@ int main(int argc, char* argv[]) {
             string countryS(c);
             initialize_record(filepath, c, record, diseaseHT, countryHT, idHT);
         }
-        cout << "String received in child process: " << readbuf << endl;
-//        printf("String received in child process: %s\n", arr);
-        sent = strlen("OK");
-        cout << "sent size child process: " << sent << endl;
-
-
-        int k = write(fd2, &sent, sizeof(int));
-        cout << "child process write(fd2) k = " << k << " & sent = " << sent << endl;
-        while (sent != 0) {
-            sent -= write(fd2, "OK", sent);
-        }
-        break;
     }
+    cout << countryHT->getCountry() << endl;
+    return 0;
 
     while(true) {
         if(signals == SIGUSR1) {
@@ -97,7 +83,7 @@ int main(int argc, char* argv[]) {
         }
         int size = 0;
         read(fd, &size, sizeof(int));
-        if (read_line(fd, readbuf, size) != 0) {
+        if (read_line(fd, readbuf, size, bufferSize) != 0) {
             cout << "error in read" << endl;
             return errno;
         }
