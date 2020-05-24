@@ -9,6 +9,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/worker.dir/ListNode.cpp.o"
   "CMakeFiles/worker.dir/Record.cpp.o"
   "CMakeFiles/worker.dir/RecordIDManagement.cpp.o"
+  "CMakeFiles/worker.dir/SignalHandling.cpp.o"
   "CMakeFiles/worker.dir/Tree.cpp.o"
   "CMakeFiles/worker.dir/TreeNode.cpp.o"
   "CMakeFiles/worker.dir/Worker.cpp.o"

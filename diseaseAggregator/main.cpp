@@ -12,7 +12,6 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-
     /* Check arguments */
     int numWorkers, bufferSize;
     string filePath;
@@ -124,7 +123,10 @@ int main(int argc, char *argv[]) {
         cout << "Enter command: ";
         if (!getline(cin, w)) cout << "exiting" << endl;
         else {
-            if(w == "/exit") break;
+            if(w == "/exit") {
+                kill(childpid[0], SIGUSR1);
+                break;
+            }
             strcpy(writebuf, w.c_str());
             sent = w.length();
             write(fd, &sent, sizeof(int));

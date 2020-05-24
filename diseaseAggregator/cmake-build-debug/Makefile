@@ -463,6 +463,36 @@ RecordIDManagement.cpp.s:
 	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/RecordIDManagement.cpp.s
 .PHONY : RecordIDManagement.cpp.s
 
+SignalHandling.o: SignalHandling.cpp.o
+
+.PHONY : SignalHandling.o
+
+# target to build an object file
+SignalHandling.cpp.o:
+	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/SignalHandling.cpp.o
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/SignalHandling.cpp.o
+.PHONY : SignalHandling.cpp.o
+
+SignalHandling.i: SignalHandling.cpp.i
+
+.PHONY : SignalHandling.i
+
+# target to preprocess a source file
+SignalHandling.cpp.i:
+	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/SignalHandling.cpp.i
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/SignalHandling.cpp.i
+.PHONY : SignalHandling.cpp.i
+
+SignalHandling.s: SignalHandling.cpp.s
+
+.PHONY : SignalHandling.s
+
+# target to generate assembly for a file
+SignalHandling.cpp.s:
+	$(MAKE) -f CMakeFiles/worker.dir/build.make CMakeFiles/worker.dir/SignalHandling.cpp.s
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/SignalHandling.cpp.s
+.PHONY : SignalHandling.cpp.s
+
 Tree.o: Tree.cpp.o
 
 .PHONY : Tree.o
@@ -620,6 +650,9 @@ help:
 	@echo "... RecordIDManagement.o"
 	@echo "... RecordIDManagement.i"
 	@echo "... RecordIDManagement.s"
+	@echo "... SignalHandling.o"
+	@echo "... SignalHandling.i"
+	@echo "... SignalHandling.s"
 	@echo "... Tree.o"
 	@echo "... Tree.i"
 	@echo "... Tree.s"

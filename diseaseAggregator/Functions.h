@@ -14,6 +14,7 @@ int partition(struct Date *array[], int low, int high);
 void quickS(struct Date *array[], int low, int high);
 
 int read_line(int fd, char *readbuf);
+int read_line(int fd, char *readbuf, int size);
 int initialize_record(char *filepath, char *country, Record *record, Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT);
 int sort_files(char* filepath, Date **&file_array);
 char *create_fifo(pid_t childpid);

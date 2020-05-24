@@ -92,6 +92,9 @@ CMakeFiles/worker.dir/RecordIDManagement.cpp.o: ../Record.h
 CMakeFiles/worker.dir/RecordIDManagement.cpp.o: ../RecordIDManagement.cpp
 CMakeFiles/worker.dir/RecordIDManagement.cpp.o: ../RecordIDManagement.h
 
+CMakeFiles/worker.dir/SignalHandling.cpp.o: ../SignalHandling.cpp
+CMakeFiles/worker.dir/SignalHandling.cpp.o: ../SignalHandling.h
+
 CMakeFiles/worker.dir/Tree.cpp.o: ../Heap.h
 CMakeFiles/worker.dir/Tree.cpp.o: ../HeapNode.h
 CMakeFiles/worker.dir/Tree.cpp.o: ../Record.h
@@ -115,6 +118,7 @@ CMakeFiles/worker.dir/Worker.cpp.o: ../HeapNode.h
 CMakeFiles/worker.dir/Worker.cpp.o: ../ListNode.h
 CMakeFiles/worker.dir/Worker.cpp.o: ../Record.h
 CMakeFiles/worker.dir/Worker.cpp.o: ../RecordIDManagement.h
+CMakeFiles/worker.dir/Worker.cpp.o: ../SignalHandling.h
 CMakeFiles/worker.dir/Worker.cpp.o: ../Tree.h
 CMakeFiles/worker.dir/Worker.cpp.o: ../TreeNode.h
 CMakeFiles/worker.dir/Worker.cpp.o: ../Worker.cpp

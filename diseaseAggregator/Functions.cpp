@@ -131,6 +131,21 @@ int read_line(int fd, char *readbuf) {
     }
     return 0;
 }
+
+int read_line(int fd, char *readbuf, int size) {
+    int toread = size;
+    while (toread != 0) {
+        int er = read(fd, readbuf, size);
+        readbuf[size] = '\0';
+        cout << "readbuf inside read_line: " << readbuf << endl;
+        if (er == -1) {
+            cout << "read() error: " << errno << endl;
+            return errno;
+        } else toread -= er;
+    }
+    return 0;
+}
+
 int initialize_record(char *filepath, char *countryS, Record *record, Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT) {
     DIR *dirp;
     struct dirent *entry;

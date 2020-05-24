@@ -5,6 +5,7 @@
 #include <dirent.h>
 #include <sstream>
 #include <unistd.h>
+#include <signal.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "Tree.h"
@@ -15,13 +16,21 @@
 #include "Functions.h"
 #include "Record.h"
 #include "Commands.h"
+#include "SignalHandling.h"
 
 #define SIZE 10
 #define DISEASE_NUM 10
 #define COUNTRY_NUM 10
 #define BUCKET_SIZE 256
 
+
 int main(int argc, char* argv[]) {
+    struct sigaction act;
+    sigemptyset(&act.sa_mask);
+    act.sa_sigaction = kill_child;
+    act.sa_flags = SA_SIGINFO;
+    if(sigaction(SIGUSR1, &act, NULL) == - 1) cout << "Error with sigaction: " << errno << endl;
+    signals = 0;
     int numWorkers, bufferSize = 20;
     string filePath;
     char filepath[20];
@@ -54,6 +63,7 @@ int main(int argc, char* argv[]) {
 
 
     while (true) {
+
         if(read_line(fd, readbuf) != 0) {
             cout << "error in read" << endl;
             return errno;
@@ -81,19 +91,23 @@ int main(int argc, char* argv[]) {
     }
 
     while(true) {
-        if (read_line(fd, readbuf) != 0) {
+        if(signals == SIGUSR1) {
+            cout << "Child process: " << getpid() << " killed by signal" << endl;
+            break;
+        }
+        int size = 0;
+        read(fd, &size, sizeof(int));
+        if (read_line(fd, readbuf, size) != 0) {
             cout << "error in read" << endl;
             return errno;
         }
-        if (strcmp(readbuf, "/exit") == 0) break;
-        else {
-            string g(readbuf);
-            select_command(diseaseHT, countryHT, idHT, record, filepath, g, fd2);
-            int k = write(fd2, &sent, sizeof(int));
-            cout << "child process write(fd2) k = " << k << " & sent = " << sent << endl;
-            while (sent != 0) {
-                sent -= write(fd2, "OK", sent);
-            }
+        cout << "read size child process: " << size << endl;
+        string g(readbuf);
+        select_command(diseaseHT, countryHT, idHT, record, filepath, g, fd2);
+        int k = write(fd2, &sent, sizeof(int));
+        cout << "child process write(fd2) k = " << k << " & sent = " << sent << endl;
+        while (sent != 0) {
+            sent -= write(fd2, "OK", sent);
         }
     }
 

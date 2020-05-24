@@ -95,6 +95,9 @@ CMakeFiles/diseaseAggregator.dir/RecordIDManagement.cpp.o: ../Record.h
 CMakeFiles/diseaseAggregator.dir/RecordIDManagement.cpp.o: ../RecordIDManagement.cpp
 CMakeFiles/diseaseAggregator.dir/RecordIDManagement.cpp.o: ../RecordIDManagement.h
 
+CMakeFiles/diseaseAggregator.dir/SignalHandling.cpp.o: ../SignalHandling.cpp
+CMakeFiles/diseaseAggregator.dir/SignalHandling.cpp.o: ../SignalHandling.h
+
 CMakeFiles/diseaseAggregator.dir/Tree.cpp.o: ../Heap.h
 CMakeFiles/diseaseAggregator.dir/Tree.cpp.o: ../HeapNode.h
 CMakeFiles/diseaseAggregator.dir/Tree.cpp.o: ../Record.h

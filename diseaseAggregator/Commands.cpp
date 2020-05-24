@@ -207,7 +207,6 @@ numPatientAdmissions(string virusName, string date1, string date2, string countr
         }
         while((entry = readdir(dirp)) != NULL) {
             if (entry->d_type == DT_DIR && strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".") != 0) {
-                cout << "entry->d_name: " << entry->d_name <<endl;
                 countries_array[pos] = entry->d_name;
                 total[pos] = diseaseHT->numPatientAdmissions(virusName, entry1, entry2, countries_array[pos]);
                 pos++;
