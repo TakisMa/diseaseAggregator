@@ -42,7 +42,6 @@ int main(int argc, char* argv[]) {
     Hashtable *diseaseHT = new Hashtable(BUCKET_NUM, BUCKET_SIZE, disease);
     Hashtable *countryHT = new Hashtable(BUCKET_NUM, BUCKET_SIZE, country);
 
-
     myfifo = create_fifo("myfifo", getpid());
     auxfifo = create_fifo("auxfifo", getpid());
 
@@ -51,11 +50,12 @@ int main(int argc, char* argv[]) {
         return errno;
     }
     fd = open(myfifo, O_RDONLY);
+
     if (mkfifo(auxfifo, 0666) == -1 && errno != EEXIST) {
         cout << "Error with main auxfifo: " << errno << endl;
     }
-//    fd2 = open(auxfifo, O_WRONLY);
-
+    fd2 = open(auxfifo, O_WRONLY);
+    cout << "fd2: " << fd2 << endl;
 
     while (true) {
         if(read_line(fd, readbuf, bufferSize) != 0) {
@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
 //            string countryS(c);
             char *country=new char[strlen(c)+1];
             strcpy(country,c);
-            initialize_record(filepath, country, diseaseHT, countryHT, idHT);
+            initialize_record(filepath, country, diseaseHT, countryHT, idHT, fd2, bufferSize);
         }
     }
     select_command(diseaseHT, countryHT, idHT, filepath, "/numPatientDischarges COVID-2019 12-12-1990 12-12-2020 Italy", fd2);

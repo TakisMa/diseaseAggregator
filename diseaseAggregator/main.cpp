@@ -68,10 +68,12 @@ int main(int argc, char *argv[]) {
                 cout << "Error with main myfifo: " << errno << endl;
             }
             fd[i] = open(myfifo[i], O_WRONLY);
+
             auxfifo[i] = create_fifo("auxfifo", childpid[i]);
             if(mkfifo(auxfifo[i], 0666) == -1 && errno != EEXIST) {
                 cout << "Error with main auxfifo: " << errno << endl;
             }
+            cout << auxfifo[i] << endl;
             fd2[i] = open(myfifo[i], O_RDONLY);
         }
         if(childpid[i] == 0) {
@@ -98,6 +100,7 @@ int main(int argc, char *argv[]) {
                     cout << "main will send: " << writebuf << endl;
                     delete[] tosend;
 //                    read_line(fd2[pos], readbuf, bufferSize);
+//                    cout << readbuf << endl;
                 }
             }
         sent = strlen("OK");

@@ -118,7 +118,7 @@ void quickS(struct Date **array, int low, int high) {
 int read_line(int fd, char *&readbuf, int bufferSize) {
     int size;
     read(fd, &size, sizeof(int));
-    cout << "read_line received: " << size << " bytes through fd: " << fd <<  endl;
+//    cout << "read_line received: " << size << " bytes through fd: " << fd <<  endl;
     readbuf = new char[size+1];
     int toread = 0;
     while (toread < size) {
@@ -126,7 +126,7 @@ int read_line(int fd, char *&readbuf, int bufferSize) {
         else toread += read(fd, readbuf + toread, bufferSize);
     }
     readbuf[size] = '\0';
-    cout << "readbuf inside read_line: " << readbuf << endl;
+//    cout << "readbuf inside read_line: " << readbuf << endl;
     return 0;
 }
 
@@ -154,7 +154,7 @@ void write_line(int fd, char *&writebuf, int bufferSize, char *message) {
 
 }
 
-int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT) {
+int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT, int fd2, int bufferSize) {
     DIR *dirp;
     struct dirent *entry;
     char filename[20];
@@ -212,6 +212,16 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
             }
         }
         summary = summary + to_string(age1) + "?" + to_string(age2) + "?" + to_string(age3) + "?" + to_string(age4);
+        char *s = new char[summary.length() + 1];
+        strcpy(s, summary.c_str());
+        cout << s << endl;
+        int size = strlen(s);
+//        write(fd2, &size, sizeof(int));
+//        int tosend = 0;
+//        while(tosend < size) {
+//            if(size-tosend <= bufferSize) tosend += write(fd2, s+tosend, size-tosend);
+//            else tosend += write(fd2, s+tosend, bufferSize);
+//        }
 
         fclose(fp);
     }
