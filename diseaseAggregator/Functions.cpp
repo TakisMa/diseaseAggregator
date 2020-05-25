@@ -171,6 +171,8 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
         cout << filename << endl;
         fp = fopen(filename, "r");
         if (!fp) cout << "errno: " << errno << endl;
+        string summary = file_array[z]->date + "?" + countryS + "?";
+        int age1 = 0, age2 = 0, age3 = 0, age4 = 0;
         while (getline(&line, &lenght, fp) != -1) {
             record = new Record();
             if (!record->initialize(line, file_array[z]->date.c_str(), countryS)) {
@@ -180,6 +182,14 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
                 Record *tmp = idHT->searchID(record->getRecordId());
                 tmp->setExitDate(record->getExitDate());
                 tmp->setState("EXIT");
+                if(record->getAge() > 60) age4 ++;
+                else if(record->getAge() > 40) age3 ++;
+                else if(record->getAge() > 20) age2 ++;
+                else if(record->getAge() > 0) age1 ++;
+                else {
+                    cout << "error with age" << endl;
+                    continue;
+                }
                 delete record;
             }
             else if(!idHT->existsID(record->getRecordId()) && record->getState() == "EXIT") {
@@ -187,11 +197,22 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
                 delete record;
             }
             else{
+                if(record->getAge() > 60) age4 ++;
+                else if(record->getAge() > 40) age3 ++;
+                else if(record->getAge() > 20) age2 ++;
+                else if(record->getAge() > 0) age1 ++;
+                else {
+                    cout << "error with age" << endl;
+                    continue;
+                }
                 idHT->insertID(record);
                 diseaseHT->insertHashTable(record);
                 countryHT->insertHashTable(record);
+
             }
         }
+        summary = summary + to_string(age1) + "?" + to_string(age2) + "?" + to_string(age3) + "?" + to_string(age4);
+
         fclose(fp);
     }
     return 0;

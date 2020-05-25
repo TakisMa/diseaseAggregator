@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
             sprintf(filepath, "%s", readbuf);
             char *c = strtok(readbuf, "/");
             c = strtok(NULL, "/");
-            string countryS(c);
+//            string countryS(c);
             char *country=new char[strlen(c)+1];
             strcpy(country,c);
             initialize_record(filepath, country, diseaseHT, countryHT, idHT);

@@ -13,28 +13,13 @@ private:
     WList* next;
 
 public:
-    int writeFD(string country) {
-        if(this->country == country) return fd;
-        else if(next) return next->writeFD(country);
-        else return -1;
-    }
+    int writeFD(string country);
 
-    int readFD(string country) {
-        if(this->country == country) return fd2;
-        else if(next) return next->readFD(country);
-        else return -1;
-    }
+    int readFD(string country);
 
-    WList(string country, int fd, int fd2, WList *next) {
-        this->country = country;
-        this->fd = fd;
-        this->fd2 = fd2;
-        this->next = next;
-    }
+    WList(string country, int fd, int fd2, WList *next);
 
-    ~WList() {
-        delete next;
-    }
+    ~WList();
 };
 
 class WBucket {
@@ -42,25 +27,15 @@ private:
     WList* head;
 
 public:
-    int writeFD(string country) {
-        if(head) return head->writeFD(country);
-    }
+    int writeFD(string country);
 
-    int readFD(string country) {
-        if(head) return head->readFD(country);
-    }
+    int readFD(string country);
 
-    void insertSummary(string country, int fd, int fd2) {
-        head = new WList(country, fd, fd2, head);
-    }
+    void insertSummary(string country, int fd, int fd2);
 
-    WBucket() {
-        head = NULL;
-    }
+    WBucket();
 
-    ~WBucket() {
-        delete head;
-    }
+    ~WBucket();
 };
 
 class WHashtable {
@@ -76,15 +51,9 @@ private:
     }
 
 public:
-    int writeFD(string country) {
-        int pos = hashS(country);
-        if(table[pos]) return table[pos]->writeFD(country);
-    }
+    int writeFD(string country);
 
-    int readFD(string country) {
-        int pos = hashS(country);
-        if(table[pos]) return table[pos]->readFD(country);
-    }
+    int readFD(string country);
 
     void insertSummary(char* c, int fd, int fd2) {
         string country(c);
@@ -93,20 +62,9 @@ public:
         table[pos]->insertSummary(country, fd, fd2);
     }
 
-    WHashtable(int bucketsNum) {
-        this->bucketsNum = bucketsNum;
-        table = new WBucket*[bucketsNum];
-        for(int i = 0; i < bucketsNum; i++) {
-            table[i] = nullptr;
-        }
-    }
+    WHashtable(int bucketsNum);
 
-    ~WHashtable() {
-        for(int i = 0; i < bucketsNum; i++) {
-            delete table[i];
-        }
-        delete []table;
-    }
+    ~WHashtable();
 };
 
 

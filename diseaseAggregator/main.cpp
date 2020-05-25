@@ -97,6 +97,7 @@ int main(int argc, char *argv[]) {
                     write(fd[pos], writebuf, sent);
                     cout << "main will send: " << writebuf << endl;
                     delete[] tosend;
+//                    read_line(fd2[pos], readbuf, bufferSize);
                 }
             }
         sent = strlen("OK");
