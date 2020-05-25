@@ -224,6 +224,12 @@
 			<Option target="worker"/>
 			<Option target="diseaseAggregator"/>
 		</Unit>
+		<Unit filename="/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/SummaryManagement.cpp">
+			<Option target="diseaseAggregator"/>
+		</Unit>
+		<Unit filename="/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/SummaryManagement.h">
+			<Option target="diseaseAggregator"/>
+		</Unit>
 		<Unit filename="/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/Tree.cpp">
 			<Option target="worker"/>
 			<Option target="diseaseAggregator"/>

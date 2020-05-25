@@ -11,6 +11,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/diseaseAggregator.dir/Record.cpp.o"
   "CMakeFiles/diseaseAggregator.dir/RecordIDManagement.cpp.o"
   "CMakeFiles/diseaseAggregator.dir/SignalHandling.cpp.o"
+  "CMakeFiles/diseaseAggregator.dir/SummaryManagement.cpp.o"
   "CMakeFiles/diseaseAggregator.dir/Tree.cpp.o"
   "CMakeFiles/diseaseAggregator.dir/TreeNode.cpp.o"
   "CMakeFiles/diseaseAggregator.dir/main.cpp.o"

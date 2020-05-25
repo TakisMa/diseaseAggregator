@@ -493,6 +493,33 @@ SignalHandling.cpp.s:
 	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/SignalHandling.cpp.s
 .PHONY : SignalHandling.cpp.s
 
+SummaryManagement.o: SummaryManagement.cpp.o
+
+.PHONY : SummaryManagement.o
+
+# target to build an object file
+SummaryManagement.cpp.o:
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/SummaryManagement.cpp.o
+.PHONY : SummaryManagement.cpp.o
+
+SummaryManagement.i: SummaryManagement.cpp.i
+
+.PHONY : SummaryManagement.i
+
+# target to preprocess a source file
+SummaryManagement.cpp.i:
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/SummaryManagement.cpp.i
+.PHONY : SummaryManagement.cpp.i
+
+SummaryManagement.s: SummaryManagement.cpp.s
+
+.PHONY : SummaryManagement.s
+
+# target to generate assembly for a file
+SummaryManagement.cpp.s:
+	$(MAKE) -f CMakeFiles/diseaseAggregator.dir/build.make CMakeFiles/diseaseAggregator.dir/SummaryManagement.cpp.s
+.PHONY : SummaryManagement.cpp.s
+
 Tree.o: Tree.cpp.o
 
 .PHONY : Tree.o
@@ -653,6 +680,9 @@ help:
 	@echo "... SignalHandling.o"
 	@echo "... SignalHandling.i"
 	@echo "... SignalHandling.s"
+	@echo "... SummaryManagement.o"
+	@echo "... SummaryManagement.i"
+	@echo "... SummaryManagement.s"
 	@echo "... Tree.o"
 	@echo "... Tree.i"
 	@echo "... Tree.s"

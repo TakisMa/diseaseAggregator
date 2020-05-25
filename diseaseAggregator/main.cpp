@@ -7,8 +7,10 @@
 #include <cstring>
 #include <string>
 #include "Functions.h"
+#include "SummaryManagement.h"
 #include "FileManagement.h"
 
+#define BUCKETS_NUM 10
 using namespace std;
 
 int main(int argc, char *argv[]) {
@@ -34,6 +36,7 @@ int main(int argc, char *argv[]) {
     int *fd = new int[numWorkers];
     int *fd2 = new int[numWorkers];
 
+    WHashtable *workerM = new WHashtable(BUCKETS_NUM);
 
     /* Determine number of directories */
     const char *cfilepath = filePath.c_str();
@@ -83,6 +86,7 @@ int main(int argc, char *argv[]) {
         int pos = 0;
             while ((entry = readdir(dirp)) != NULL) {
                 if (entry->d_type == DT_DIR && strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".") != 0) {
+                    workerM->insertSummary(entry->d_name, fd[pos], fd2[pos]);
                     char *tosend = new char[strlen(cfilepath) + strlen(entry->d_name) + 2];
                     sprintf(tosend, "%s/%s", cfilepath, entry->d_name);
                     sent = strlen(tosend);

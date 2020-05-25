@@ -19,8 +19,7 @@
 #include "SignalHandling.h"
 
 #define SIZE 10
-#define DISEASE_NUM 10
-#define COUNTRY_NUM 10
+#define BUCKET_NUM 10
 #define BUCKET_SIZE 256
 
 
@@ -40,8 +39,8 @@ int main(int argc, char* argv[]) {
     char *myfifo, *auxfifo;
 
     ID_Hashtable *idHT = new ID_Hashtable(SIZE);
-    Hashtable *diseaseHT = new Hashtable(DISEASE_NUM, BUCKET_SIZE, disease);
-    Hashtable *countryHT = new Hashtable(COUNTRY_NUM, BUCKET_SIZE, country);
+    Hashtable *diseaseHT = new Hashtable(BUCKET_NUM, BUCKET_SIZE, disease);
+    Hashtable *countryHT = new Hashtable(BUCKET_NUM, BUCKET_SIZE, country);
 
 
     myfifo = create_fifo("myfifo", getpid());
