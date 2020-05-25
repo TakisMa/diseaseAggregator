@@ -1,4 +1,0 @@
-/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles/worker.dir
-/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/takis/Documents/DI/6ο εξαμηνο/SysPro/diseaseAggregator/diseaseAggregator/cmake-build-debug/CMakeFiles/diseaseAggregator.dir

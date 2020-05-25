@@ -71,12 +71,20 @@ void ListNode::insertList(Record *rec) {
         tree = new Tree();
         tree->insertItem(rec);
     }
+    if(rec->getAge() > 60) ages[3] ++;
+    else if(rec->getAge() > 40) ages[2] ++;
+    else if(rec->getAge() > 20) ages[1] ++;
+    else if(rec->getAge() > 0) ages[0] ++;
+    else cout << "Wrong age" << endl;
 }
 
 ListNode::ListNode(Record *rec) {
     next = NULL;
     tree = NULL;
     record = rec;
+    for(int i = 0; i < 4; i++) {
+        ages[i] = 0;
+    }
 }
 
 ListNode::~ListNode() {

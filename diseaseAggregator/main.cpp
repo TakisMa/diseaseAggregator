@@ -73,8 +73,8 @@ int main(int argc, char *argv[]) {
             if(mkfifo(auxfifo[i], 0666) == -1 && errno != EEXIST) {
                 cout << "Error with main auxfifo: " << errno << endl;
             }
-            cout << auxfifo[i] << endl;
-            fd2[i] = open(myfifo[i], O_RDONLY);
+            fd2[i] = open(auxfifo[i], O_RDONLY);
+            cout << fd2[i] << endl;
         }
         if(childpid[i] == 0) {
             if(execvp("./cmake-build-debug/worker", argumentsv) == -1) {
@@ -99,8 +99,11 @@ int main(int argc, char *argv[]) {
                     write(fd[pos], writebuf, sent);
                     cout << "main will send: " << writebuf << endl;
                     delete[] tosend;
-//                    read_line(fd2[pos], readbuf, bufferSize);
-//                    cout << readbuf << endl;
+                    read_line(fd2[pos], readbuf, bufferSize);
+                    char *c = strtok(readbuf, "?");
+                    cout << c << endl;
+                    print_summary(c);
+                    delete[] readbuf;
                 }
             }
         sent = strlen("OK");

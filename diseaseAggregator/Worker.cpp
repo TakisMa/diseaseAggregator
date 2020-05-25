@@ -55,7 +55,6 @@ int main(int argc, char* argv[]) {
         cout << "Error with main auxfifo: " << errno << endl;
     }
     fd2 = open(auxfifo, O_WRONLY);
-    cout << "fd2: " << fd2 << endl;
 
     while (true) {
         if(read_line(fd, readbuf, bufferSize) != 0) {

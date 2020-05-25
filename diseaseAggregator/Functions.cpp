@@ -182,6 +182,8 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
                 Record *tmp = idHT->searchID(record->getRecordId());
                 tmp->setExitDate(record->getExitDate());
                 tmp->setState("EXIT");
+                //TODO:: uparxei sto ListNode ena int[4] me ages poy auksanetai kathe fora poy ginetai insert.
+                // Να τον χρησιμοποιησω ψαχνοντας το diseaseHT για την ασθενεια που διαχειριζομαι καθε φορα ωστε να στελνω στο summary statistict και το ονομα του ιου
                 if(record->getAge() > 60) age4 ++;
                 else if(record->getAge() > 40) age3 ++;
                 else if(record->getAge() > 20) age2 ++;
@@ -193,7 +195,7 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
                 delete record;
             }
             else if(!idHT->existsID(record->getRecordId()) && record->getState() == "EXIT") {
-                cout << "ERROR" << endl;
+//                cout << "ERROR" << endl;
                 delete record;
             }
             else{
@@ -214,14 +216,13 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
         summary = summary + to_string(age1) + "?" + to_string(age2) + "?" + to_string(age3) + "?" + to_string(age4);
         char *s = new char[summary.length() + 1];
         strcpy(s, summary.c_str());
-        cout << s << endl;
         int size = strlen(s);
-//        write(fd2, &size, sizeof(int));
-//        int tosend = 0;
-//        while(tosend < size) {
-//            if(size-tosend <= bufferSize) tosend += write(fd2, s+tosend, size-tosend);
-//            else tosend += write(fd2, s+tosend, bufferSize);
-//        }
+        write(fd2, &size, sizeof(int));
+        int tosend = 0;
+        while(tosend < size) {
+            if(size-tosend <= bufferSize) tosend += write(fd2, s+tosend, size-tosend);
+            else tosend += write(fd2, s+tosend, bufferSize);
+        }
 
         fclose(fp);
     }
@@ -275,6 +276,7 @@ int sort_files(char *filepath, Date **&file_array) {
 char *create_fifo(char *fifo_name, pid_t childpid) {
     char *name = new char[strlen(fifo_name) + 1];
     strcpy(name, fifo_name);
+    name[strlen(fifo_name) + 1] = '\0';
     int digits = 0, total = childpid;
     while(total != 0) {
         total /= 10;
@@ -284,4 +286,12 @@ char *create_fifo(char *fifo_name, pid_t childpid) {
     sprintf(myfifo, "%s_%d", name, childpid);
     delete[] name;
     return myfifo;
+}
+
+void print_summary(char *summary) {
+
+    while(summary) {
+        summary = strtok(NULL, "?");
+        cout << summary << endl;
+    }
 }

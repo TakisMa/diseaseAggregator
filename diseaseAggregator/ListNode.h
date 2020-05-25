@@ -12,6 +12,7 @@ using namespace std;
 
 class ListNode {
 private:
+    int ages[4];
     ListNode* next;
     Record* record;
     Tree* tree;
