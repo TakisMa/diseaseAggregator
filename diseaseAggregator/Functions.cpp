@@ -176,11 +176,17 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
             if (!record->initialize(line, file_array[z]->date.c_str(), countryS)) {
                 cout << "Failed to initialize record " << endl;
             }
+            if(idHT->existsID(record->getRecordId()) && record->getState() == "EXIT") {
+                Record *tmp = idHT->searchID(record->getRecordId());
+                tmp->setExitDate(record->getExitDate());
+                tmp->setState("EXIT");
+                delete record;
+            }
+            else if(!idHT->existsID(record->getRecordId()) && record->getState() == "EXIT") {
+                cout << "ERROR" << endl;
+                delete record;
+            }
             else{
-                /*if(record->getAge() > 60) ages[3] ++;
-                else if(record->getAge() > 40) ages[2] ++;
-                else if(record->getAge() > 20) ages[1] ++;
-                else ages[0] ++;*/
                 idHT->insertID(record);
                 diseaseHT->insertHashTable(record);
                 countryHT->insertHashTable(record);

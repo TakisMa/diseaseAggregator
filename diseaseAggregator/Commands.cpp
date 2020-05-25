@@ -31,6 +31,7 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         return -1;
     }
     else if(w == "/searchPatientRecord") {
+        iss >> w;
         Record *tmp = searchPatientRecord(w, idHT);
         if(tmp) cout << tmp->getRecordId() << " " << tmp->getFirstName() << " " << tmp->getLastName() << endl;
         else cout << "ID not found " << endl;
@@ -62,7 +63,7 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         if(iss) iss >> date1;
         if(iss) iss >> date2;
         if(iss) iss >> country;
-        numPatientAdmissions(virusName, date1, date2, country, diseaseHT, filepath);
+        numPatientAdmissions(virusName, date1, date2, country, diseaseHT, countryHT);
 
     }
     else if(w == "/numPatientDischarges") {
@@ -74,7 +75,7 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         if(iss) iss >> date1;
         if(iss) iss >> date2;
         if(iss) iss >> country;
-        numPatientDischarges(virusName, date1, date2, country, diseaseHT, filepath);
+        numPatientDischarges(virusName, date1, date2, country, diseaseHT, countryHT);
     }
     return 0;
 }
@@ -141,12 +142,7 @@ int listCountries(char *filepath) {
     return 0;
 }
 
-void
-numPatientAdmissions(string virusName, string date1, string date2, string country, Hashtable *diseaseHT, char *filepath) {
-    filepath = strtok(filepath, "/");
-    DIR *dirp;
-    struct dirent *entry;
-    int counties_count = 0;
+void numPatientAdmissions(string virusName, string date1, string date2, string country, Hashtable *diseaseHT, Hashtable *countryHT) {
     Date *entry1 = new Date;
     Date *entry2 = new Date;
     if(date1.length() < 10 || date2.length() < 10) {
@@ -174,7 +170,7 @@ numPatientAdmissions(string virusName, string date1, string date2, string countr
     else {
         cout << "Wrong dates" << endl;
         delete entry2;
-        delete entry2;
+        delete entry1;
     }
     if(entry1->compare(entry2) > 0) {
         cout << "ERROR: date1 > date2" << endl;
@@ -182,37 +178,11 @@ numPatientAdmissions(string virusName, string date1, string date2, string countr
         delete entry1;
     }
     if(country.empty()) {
-        int z = 0;
-
-        dirp = opendir(filepath);
-        if(!dirp) {
-            cout << "Failed to open directory filepath in child process" << endl;
-//            return errno;
-        }
-        while((entry = readdir(dirp)) != NULL) {
-            if (entry->d_type == DT_DIR && strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".") != 0) counties_count ++;
-        }
-        closedir(dirp);
-        int pos = 0;
-        string countries_array[counties_count], s;
-        int total[counties_count];
-        for(int z = 0; z < counties_count; z++) total[z] = 0;
-        cout << "filepath: " << filepath << "countries_count: " << counties_count<<  endl;
-        dirp = opendir(filepath);
-        if(!dirp) {
-            cout << "Failed to open directory filepath in child process" << endl;
-//            return errno;
-        }
-        while((entry = readdir(dirp)) != NULL) {
-            if (entry->d_type == DT_DIR && strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".") != 0) {
-                countries_array[pos] = entry->d_name;
-                total[pos] = diseaseHT->numPatientAdmissions(virusName, entry1, entry2, countries_array[pos]);
-                pos++;
-            }
-        }
-        closedir(dirp);
-        for(int z = 0; z < counties_count; z++) {
-            if(total[z] != 0) cout << countries_array[z] << " " << total[z] << endl;
+        istringstream iss(countryHT->getCountry());
+        string token;
+        while(getline(iss, token, '?')) {
+            int total = diseaseHT->numPatientAdmissions(virusName, entry1, entry2, token);
+            cout << token << " " << total << endl;
         }
     }
     else {
@@ -223,11 +193,7 @@ numPatientAdmissions(string virusName, string date1, string date2, string countr
     delete entry1;
 }
 
-void
-numPatientDischarges(string virusName, string date1, string date2, string country, Hashtable *diseaseHT, char *filepath) {
-    DIR *dirp;
-    struct dirent *entry;
-    int counties_count = 0;
+void numPatientDischarges(string virusName, string date1, string date2, string country, Hashtable *diseaseHT, Hashtable *countryHT) {
     Date *entry1 = new Date;
     Date *entry2 = new Date;
     if(date1.length() < 10 || date2.length() < 10) {
@@ -263,34 +229,11 @@ numPatientDischarges(string virusName, string date1, string date2, string countr
         delete entry1;
     }
     if(country.empty()) {
-        dirp = opendir(filepath);
-        if(!dirp) {
-            cout << "Failed to open directory filepath in child process" << endl;
-//            return errno;
-        }
-        while((entry = readdir(dirp)) != NULL) {
-            if (entry->d_type == DT_DIR && strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".") != 0) counties_count ++;
-        }
-        closedir(dirp);
-        int pos = 0;
-        string countries_array[counties_count], s;
-        int total[counties_count];
-        for(int z = 0; z < counties_count; z++) total[z] = 0;
-        dirp = opendir(filepath);
-        if(!dirp) {
-            cout << "Failed to open directory filepath in child process" << endl;
-//            return errno;
-        }
-        while((entry = readdir(dirp)) != NULL) {
-            if (entry->d_type == DT_DIR && strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".") != 0) {
-                countries_array[pos] = entry->d_name;
-                total[pos] = diseaseHT->numPatientDischarges(virusName, entry1, entry2,countries_array[pos]);
-                pos++;
-            }
-        }
-        closedir(dirp);
-        for(int z = 0; z < counties_count; z++) {
-            if(total[z] != 0) cout << countries_array[z] << " " << total[z] << endl;
+        istringstream iss(countryHT->getCountry());
+        string token;
+        while(getline(iss, token, '?')) {
+            int total = diseaseHT->numPatientDischarges(virusName, entry1, entry2, token);
+            cout << token << " " << total << endl;
         }
     }
     else {

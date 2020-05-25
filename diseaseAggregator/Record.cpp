@@ -105,13 +105,17 @@ Record::Record() {
 
 }
 
+int Record::getAge() const {
+    return age;
+}
+
+void Record::setState(const string &state) {
+    Record::state = state;
+}
+
 Record::~Record() {}
 
 Date *Record::getExitDate() {
     return &exitDate;
-}
-
-int Record::getAge() const {
-    return age;
 }
 

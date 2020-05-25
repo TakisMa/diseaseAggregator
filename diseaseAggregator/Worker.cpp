@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
             initialize_record(filepath, country, diseaseHT, countryHT, idHT);
         }
     }
-    select_command(diseaseHT, countryHT, idHT, filepath, "/listCountries", fd2);
+    select_command(diseaseHT, countryHT, idHT, filepath, "/numPatientDischarges COVID-2019 12-12-1990 12-12-2020 Italy", fd2);
     return 0;
 
     while(true) {

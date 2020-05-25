@@ -25,10 +25,6 @@ class Record {
 private:
     int recordID;
     int age;
-public:
-    int getAge() const;
-
-private:
     string state;
     string firstName;
     string lastName;
@@ -37,10 +33,13 @@ private:
     Date entryDate;
     Date exitDate;
 public:
+    void setState(const string &state);
+
+    int getAge() const;
+
     const string &getState() const;
 
-public:
-    int getRecordId() const;
+int getRecordId() const;
 
     const string &getFirstName() const {
         return firstName;
