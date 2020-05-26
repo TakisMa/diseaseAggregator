@@ -107,6 +107,7 @@ int main(int argc, char *argv[]) {
                     delete[] readbuf;
                 }
             }
+        read_line(fd2[pos], readbuf, bufferSize);
         sent = strlen("OK");
         write(fd[0], &sent, sizeof(int));
         write(fd[0], "OK", sent);

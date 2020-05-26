@@ -187,8 +187,6 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
                 Record *tmp = idHT->searchID(record->getRecordId());
                 tmp->setExitDate(record->getExitDate());
                 tmp->setState("EXIT");
-                //TODO:: uparxei sto ListNode ena int[4] me ages poy auksanetai kathe fora poy ginetai insert.
-                // Να τον χρησιμοποιησω ψαχνοντας το diseaseHT για την ασθενεια που διαχειριζομαι καθε φορα ωστε να στελνω στο summary statistict και το ονομα του ιου
                 delete record;
             }
             else if(!idHT->existsID(record->getRecordId()) && record->getState() == "EXIT") {
