@@ -4,6 +4,7 @@
 #include "SummaryList.h"
 #include <iostream>
 #include <cstring>
+#include <string.h>
 #include <unistd.h>
 #include <dirent.h>
 #include <sstream>
@@ -126,7 +127,6 @@ int read_line(int fd, char *&readbuf, int bufferSize) {
     while (toread < size) {
         if(size-toread <= bufferSize) toread += read(fd, readbuf + toread, size-toread);
         else toread += read(fd, readbuf + toread, bufferSize);
-        cout << count++ << ") read: " << readbuf<< endl;
     }
     readbuf[size] = '\0';
 //    cout << "readbuf inside read_line: " << readbuf << endl;
@@ -158,26 +158,22 @@ void write_line(int fd, char *&writebuf, int bufferSize, char *message) {
 }
 
 int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT, int fd2, int bufferSize) {
-    DIR *dirp;
-    struct dirent *entry;
     char filename[20];
     char *line = NULL;
     std::size_t lenght = 0;
     FILE *fp;
     struct Date **file_array;
     int file_count = 0;
-    int *ages;
     Record *record;
     List *list_head = new List();
+    string summary(countryS);
 
     file_count = sort_files(filepath, file_array);
     for (int z = 0; z < file_count; z++) {
-        int count = 0;
         sprintf(filename, "%s/%s", filepath, file_array[z]->date.c_str());
         fp = fopen(filename, "r");
         if (!fp) cout << "errno: " << errno << endl;
-        string summary = file_array[z]->date + "?" + countryS + "?";
-        int age1 = 0, age2 = 0, age3 = 0, age4 = 0;
+        summary = summary + "%?" + file_array[z]->date + "?";
         while (getline(&line, &lenght, fp) != -1) {
             record = new Record();
             if (!record->initialize(line, file_array[z]->date.c_str(), countryS)) {
@@ -201,19 +197,17 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
             }
         }
         summary += list_head->getAges(countryS);
-        char *s = new char[summary.length() + 1];
-        strcpy(s, summary.c_str());
-        int size = strlen(s);
-        write(fd2, &size, sizeof(int));
-        int tosend = 0;
-        while(tosend < size) {
-            cout << count++ << ") write: " << s+tosend << endl;
-            if(size-tosend <= bufferSize) tosend += write(fd2, s+tosend, size-tosend);
-            else tosend += write(fd2, s+tosend, bufferSize);
-        }
         fclose(fp);
     }
-//    list_head->getAges("Germany");
+    char *s = new char[summary.length() + 1];
+    strcpy(s, summary.c_str());
+    int size = strlen(s);
+    write(fd2, &size, sizeof(int));
+    int tosend = 0;
+    while(tosend < size) {
+        if(size-tosend <= bufferSize) tosend += write(fd2, s+tosend, size-tosend);
+        else tosend += write(fd2, s+tosend, bufferSize);
+    }
     return 0;
 }
 int sort_files(char *filepath, Date **&file_array) {
@@ -276,10 +270,28 @@ char *create_fifo(char *fifo_name, pid_t childpid) {
     return myfifo;
 }
 
-void print_summary(char *summary) {
-
+/* η συνάρτηση δέχεται σαν όρισμα ολόκληρο το στρινγκ που διαβάζεται απο το named pipe και
+ * αποκωδικοποιει το μηνυμα που εχει σταλει και περιεχει τα summary statistics για τον φακελο που διαβάστηκε απο τον worker.
+ * Πιο αναλυτικα, μετα τον χαρακτήρα '%' ακολουθει ημερομηνια/ονομα αρχειαυ
+ *      μετα τον χαρακτηρα '\' ακολουθουν ages ranges σε αύξουσα σειρά
+ *      Πάντα η πρώτη λέξη που λαμβάνεται είναι η χώρα την οποια διαχειρίζομαι αρα δεν υπάρχει καποιο αναγνωριστικό γι'αυτήν.
+ *      Όλες οι υπολοιπες λέξεις διαχωρίζονται με τον χαρακτήρα '?'*/
+void print_summary(char *sum) {
+    char *summary;
+    summary = strtok(sum, "?");
     while(summary) {
+        if(summary[0] == '\\'){
+            summary = strtok(NULL, "\\");
+            summary = strtok(NULL, "?");
+            cout << "age1: " << summary << endl;
+            summary = strtok(NULL, "?");
+            cout << "age2: " << summary << endl;
+            summary = strtok(NULL, "?");
+            cout << "age3: " << summary << endl;
+            summary = strtok(NULL, "?");
+            cout << "age4: " << summary << endl;
+        }
+        else cout << summary << endl;
         summary = strtok(NULL, "?");
-        cout << summary << endl;
     }
 }

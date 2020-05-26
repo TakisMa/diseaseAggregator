@@ -100,19 +100,22 @@ int main(int argc, char *argv[]) {
 //                    cout << "main will send: " << writebuf << endl;
                     delete[] tosend;
                     read_line(fd2[pos], readbuf, bufferSize);
-//                    cout << readbuf << endl;
-//                    char *c = strtok(readbuf, "?");
-//                    cout << c << endl;
+                    cout << readbuf << endl;
+//                    char *c = new char[strlen(readbuf) + 1];
+//                    strcpy(c, readbuf);
+//                    c[strlen(readbuf)] = '\0';
 //                    print_summary(c);
                     delete[] readbuf;
                 }
             }
-        read_line(fd2[pos], readbuf, bufferSize);
-        sent = strlen("OK");
-        write(fd[0], &sent, sizeof(int));
-        write(fd[0], "OK", sent);
-        cout << endl;
-        closedir(dirp);
+//            cout << readbuf<< endl;
+//            char *c = readbuf;
+            print_summary(c);
+            sent = strlen("OK");
+            write(fd[0], &sent, sizeof(int));
+            write(fd[0], "OK", sent);
+            cout << endl;
+            closedir(dirp);
     }
     wait(&wstatus);
     return 0;
