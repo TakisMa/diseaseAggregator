@@ -12,7 +12,7 @@ using namespace std;
 
 class ListNode {
 private:
-    int ages[4];
+    int *ages;
     ListNode* next;
     Record* record;
     Tree* tree;
@@ -58,6 +58,9 @@ public:
         if(record->getDiseaseId() == rec->getDiseaseId());
     }
 
+    int *getAges() {
+        return ages;
+    }
 
     void setNext(ListNode *next);
 

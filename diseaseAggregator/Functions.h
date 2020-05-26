@@ -7,6 +7,8 @@
 
 using namespace std;
 
+
+
 bool check_int(string );
 int checkArguments(int argc, char** argv, int &workersNum, int &bufferSize, string &path);
 void swapD(struct Date *a, struct Date *b);

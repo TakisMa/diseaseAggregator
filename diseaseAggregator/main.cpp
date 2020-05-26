@@ -95,14 +95,15 @@ int main(int argc, char *argv[]) {
                     writebuf = new char[sent];
                     strcpy(writebuf, tosend);
                     write(fd[pos], &sent, sizeof(int));
-                    cout << "main will send: " << sent << " bytes throught fd: " << fd[0] << endl;
+//                    cout << "main will send: " << sent << " bytes throught fd: " << fd[0] << endl;
                     write(fd[pos], writebuf, sent);
-                    cout << "main will send: " << writebuf << endl;
+//                    cout << "main will send: " << writebuf << endl;
                     delete[] tosend;
                     read_line(fd2[pos], readbuf, bufferSize);
-                    char *c = strtok(readbuf, "?");
-                    cout << c << endl;
-                    print_summary(c);
+//                    cout << readbuf << endl;
+//                    char *c = strtok(readbuf, "?");
+//                    cout << c << endl;
+//                    print_summary(c);
                     delete[] readbuf;
                 }
             }

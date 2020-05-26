@@ -47,6 +47,13 @@ public:
         return next;
     }
 
+    int *getAges(string country) {
+        if(head) {
+            if(head->getCountry() == country) return head->getAges();
+        }
+        if(next) return next->getAges(country);
+    }
+
     string getCountry() {
         string countries;
         if(head) {

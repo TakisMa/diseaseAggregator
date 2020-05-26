@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
     act.sa_flags = SA_SIGINFO;
     if(sigaction(SIGUSR1, &act, NULL) == - 1) cout << "Error with sigaction: " << errno << endl;
     signals = 0;
-    int bufferSize = 20, fd , fd2, sent;
+    int bufferSize = 512, fd , fd2, sent;
     string filePath, word, i, j, k;
     char filepath[20];
     char command[30];

@@ -78,10 +78,13 @@ void ListNode::insertList(Record *rec) {
     else cout << "Wrong age" << endl;
 }
 
+
+
 ListNode::ListNode(Record *rec) {
     next = NULL;
     tree = NULL;
     record = rec;
+    ages = new int[4];
     for(int i = 0; i < 4; i++) {
         ages[i] = 0;
     }
@@ -90,6 +93,7 @@ ListNode::ListNode(Record *rec) {
 ListNode::~ListNode() {
     delete next;
     delete tree;
+    delete[] ages;
 }
 
 int ListNode::numPatientAdmissions(Date *date1, Date *date2, string countries) {

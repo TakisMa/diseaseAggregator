@@ -56,6 +56,12 @@ public:
         return countries;
     }
 
+    int *getAges(string disease, string country) {
+        int pos = hashS(disease);
+        if(table[pos]) return table[pos]->getAges(country);
+        else return NULL;
+    }
+
     void insertHashTable(Record *rec);
 
     void hashPrint();

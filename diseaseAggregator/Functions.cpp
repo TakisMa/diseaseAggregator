@@ -1,6 +1,7 @@
 #include <string>
 #include "Functions.h"
 #include "Record.h"
+#include "SummaryList.h"
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
@@ -117,6 +118,7 @@ void quickS(struct Date **array, int low, int high) {
 /* Read from fd and copy to readbuf. First message is no bytes to read(stored in size) */
 int read_line(int fd, char *&readbuf, int bufferSize) {
     int size;
+    int count = 0;
     read(fd, &size, sizeof(int));
 //    cout << "read_line received: " << size << " bytes through fd: " << fd <<  endl;
     readbuf = new char[size+1];
@@ -124,6 +126,7 @@ int read_line(int fd, char *&readbuf, int bufferSize) {
     while (toread < size) {
         if(size-toread <= bufferSize) toread += read(fd, readbuf + toread, size-toread);
         else toread += read(fd, readbuf + toread, bufferSize);
+        cout << count++ << ") read: " << readbuf<< endl;
     }
     readbuf[size] = '\0';
 //    cout << "readbuf inside read_line: " << readbuf << endl;
@@ -163,12 +166,14 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
     FILE *fp;
     struct Date **file_array;
     int file_count = 0;
+    int *ages;
     Record *record;
+    List *list_head = new List();
 
     file_count = sort_files(filepath, file_array);
     for (int z = 0; z < file_count; z++) {
+        int count = 0;
         sprintf(filename, "%s/%s", filepath, file_array[z]->date.c_str());
-        cout << filename << endl;
         fp = fopen(filename, "r");
         if (!fp) cout << "errno: " << errno << endl;
         string summary = file_array[z]->date + "?" + countryS + "?";
@@ -184,14 +189,6 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
                 tmp->setState("EXIT");
                 //TODO:: uparxei sto ListNode ena int[4] me ages poy auksanetai kathe fora poy ginetai insert.
                 // Να τον χρησιμοποιησω ψαχνοντας το diseaseHT για την ασθενεια που διαχειριζομαι καθε φορα ωστε να στελνω στο summary statistict και το ονομα του ιου
-                if(record->getAge() > 60) age4 ++;
-                else if(record->getAge() > 40) age3 ++;
-                else if(record->getAge() > 20) age2 ++;
-                else if(record->getAge() > 0) age1 ++;
-                else {
-                    cout << "error with age" << endl;
-                    continue;
-                }
                 delete record;
             }
             else if(!idHT->existsID(record->getRecordId()) && record->getState() == "EXIT") {
@@ -199,33 +196,26 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
                 delete record;
             }
             else{
-                if(record->getAge() > 60) age4 ++;
-                else if(record->getAge() > 40) age3 ++;
-                else if(record->getAge() > 20) age2 ++;
-                else if(record->getAge() > 0) age1 ++;
-                else {
-                    cout << "error with age" << endl;
-                    continue;
-                }
                 idHT->insertID(record);
                 diseaseHT->insertHashTable(record);
                 countryHT->insertHashTable(record);
-
+                list_head = list_head->insertList(record->getCountry(), record->getDiseaseId(), record);
             }
         }
-        summary = summary + to_string(age1) + "?" + to_string(age2) + "?" + to_string(age3) + "?" + to_string(age4);
+        summary += list_head->getAges(countryS);
         char *s = new char[summary.length() + 1];
         strcpy(s, summary.c_str());
         int size = strlen(s);
         write(fd2, &size, sizeof(int));
         int tosend = 0;
         while(tosend < size) {
+            cout << count++ << ") write: " << s+tosend << endl;
             if(size-tosend <= bufferSize) tosend += write(fd2, s+tosend, size-tosend);
             else tosend += write(fd2, s+tosend, bufferSize);
         }
-
         fclose(fp);
     }
+//    list_head->getAges("Germany");
     return 0;
 }
 int sort_files(char *filepath, Date **&file_array) {
