@@ -12,5 +12,6 @@ void kill_child(int signum, siginfo_t *info, void *context) {
 }
 
 void child_int(int signum, siginfo_t *info, void *context) {
+    cout << "signal caught" << endl;
     signals = info->si_pid;
 }

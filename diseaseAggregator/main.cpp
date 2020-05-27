@@ -111,6 +111,7 @@ int main(int argc, char *argv[]) {
                     tmp = new char[strlen(entry->d_name) + 1];
                     strcpy(tmp, entry->d_name);
                     tmp[strlen(entry->d_name)] = '\0';
+                    cout << tmp << endl;
                 }
             }
             workerM->insertSummary(tmp, fd[pos], fd2[pos], childpid[pos]);
@@ -131,7 +132,7 @@ int main(int argc, char *argv[]) {
             signals = -1;
         }
 
-        if (!getline(cin, w)) exit(2);
+        if (!getline(cin, w)) continue;
         else {
             if(w == "/exit") {
                 kill(childpid[0], SIGUSR1);
