@@ -10,3 +10,7 @@ void kill_child(int signum, siginfo_t *info, void *context) {
     signals = signum;
     cout << "signals: " << signals << endl;
 }
+
+void child_int(int signum, siginfo_t *info, void *context) {
+    signals = info->si_pid;
+}

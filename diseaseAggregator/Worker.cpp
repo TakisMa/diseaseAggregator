@@ -28,12 +28,10 @@ int main(int argc, char* argv[]) {
     sigemptyset(&act.sa_mask);
     act.sa_sigaction = kill_child;
     act.sa_flags = SA_SIGINFO;
-    if(sigaction(SIGUSR1, &act, NULL) == - 1) cout << "Error with sigaction: " << errno << endl;
     signals = 0;
     int bufferSize = 512, fd , fd2, sent;
     string filePath, word, i, j, k;
     char filepath[20];
-    char command[30];
     string w, countryS;
     char *readbuf, *writebuf;
     char *myfifo, *auxfifo;

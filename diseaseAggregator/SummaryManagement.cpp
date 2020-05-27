@@ -54,6 +54,14 @@ int WHashtable::readFD(string country) {
     if(table[pos]) return table[pos]->readFD(country);
 }
 
+
+void WHashtable::insertSummary(char *c, int fd, int fd2, pid_t childpid) {
+    string country(c);
+    int pos = hashS(country);
+    if(!table[pos]) table[pos] = new WBucket();
+    table[pos]->insertSummary(country, fd, fd2, childpid);
+}
+
 WHashtable::WHashtable(int bucketsNum) {
     this->bucketsNum = bucketsNum;
     table = new WBucket*[bucketsNum];

@@ -18,6 +18,12 @@ public:
 
     int readFD(string country);
 
+    string getAllCountries(string countries, pid_t dead_pid) {
+        if(childpid == dead_pid) countries = country + "?";
+        if(next) return next->getAllCountries(countries, dead_pid);
+        return countries;
+    }
+
     WList(string country, int fd, int fd2, WList *next, pid_t childpid);
 
     ~WList();
@@ -33,6 +39,10 @@ public:
     int readFD(string country);
 
     void insertSummary(string country, int fd, int fd2, pid_t childpid);
+
+    string getAllCountries(string countries, pid_t dead_pid) {
+        return head->getAllCountries(countries, dead_pid);
+    }
 
     WBucket();
 
@@ -56,11 +66,14 @@ public:
 
     int readFD(string country);
 
-    void insertSummary(char* c, int fd, int fd2, pid_t childpid) {
-        string country(c);
-        int pos = hashS(country);
-        if(!table[pos]) table[pos] = new WBucket();
-        table[pos]->insertSummary(country, fd, fd2, childpid);
+    void insertSummary(char* c, int fd, int fd2, pid_t childpid);
+
+    string getAllCountries(pid_t dead_pid) {
+        string countries;
+        for(int i = 0; i < bucketsNum; i++) {
+            if(table[i]) countries += table[i]->getAllCountries(countries, dead_pid);
+        }
+        return countries;
     }
 
     WHashtable(int bucketsNum);

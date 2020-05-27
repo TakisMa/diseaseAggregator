@@ -8,6 +8,7 @@
 #include <string>
 #include "Functions.h"
 #include "SummaryManagement.h"
+#include "SignalHandling.h"
 #include "FileManagement.h"
 
 #define BUCKETS_NUM 10
@@ -21,6 +22,12 @@ int main(int argc, char *argv[]) {
         return -10;
     }
 
+    struct sigaction child_act;
+    sigemptyset(&child_act.sa_mask);
+    child_act.sa_sigaction = child_int;
+    if(sigaction(SIGCHLD, &child_act, NULL) == - 1) cout << "Error with sigaction: " << errno << endl;
+    signals = -1;
+
     int wstatus;
     string w;
     pid_t *childpid = new pid_t[numWorkers];
@@ -29,6 +36,7 @@ int main(int argc, char *argv[]) {
     DIR * dirp;
     struct dirent * entry;
     int sent, size;
+    char * tmp;
     char *readbuf;
     char *writebuf;
     char **myfifo = new char*[numWorkers];
@@ -100,20 +108,30 @@ int main(int argc, char *argv[]) {
                     c[strlen(readbuf)] = '\0';
                     print_summary(c);
                     delete[] readbuf;
+                    tmp = new char[strlen(entry->d_name) + 1];
+                    strcpy(tmp, entry->d_name);
+                    tmp[strlen(entry->d_name)] = '\0';
                 }
             }
+            workerM->insertSummary(tmp, fd[pos], fd2[pos], childpid[pos]);
             write_line(fd[pos], writebuf, bufferSize, "OK");
             cout << endl;
             closedir(dirp);
     }
+    cout << workerM->writeFD("China") << endl;
     while(true) {
         read_line(fd2[0], readbuf, bufferSize);
         if (strcmp(readbuf, "OK") == 0) break;
     }
-
-
+    cout << childpid[0] << endl;
     while(true) {
-        if (!getline(cin, w)) cout << "exiting" << endl;
+        if(signals > 0) {
+            cout << "Child with pid: " << signals << " died..." << endl;
+            cout << "countries for dead worker: " << workerM->getAllCountries(signals) << endl;
+            signals = -1;
+        }
+
+        if (!getline(cin, w)) exit(2);
         else {
             if(w == "/exit") {
                 kill(childpid[0], SIGUSR1);
@@ -134,7 +152,6 @@ int main(int argc, char *argv[]) {
     if(close(fd2[0]) < 0) {
         cout << "Error on main process close(fd2) with code: " << errno << endl;
     }
-    unlink("auxfifo");
     return 0;
 }
 
