@@ -20,8 +20,13 @@ public:
 
     string getAllCountries(string countries, pid_t dead_pid) {
         if(childpid == dead_pid) countries = country + "?";
-        if(next) return next->getAllCountries(countries, dead_pid);
+        if(next) countries += next->getAllCountries(countries, dead_pid);
         return countries;
+    }
+
+    void printAll() {
+        cout << "country: " << country << endl;
+        if(next) next->printAll();
     }
 
     WList(string country, int fd, int fd2, WList *next, pid_t childpid);
@@ -42,6 +47,10 @@ public:
 
     string getAllCountries(string countries, pid_t dead_pid) {
         return head->getAllCountries(countries, dead_pid);
+    }
+
+    void printAll() {
+        head->printAll();
     }
 
     WBucket();
@@ -74,6 +83,12 @@ public:
             if(table[i]) countries += table[i]->getAllCountries(countries, dead_pid);
         }
         return countries;
+    }
+
+    void printAll() {
+        for(int i = 0; i < bucketsNum; i++) if(table[i]) {
+            table[i]->printAll();
+        }
     }
 
     WHashtable(int bucketsNum);

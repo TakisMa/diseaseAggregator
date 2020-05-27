@@ -108,18 +108,12 @@ int main(int argc, char *argv[]) {
                     c[strlen(readbuf)] = '\0';
                     print_summary(c);
                     delete[] readbuf;
-                    tmp = new char[strlen(entry->d_name) + 1];
-                    strcpy(tmp, entry->d_name);
-                    tmp[strlen(entry->d_name)] = '\0';
-                    cout << tmp << endl;
                 }
             }
-            workerM->insertSummary(tmp, fd[pos], fd2[pos], childpid[pos]);
             write_line(fd[pos], writebuf, bufferSize, "OK");
             cout << endl;
             closedir(dirp);
     }
-    cout << workerM->writeFD("China") << endl;
     while(true) {
         read_line(fd2[0], readbuf, bufferSize);
         if (strcmp(readbuf, "OK") == 0) break;
