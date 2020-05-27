@@ -15,8 +15,14 @@ private:
 public:
     string getAges() {
         string summary;
-        summary = summary + disease + "?\\";
-        for(int i = 0; i < 4; i++) summary = summary + to_string(ages[i]) + "?";
+        summary = summary + "?" +disease + "?\\";
+        for(int i = 0; i < 4; i++) {
+            if(i == 3) {
+                summary = summary + to_string(ages[i]);
+                continue;
+            }
+            summary = summary + to_string(ages[i]) + "?";
+        }
         if(next) summary += next->getAges();
         else return summary;
     }

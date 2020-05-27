@@ -72,8 +72,9 @@ int main(int argc, char* argv[]) {
             initialize_record(filepath, country, diseaseHT, countryHT, idHT, fd2, bufferSize);
         }
     }
-    select_command(diseaseHT, countryHT, idHT, filepath, "/numPatientDischarges COVID-2019 12-12-1990 12-12-2020 Italy", fd2);
-    return 0;
+    write_line(fd2, writebuf, bufferSize, "OK");
+
+
 
     while(true) {
         if(signals == SIGUSR1) {
@@ -86,14 +87,8 @@ int main(int argc, char* argv[]) {
             cout << "error in read" << endl;
             return errno;
         }
-        cout << "read size child process: " << size << endl;
         string g(readbuf);
         select_command(diseaseHT, countryHT, idHT, filepath, g, fd2);
-        int k = write(fd2, &sent, sizeof(int));
-        cout << "child process write(fd2) k = " << k << " & sent = " << sent << endl;
-        while (sent != 0) {
-            sent -= write(fd2, "OK", sent);
-        }
     }
 
 

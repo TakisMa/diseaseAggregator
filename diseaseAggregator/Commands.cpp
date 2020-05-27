@@ -49,10 +49,17 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         total = diseaseFrequency(virusName, date1, date2, country, diseaseHT, fd2);
         if(!country.empty()) cout << country << " " << total << endl;
         else cout << total << endl;
-
     }
     else if(w == "/listCountries") {
-        cout << countryHT->getCountry() << endl;
+        string countries = countryHT->getCountry().c_str();
+        char *c = new char[countries.length() + 1];
+        strcpy(c, countries.c_str());
+        c[countries.length()] = '\0';
+        char *countriesC = strtok(c, "?");
+        while(countriesC != NULL) {
+            cout << countriesC << " " << getpid() << endl;
+            countriesC = strtok(NULL, "?");
+        }
     }
     else if(w == "/numPatientAdmissions") {
         string virusName, date1, date2, country;

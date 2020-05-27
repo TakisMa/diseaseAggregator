@@ -10,6 +10,7 @@ private:
     string country;
     int fd;
     int fd2;
+    pid_t childpid;
     WList* next;
 
 public:
@@ -17,7 +18,7 @@ public:
 
     int readFD(string country);
 
-    WList(string country, int fd, int fd2, WList *next);
+    WList(string country, int fd, int fd2, WList *next, pid_t childpid);
 
     ~WList();
 };
@@ -31,7 +32,7 @@ public:
 
     int readFD(string country);
 
-    void insertSummary(string country, int fd, int fd2);
+    void insertSummary(string country, int fd, int fd2, pid_t childpid);
 
     WBucket();
 
@@ -55,11 +56,11 @@ public:
 
     int readFD(string country);
 
-    void insertSummary(char* c, int fd, int fd2) {
+    void insertSummary(char* c, int fd, int fd2, pid_t childpid) {
         string country(c);
         int pos = hashS(country);
         if(!table[pos]) table[pos] = new WBucket();
-        table[pos]->insertSummary(country, fd, fd2);
+        table[pos]->insertSummary(country, fd, fd2, childpid);
     }
 
     WHashtable(int bucketsNum);

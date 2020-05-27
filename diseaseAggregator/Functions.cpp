@@ -129,7 +129,6 @@ int read_line(int fd, char *&readbuf, int bufferSize) {
         else toread += read(fd, readbuf + toread, bufferSize);
     }
     readbuf[size] = '\0';
-//    cout << "readbuf inside read_line: " << readbuf << endl;
     return 0;
 }
 
@@ -146,8 +145,9 @@ int read_line(int fd, char *&readbuf, int size, int bufferSize) {
 
 void write_line(int fd, char *&writebuf, int bufferSize, char *message) {
     int size = strlen(message);
-    writebuf = new char[size];
+    writebuf = new char[size+1];
     strcpy(writebuf, message);
+    writebuf[size] = '\0';
     write(fd, &size, sizeof(int));
     int tosend = 0;
     while(tosend < size) {
@@ -173,7 +173,7 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
         sprintf(filename, "%s/%s", filepath, file_array[z]->date.c_str());
         fp = fopen(filename, "r");
         if (!fp) cout << "errno: " << errno << endl;
-        summary = summary + "%?" + file_array[z]->date + "?";
+        summary = summary + "?" + file_array[z]->date + "?";
         while (getline(&line, &lenght, fp) != -1) {
             record = new Record();
             if (!record->initialize(line, file_array[z]->date.c_str(), countryS)) {
@@ -281,15 +281,15 @@ void print_summary(char *sum) {
     summary = strtok(sum, "?");
     while(summary) {
         if(summary[0] == '\\'){
-            summary = strtok(NULL, "\\");
+            summary++;
+            cout << "Age range 0-20 years: " << summary << " cases" << endl;
             summary = strtok(NULL, "?");
-            cout << "age1: " << summary << endl;
+            cout << "Age range 21-40 years: " << summary << " cases" << endl;
             summary = strtok(NULL, "?");
-            cout << "age2: " << summary << endl;
+            cout << "Age range 41-60 years: " << summary << " cases" << endl;
             summary = strtok(NULL, "?");
-            cout << "age3: " << summary << endl;
-            summary = strtok(NULL, "?");
-            cout << "age4: " << summary << endl;
+            cout << "Age range 60+ years: " << summary << " cases" << endl;
+            cout << endl;
         }
         else cout << summary << endl;
         summary = strtok(NULL, "?");

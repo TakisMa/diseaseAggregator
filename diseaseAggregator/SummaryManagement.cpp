@@ -12,10 +12,11 @@ int WList::readFD(string country) {
     else return -1;
 }
 
-WList::WList(string country, int fd, int fd2, WList *next) {
+WList::WList(string country, int fd, int fd2, WList *next, pid_t childpid) {
     this->country = country;
     this->fd = fd;
     this->fd2 = fd2;
+    this->childpid = childpid;
     this->next = next;
 }
 
@@ -31,8 +32,8 @@ int WBucket::readFD(string country) {
     if(head) return head->readFD(country);
 }
 
-void WBucket::insertSummary(string country, int fd, int fd2) {
-    head = new WList(country, fd, fd2, head);
+void WBucket::insertSummary(string country, int fd, int fd2, pid_t childpid) {
+    head = new WList(country, fd, fd2, head, childpid);
 }
 
 WBucket::WBucket() {

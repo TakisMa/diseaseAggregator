@@ -88,60 +88,41 @@ int main(int argc, char *argv[]) {
         int pos = 0;
             while ((entry = readdir(dirp)) != NULL) {
                 if (entry->d_type == DT_DIR && strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".") != 0) {
-                    workerM->insertSummary(entry->d_name, fd[pos], fd2[pos]);
+                    workerM->insertSummary(entry->d_name, fd[pos], fd2[pos], childpid[pos]);
                     char *tosend = new char[strlen(cfilepath) + strlen(entry->d_name) + 2];
                     sprintf(tosend, "%s/%s", cfilepath, entry->d_name);
-                    sent = strlen(tosend);
-                    writebuf = new char[sent];
-                    strcpy(writebuf, tosend);
-                    write(fd[pos], &sent, sizeof(int));
-//                    cout << "main will send: " << sent << " bytes throught fd: " << fd[0] << endl;
-                    write(fd[pos], writebuf, sent);
-//                    cout << "main will send: " << writebuf << endl;
+                    write_line(fd[pos], writebuf, bufferSize, tosend);
                     delete[] tosend;
+
                     read_line(fd2[pos], readbuf, bufferSize);
-                    cout << readbuf << endl;
-//                    char *c = new char[strlen(readbuf) + 1];
-//                    strcpy(c, readbuf);
-//                    c[strlen(readbuf)] = '\0';
-//                    print_summary(c);
+                    char *c = new char[strlen(readbuf) + 1];
+                    strcpy(c, readbuf);
+                    c[strlen(readbuf)] = '\0';
+                    print_summary(c);
                     delete[] readbuf;
                 }
             }
-//            cout << readbuf<< endl;
-//            char *c = readbuf;
-            print_summary(c);
-            sent = strlen("OK");
-            write(fd[0], &sent, sizeof(int));
-            write(fd[0], "OK", sent);
+            write_line(fd[pos], writebuf, bufferSize, "OK");
             cout << endl;
             closedir(dirp);
     }
-    wait(&wstatus);
-    return 0;
+    while(true) {
+        read_line(fd2[0], readbuf, bufferSize);
+        if (strcmp(readbuf, "OK") == 0) break;
+    }
 
 
     while(true) {
-        cout << "Enter command: ";
         if (!getline(cin, w)) cout << "exiting" << endl;
         else {
             if(w == "/exit") {
                 kill(childpid[0], SIGUSR1);
                 break;
             }
-            strcpy(writebuf, w.c_str());
-            sent = w.length();
-            write(fd[0], &sent, sizeof(int));
-            while (sent != 0) sent -= write(fd[0], writebuf, w.length());
-        }
-        int k = read(fd2[0], &size, sizeof(int));
-        if (k == -1) cout << "main process read(fd2) errno: " << errno << endl;
-        cout << "read size main process: " << size << endl;
-        int toread = size;
-        while (true) {
-            toread -= read(fd2[0], readbuf, k);
-            printf("String received in main process: %s\n ", readbuf);
-            if ((strcmp(readbuf, "OK") == 0) || toread <= 0) break;
+            char *m = new char[w.length() +1];
+            strcpy(m, w.c_str());
+            m[w.length()] = '\0';
+            write_line(fd[0], writebuf, bufferSize, m);
         }
     }
 
