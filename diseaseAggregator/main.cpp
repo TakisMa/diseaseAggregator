@@ -25,7 +25,6 @@ int main(int argc, char *argv[]) {
     struct sigaction child_act;
     sigemptyset(&child_act.sa_mask);
     child_act.sa_sigaction = child_int;
-    child_act.sa_flags = SA_SIGINFO | SA_RESTART;
     if(sigaction(SIGCHLD, &child_act, NULL) == - 1) cout << "Error with sigaction: " << errno << endl;
     signals = -1;
 
@@ -118,6 +117,8 @@ int main(int argc, char *argv[]) {
         read_line(fd2[0], readbuf, bufferSize);
         if (strcmp(readbuf, "OK") == 0) break;
     }
+
+
     cout << childpid[0] << endl;
     while(true) {
         if(signals > 0) {
@@ -126,8 +127,8 @@ int main(int argc, char *argv[]) {
             char *tmp = new char[workerM->getAllCountries(signals).length() + 1];
             strcpy(tmp, workerM->getAllCountries(signals).c_str());
             tmp[workerM->getAllCountries(signals).length()] = '\0';
-            char *country_token = strtok(tmp, "?");
-            cout << tmp << endl;
+            char *country_token = new char[strlen(tmp) + 1];
+            country_token = strtok(tmp, "?");
             int child_pos = -1;
             for(int i = 0; i < numWorkers; i++){
                 if(childpid[i] == signals){
@@ -161,6 +162,7 @@ int main(int argc, char *argv[]) {
                     cout << "Error with main auxfifo: " << errno << endl;
                 }
                 fd2[child_pos] = open(auxfifo[child_pos], O_RDONLY);
+                cout << childpid[child_pos] << endl;
             }
             if(childpid[child_pos] == 0) {
                 if(execvp("./cmake-build-debug/worker", argumentsv) == -1) {
@@ -169,11 +171,13 @@ int main(int argc, char *argv[]) {
                 }
             }
 
+
             while(country_token) {
-                cout << country_token << endl;
                 char *tosend = new char[strlen(cfilepath) + strlen(country_token) + 2];
                 sprintf(tosend, "%s/%s", cfilepath, country_token);
+                cout << "tosend: " << tosend << endl;
                 write_line(fd[child_pos], writebuf, bufferSize, tosend);
+                cout << "writebuf: " << writebuf << endl;
                 delete[] tosend;
 
                 read_line(fd2[child_pos], readbuf, bufferSize);
@@ -191,7 +195,13 @@ int main(int argc, char *argv[]) {
         if (!getline(cin, w)) continue;
         else if(!w.empty()){
             if(w == "/exit") {
-                kill(childpid[0], SIGUSR1);
+                for(int i = 0; i < numWorkers; i++){
+                    char *fifo = create_fifo("myfifo", childpid[i]);
+                    unlink(fifo);
+                    fifo = create_fifo("auxfifo", childpid[i]);
+                    unlink(fifo);
+                    kill(childpid[i], SIGKILL);
+                }
                 break;
             }
             char *m = new char[w.length() +1];
