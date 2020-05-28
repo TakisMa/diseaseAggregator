@@ -127,8 +127,14 @@ int main(int argc, char *argv[]) {
             char *tmp = new char[workerM->getAllCountries(signals).length() + 1];
             strcpy(tmp, workerM->getAllCountries(signals).c_str());
             tmp[workerM->getAllCountries(signals).length()] = '\0';
+            char *tmp2 = new char[strlen(tmp) + 1];
+            strcpy(tmp2, tmp);
+            tmp2[strlen(tmp)] = '\0';
             char *country_token = new char[strlen(tmp) + 1];
             country_token = strtok(tmp, "?");
+            cout << "tmp: " << tmp << endl;
+            cout << "tmp2: " << &tmp2[strlen(tmp)+1] << endl;
+//            printf("tmp2: %s\n", &tmp2[strlen(tmp)+1]);
             int child_pos = -1;
             for(int i = 0; i < numWorkers; i++){
                 if(childpid[i] == signals){
@@ -171,13 +177,11 @@ int main(int argc, char *argv[]) {
                 }
             }
 
-
-            while(country_token) {
+            int length = strlen(country_token);
+            while(true) {
                 char *tosend = new char[strlen(cfilepath) + strlen(country_token) + 2];
                 sprintf(tosend, "%s/%s", cfilepath, country_token);
-                cout << "tosend: " << tosend << endl;
                 write_line(fd[child_pos], writebuf, bufferSize, tosend);
-                cout << "writebuf: " << writebuf << endl;
                 delete[] tosend;
 
                 read_line(fd2[child_pos], readbuf, bufferSize);
@@ -186,7 +190,16 @@ int main(int argc, char *argv[]) {
                 c[strlen(readbuf)] = '\0';
                 print_summary(c);
                 delete[] readbuf;
-                country_token = strtok(NULL, "?");
+                delete [] tmp;
+
+                tmp = new char[strlen(&tmp2[length+1] + 1)];
+                strcpy(tmp, &tmp2[length+1]);
+                tmp[strlen(&tmp2[length+1])] = '\0';
+                cout << "tmp: " << tmp << endl;
+                country_token = strtok(tmp, "?");
+                if(!country_token) break;
+                cout << "Country_token: " << country_token << endl;
+                length += strlen(country_token)+1;
             }
             
             signals = -1;
