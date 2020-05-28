@@ -28,6 +28,8 @@ int main(int argc, char* argv[]) {
     sigemptyset(&act.sa_mask);
     act.sa_sigaction = kill_child;
     act.sa_flags = SA_SIGINFO;
+    if(sigaction(SIGINT, &act, NULL) == -1) cout << "Error with child sigaciton: " << errno << endl;
+    if(sigaction(SIGQUIT, &act, NULL) == -1) cout << "Error with child sigaciton: " << errno << endl;
     signals = 0;
     int bufferSize = 512, fd , fd2, sent;
     string filePath, word, i, j, k;

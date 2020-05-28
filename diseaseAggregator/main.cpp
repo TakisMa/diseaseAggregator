@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
     struct sigaction child_act;
     sigemptyset(&child_act.sa_mask);
     child_act.sa_sigaction = child_int;
+    child_act.sa_flags = SA_SIGINFO | SA_RESTART;
     if(sigaction(SIGCHLD, &child_act, NULL) == - 1) cout << "Error with sigaction: " << errno << endl;
     signals = -1;
 
@@ -123,11 +124,12 @@ int main(int argc, char *argv[]) {
         if(signals > 0) {
             cout << "Child with pid: " << signals << " died..." << endl;
             cout << "countries for dead worker: " << workerM->getAllCountries(signals) << endl;
+
             signals = -1;
         }
 
         if (!getline(cin, w)) continue;
-        else {
+        else if(!w.empty()){
             if(w == "/exit") {
                 kill(childpid[0], SIGUSR1);
                 break;
@@ -137,6 +139,7 @@ int main(int argc, char *argv[]) {
             m[w.length()] = '\0';
             write_line(fd[0], writebuf, bufferSize, m);
         }
+        else continue;
     }
 
     wait(&wstatus);
