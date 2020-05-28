@@ -83,7 +83,6 @@ int main(int argc, char *argv[]) {
                 cout << "Error with main auxfifo: " << errno << endl;
             }
             fd2[i] = open(auxfifo[i], O_RDONLY);
-            cout << fd2[i] << endl;
         }
         if(childpid[i] == 0) {
             if(execvp("./cmake-build-debug/worker", argumentsv) == -1) {
@@ -124,7 +123,68 @@ int main(int argc, char *argv[]) {
         if(signals > 0) {
             cout << "Child with pid: " << signals << " died..." << endl;
             cout << "countries for dead worker: " << workerM->getAllCountries(signals) << endl;
+            char *tmp = new char[workerM->getAllCountries(signals).length() + 1];
+            strcpy(tmp, workerM->getAllCountries(signals).c_str());
+            tmp[workerM->getAllCountries(signals).length()] = '\0';
+            char *country_token = strtok(tmp, "?");
+            cout << tmp << endl;
+            int child_pos = -1;
+            for(int i = 0; i < numWorkers; i++){
+                if(childpid[i] == signals){
+                    child_pos = i;
+                    break;
+                }
+            }
+            if(child_pos < 0) {
+                cout << "ERROR finding killed process " << endl;
+                exit(5);
+            }
+            char *killedFD = create_fifo("myfifo", childpid[child_pos]);
+            unlink(killedFD);
+            killedFD = create_fifo("auxfifo", childpid[child_pos]);
+            unlink(killedFD);
+            
+            childpid[child_pos] = fork();
+            if(childpid[child_pos] < 0) {
+                cout << "Fork Failed" << endl;
+                return errno;
+            }
+            else if(childpid[child_pos] > 0) {
+                myfifo[child_pos] = create_fifo("myfifo", childpid[child_pos]);
+                if(mkfifo(myfifo[child_pos], 0666) == -1 && errno != EEXIST) {
+                    cout << "Error with main myfifo: " << errno << endl;
+                }
+                fd[child_pos] = open(myfifo[child_pos], O_WRONLY);
 
+                auxfifo[child_pos] = create_fifo("auxfifo", childpid[child_pos]);
+                if(mkfifo(auxfifo[child_pos], 0666) == -1 && errno != EEXIST) {
+                    cout << "Error with main auxfifo: " << errno << endl;
+                }
+                fd2[child_pos] = open(auxfifo[child_pos], O_RDONLY);
+            }
+            if(childpid[child_pos] == 0) {
+                if(execvp("./cmake-build-debug/worker", argumentsv) == -1) {
+                    cout << "Exec failed " << endl;
+                    return errno;
+                }
+            }
+
+            while(country_token) {
+                cout << country_token << endl;
+                char *tosend = new char[strlen(cfilepath) + strlen(country_token) + 2];
+                sprintf(tosend, "%s/%s", cfilepath, country_token);
+                write_line(fd[child_pos], writebuf, bufferSize, tosend);
+                delete[] tosend;
+
+                read_line(fd2[child_pos], readbuf, bufferSize);
+                char *c = new char[strlen(readbuf) + 1];
+                strcpy(c, readbuf);
+                c[strlen(readbuf)] = '\0';
+                print_summary(c);
+                delete[] readbuf;
+                country_token = strtok(NULL, "?");
+            }
+            
             signals = -1;
         }
 
