@@ -9,8 +9,8 @@ int signals;
 
 void kill_child(int signum, siginfo_t *info, void *context) {
     signals = signum;
-    /*cout << "signals: " << signals << endl;
-    cout << "Child pid: " << getpid() << endl;*/
+    /*cout << "signals: " << signals << endl;*/
+    cout << "Child pid: " << getpid() << endl;
     kill(getpid(), SIGKILL);
 }
 

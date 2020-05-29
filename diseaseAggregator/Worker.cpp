@@ -24,12 +24,12 @@
 
 
 int main(int argc, char* argv[]) {
-    struct sigaction act;
-    sigemptyset(&act.sa_mask);
-    /*act.sa_sigaction = kill_child;
-    act.sa_flags = SA_SIGINFO;
-    if(sigaction(SIGINT, &act, NULL) == -1) cout << "Error with child sigaciton: " << errno << endl;
-    if(sigaction(SIGQUIT, &act, NULL) == -1) cout << "Error with child sigaciton: " << errno << endl;*/
+//    struct sigaction act;
+//    sigemptyset(&act.sa_mask);
+//    act.sa_sigaction = kill_child;
+//    act.sa_flags = SA_SIGINFO;
+//    if(sigaction(SIGQUIT, &act, NULL) == -1) cout << "Error with child sigaciton: " << errno << endl;
+//    if(sigaction(SIGINT, &act, NULL) == -1) cout << "Error with child sigaciton: " << errno << endl;
     signals = 0;
     int bufferSize = 512, fd , fd2, sent;
     string filePath, word, i, j, k;
@@ -69,7 +69,6 @@ int main(int argc, char* argv[]) {
             sprintf(filepath, "%s", readbuf);
             char *c = strtok(readbuf, "/");
             c = strtok(NULL, "/");
-//            string countryS(c);
             char *country=new char[strlen(c)+1];
             strcpy(country,c);
             initialize_record(filepath, country, diseaseHT, countryHT, idHT, fd2, bufferSize);

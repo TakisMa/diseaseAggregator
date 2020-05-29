@@ -18,6 +18,18 @@ public:
 
     int readFD(string country);
 
+    void replaceList(int fd, int fd2, pid_t childpid) {
+        this->fd = fd;
+        this->fd2 = fd2;
+        this->childpid = childpid;
+    }
+
+    WList *searchList(string country) {
+        if(this->country == country) return this;
+        else if(next) return next->searchList(country);
+        else return NULL;
+    }
+
     string getAllCountries(string countries, pid_t dead_pid) {
         if(childpid == dead_pid) countries = country + "?";
         if(next) countries += next->getAllCountries(countries, dead_pid);

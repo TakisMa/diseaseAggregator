@@ -26,7 +26,6 @@ int main(int argc, char *argv[]) {
     sigemptyset(&child_act.sa_mask);
     child_act.sa_flags = SA_SIGINFO | SA_RESTART;
     child_act.sa_sigaction = child_int;
-//    child_act.sa_flags = SA_NOCLDWAIT;
     if(sigaction(SIGCHLD, &child_act, NULL) == - 1) cout << "Error with sigaction: " << errno << endl;
     signals = -1;
 
@@ -134,7 +133,6 @@ int main(int argc, char *argv[]) {
             tmp2[strlen(tmp)] = '\0';
             char *country_token = new char[strlen(tmp) + 1];
             country_token = strtok(tmp, "?");
-//            printf("tmp2: %s\n", &tmp2[strlen(tmp)+1]);
             int child_pos = -1;
             for(int i = 0; i < numWorkers; i++){
                 if(childpid[i] == signals){
@@ -182,6 +180,7 @@ int main(int argc, char *argv[]) {
                 char *tosend = new char[strlen(cfilepath) + strlen(country_token) + 2];
                 sprintf(tosend, "%s/%s", cfilepath, country_token);
                 write_line(fd[child_pos], writebuf, bufferSize, tosend);
+                cout << "country_token: " << country_token << endl;
                 workerM->insertSummary(country_token, fd[child_pos], fd2[child_pos], childpid[child_pos]);
                 delete[] tosend;
 
@@ -208,6 +207,7 @@ int main(int argc, char *argv[]) {
             }
             delete [] writebuf;
             delete [] readbuf;
+            delete [] tmp2;
             signals = -1;
         }
 

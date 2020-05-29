@@ -33,7 +33,10 @@ int WBucket::readFD(string country) {
 }
 
 void WBucket::insertSummary(string country, int fd, int fd2, pid_t childpid) {
-    head = new WList(country, fd, fd2, head, childpid);
+    WList *tmp = NULL;
+    if(head) tmp = head->searchList(country);
+    if(tmp) tmp->replaceList(fd, fd2, childpid);
+    else head = new WList(country, fd, fd2, head, childpid);
 }
 
 WBucket::WBucket() {
