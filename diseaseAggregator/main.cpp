@@ -123,7 +123,6 @@ int main(int argc, char *argv[]) {
 
     cout << "childpid: " << childpid[0] << endl;
     while(true) {
-        cout << "signals = " << signals << endl;
         if(signals > 0) {
             cout << "Child with pid: " << signals << " died..." << endl;
             cout << "countries for dead worker: " << workerM->getAllCountries(signals) << endl;
@@ -135,14 +134,11 @@ int main(int argc, char *argv[]) {
             tmp2[strlen(tmp)] = '\0';
             char *country_token = new char[strlen(tmp) + 1];
             country_token = strtok(tmp, "?");
-            cout << "tmp: " << tmp << endl;
-            cout << "tmp2: " << &tmp2[strlen(tmp)+1] << endl;
 //            printf("tmp2: %s\n", &tmp2[strlen(tmp)+1]);
             int child_pos = -1;
             for(int i = 0; i < numWorkers; i++){
                 if(childpid[i] == signals){
                     child_pos = i;
-                    cout << "pos is: " << i << endl;
                     break;
                 }
             }
@@ -151,10 +147,8 @@ int main(int argc, char *argv[]) {
                 exit(5);
             }
             char *killedFD = create_fifo("myfifo", childpid[child_pos]);
-            cout << "killedFD: " << killedFD << endl;
             unlink(killedFD);
             killedFD = create_fifo("auxfifo", childpid[child_pos]);
-            cout << "killedFD: " << killedFD << endl;
             unlink(killedFD);
             
             childpid[child_pos] = fork();
@@ -167,16 +161,14 @@ int main(int argc, char *argv[]) {
                 if(mkfifo(myfifo[child_pos], 0666) == -1 && errno != EEXIST) {
                     cout << "Error with main myfifo: " << errno << endl;
                 }
-                cout << "new fifo is: "<< myfifo[child_pos] << endl;
                 fd[child_pos] = open(myfifo[child_pos], O_WRONLY);
 
                 auxfifo[child_pos] = create_fifo("auxfifo", childpid[child_pos]);
                 if(mkfifo(auxfifo[child_pos], 0666) == -1 && errno != EEXIST) {
                     cout << "Error with main auxfifo: " << errno << endl;
                 }
-                cout << "new aux_fifo is: "<< auxfifo[child_pos] << endl;
                 fd2[child_pos] = open(auxfifo[child_pos], O_RDONLY);
-                cout << "childpid["<< child_pos << "]: " <<childpid[child_pos] << endl;
+
             }
             if(childpid[child_pos] == 0) {
                 if(execvp("./cmake-build-debug/worker", argumentsv) == -1) {
@@ -190,6 +182,7 @@ int main(int argc, char *argv[]) {
                 char *tosend = new char[strlen(cfilepath) + strlen(country_token) + 2];
                 sprintf(tosend, "%s/%s", cfilepath, country_token);
                 write_line(fd[child_pos], writebuf, bufferSize, tosend);
+                workerM->insertSummary(country_token, fd[child_pos], fd2[child_pos], childpid[child_pos]);
                 delete[] tosend;
 
                 read_line(fd2[child_pos], readbuf, bufferSize);
@@ -203,10 +196,8 @@ int main(int argc, char *argv[]) {
                 tmp = new char[strlen(&tmp2[length+1])+1];
                 strcpy(tmp, &tmp2[length+1]);
                 tmp[strlen(&tmp2[length+1])] = '\0';
-                cout << "tmp: " << tmp << endl;
                 country_token = strtok(tmp, "?");
                 if(!country_token) break;
-                cout << "Country_token: " << country_token << endl;
                 length += strlen(country_token)+1;
             }
             write_line(fd[child_pos], writebuf, bufferSize, "OK");
@@ -241,7 +232,6 @@ int main(int argc, char *argv[]) {
                 strcpy(m, w.c_str());
                 m[w.length()] = '\0';
                 for(int i = 0; i < numWorkers; i++) {
-                    cout << "fd = " << fd[i] << endl;
                     write_line(fd[i], writebuf, bufferSize, m);
                 }
             }

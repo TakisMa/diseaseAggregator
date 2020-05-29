@@ -51,7 +51,6 @@ int main(int argc, char* argv[]) {
     }
     fd = open(myfifo, O_RDONLY);
     if(fd == -1) cout << "error with fd: " << myfifo << endl;
-    else cout << "myfifo: " << myfifo << " created with fd: " << fd << endl;
 
 
     if (mkfifo(auxfifo, 0666) == -1 && errno != EEXIST) {
@@ -59,7 +58,6 @@ int main(int argc, char* argv[]) {
     }
     fd2 = open(auxfifo, O_WRONLY);
     if(fd2 == -1) cout << "error with fd2: " << auxfifo << endl;
-    else cout << "auxfifo: " << auxfifo << " created with fd2: " << fd2 << endl;
 
     while (true) {
         if(read_line(fd, readbuf, bufferSize) != 0) {
