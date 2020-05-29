@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
     struct sigaction child_act;
     sigemptyset(&child_act.sa_mask);
     child_act.sa_sigaction = child_int;
+//    child_act.sa_flags = SA_NOCLDWAIT;
     if(sigaction(SIGCHLD, &child_act, NULL) == - 1) cout << "Error with sigaction: " << errno << endl;
     signals = -1;
 
@@ -201,11 +202,14 @@ int main(int argc, char *argv[]) {
                 cout << "Country_token: " << country_token << endl;
                 length += strlen(country_token)+1;
             }
-            
             signals = -1;
         }
+        cout << "signals = " << signals << endl;
 
-        if (!getline(cin, w)) continue;
+        if (!getline(cin, w)) {
+            cout << "ERROR" << endl;
+            continue;
+        }
         else if(!w.empty()){
             if(w == "/exit") {
                 for(int i = 0; i < numWorkers; i++){
@@ -217,10 +221,20 @@ int main(int argc, char *argv[]) {
                 }
                 break;
             }
-            char *m = new char[w.length() +1];
-            strcpy(m, w.c_str());
-            m[w.length()] = '\0';
-            write_line(fd[0], writebuf, bufferSize, m);
+            else if(w == "/listCountries"){
+                char *m = new char[w.length() +1];
+                strcpy(m, w.c_str());
+                m[w.length()] = '\0';
+                for(int i = 0; i < numWorkers; i++) {
+                    write_line(fd[i], writebuf, bufferSize, m);
+                }
+            }
+            else {
+                char *m = new char[w.length() +1];
+                strcpy(m, w.c_str());
+                m[w.length()] = '\0';
+                write_line(fd[0], writebuf, bufferSize, m);
+            }
         }
         else continue;
     }
