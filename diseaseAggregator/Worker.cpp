@@ -26,10 +26,10 @@
 int main(int argc, char* argv[]) {
     struct sigaction act;
     sigemptyset(&act.sa_mask);
-    act.sa_sigaction = kill_child;
+    /*act.sa_sigaction = kill_child;
     act.sa_flags = SA_SIGINFO;
     if(sigaction(SIGINT, &act, NULL) == -1) cout << "Error with child sigaciton: " << errno << endl;
-    if(sigaction(SIGQUIT, &act, NULL) == -1) cout << "Error with child sigaciton: " << errno << endl;
+    if(sigaction(SIGQUIT, &act, NULL) == -1) cout << "Error with child sigaciton: " << errno << endl;*/
     signals = 0;
     int bufferSize = 512, fd , fd2, sent;
     string filePath, word, i, j, k;
@@ -50,11 +50,16 @@ int main(int argc, char* argv[]) {
         return errno;
     }
     fd = open(myfifo, O_RDONLY);
+    if(fd == -1) cout << "error with fd: " << myfifo << endl;
+    else cout << "myfifo: " << myfifo << " created with fd: " << fd << endl;
+
 
     if (mkfifo(auxfifo, 0666) == -1 && errno != EEXIST) {
         cout << "Error with main auxfifo: " << errno << endl;
     }
     fd2 = open(auxfifo, O_WRONLY);
+    if(fd2 == -1) cout << "error with fd2: " << auxfifo << endl;
+    else cout << "auxfifo: " << auxfifo << " created with fd2: " << fd2 << endl;
 
     while (true) {
         if(read_line(fd, readbuf, bufferSize) != 0) {

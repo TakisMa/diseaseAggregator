@@ -24,6 +24,7 @@ int main(int argc, char *argv[]) {
 
     struct sigaction child_act;
     sigemptyset(&child_act.sa_mask);
+    child_act.sa_flags = SA_SIGINFO | SA_RESTART;
     child_act.sa_sigaction = child_int;
 //    child_act.sa_flags = SA_NOCLDWAIT;
     if(sigaction(SIGCHLD, &child_act, NULL) == - 1) cout << "Error with sigaction: " << errno << endl;
@@ -120,8 +121,9 @@ int main(int argc, char *argv[]) {
     }
 
 
-    cout << childpid[0] << endl;
+    cout << "childpid: " << childpid[0] << endl;
     while(true) {
+        cout << "signals = " << signals << endl;
         if(signals > 0) {
             cout << "Child with pid: " << signals << " died..." << endl;
             cout << "countries for dead worker: " << workerM->getAllCountries(signals) << endl;
@@ -140,6 +142,7 @@ int main(int argc, char *argv[]) {
             for(int i = 0; i < numWorkers; i++){
                 if(childpid[i] == signals){
                     child_pos = i;
+                    cout << "pos is: " << i << endl;
                     break;
                 }
             }
@@ -148,8 +151,10 @@ int main(int argc, char *argv[]) {
                 exit(5);
             }
             char *killedFD = create_fifo("myfifo", childpid[child_pos]);
+            cout << "killedFD: " << killedFD << endl;
             unlink(killedFD);
             killedFD = create_fifo("auxfifo", childpid[child_pos]);
+            cout << "killedFD: " << killedFD << endl;
             unlink(killedFD);
             
             childpid[child_pos] = fork();
@@ -162,14 +167,16 @@ int main(int argc, char *argv[]) {
                 if(mkfifo(myfifo[child_pos], 0666) == -1 && errno != EEXIST) {
                     cout << "Error with main myfifo: " << errno << endl;
                 }
+                cout << "new fifo is: "<< myfifo[child_pos] << endl;
                 fd[child_pos] = open(myfifo[child_pos], O_WRONLY);
 
                 auxfifo[child_pos] = create_fifo("auxfifo", childpid[child_pos]);
                 if(mkfifo(auxfifo[child_pos], 0666) == -1 && errno != EEXIST) {
                     cout << "Error with main auxfifo: " << errno << endl;
                 }
+                cout << "new aux_fifo is: "<< auxfifo[child_pos] << endl;
                 fd2[child_pos] = open(auxfifo[child_pos], O_RDONLY);
-                cout << childpid[child_pos] << endl;
+                cout << "childpid["<< child_pos << "]: " <<childpid[child_pos] << endl;
             }
             if(childpid[child_pos] == 0) {
                 if(execvp("./cmake-build-debug/worker", argumentsv) == -1) {
@@ -189,11 +196,11 @@ int main(int argc, char *argv[]) {
                 char *c = new char[strlen(readbuf) + 1];
                 strcpy(c, readbuf);
                 c[strlen(readbuf)] = '\0';
-                print_summary(c);
+//                print_summary(c);
                 delete[] readbuf;
                 delete [] tmp;
 
-                tmp = new char[strlen(&tmp2[length+1] + 1)];
+                tmp = new char[strlen(&tmp2[length+1])+1];
                 strcpy(tmp, &tmp2[length+1]);
                 tmp[strlen(&tmp2[length+1])] = '\0';
                 cout << "tmp: " << tmp << endl;
@@ -202,12 +209,20 @@ int main(int argc, char *argv[]) {
                 cout << "Country_token: " << country_token << endl;
                 length += strlen(country_token)+1;
             }
+            write_line(fd[child_pos], writebuf, bufferSize, "OK");
+            cout << endl;
+            while(true) {
+                read_line(fd2[0], readbuf, bufferSize);
+                if (strcmp(readbuf, "OK") == 0) break;
+            }
+            delete [] writebuf;
+            delete [] readbuf;
             signals = -1;
         }
-        cout << "signals = " << signals << endl;
 
         if (!getline(cin, w)) {
-            cout << "ERROR" << endl;
+            cout<<"w: " << w<<endl;
+            cout << "ERROR: " << errno << endl;
             continue;
         }
         else if(!w.empty()){
@@ -226,6 +241,7 @@ int main(int argc, char *argv[]) {
                 strcpy(m, w.c_str());
                 m[w.length()] = '\0';
                 for(int i = 0; i < numWorkers; i++) {
+                    cout << "fd = " << fd[i] << endl;
                     write_line(fd[i], writebuf, bufferSize, m);
                 }
             }
