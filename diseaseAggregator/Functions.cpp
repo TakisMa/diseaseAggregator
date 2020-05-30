@@ -262,7 +262,6 @@ int sort_files(char *filepath, Date **&file_array) {
             }
         }
         quickS(file_array, 0, file_count - 1);
-        for(int z = 0; z<file_count; z++) cout << z << ") " << file_array[z]->date << endl;
         return file_count;
 }
 char *create_fifo(char *fifo_name, pid_t childpid) {

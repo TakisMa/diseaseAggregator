@@ -38,13 +38,9 @@ public:
     int countIncidents(Date* entry, Date* exit);
 
     bool findNewFile(Date *filename) {
-        if(record->getEntryDate()->compare(filename) == 0) return true;
-        else if(record->getEntryDate()->compare(filename) < 0) {
-            if(right_child) return right_child->findNewFile(filename);
-        }
-        else if(record->getEntryDate()->compare(filename) > 0){
-            if(left_child) return left_child->findNewFile(filename);
-        }
+        if((record->getEntryDate()->compare(filename) == 0) || record->getExitDate()->compare(filename) == 0) return true;
+        if(left_child && left_child->findNewFile(filename)) return true;
+        if(right_child && right_child->findNewFile(filename)) return true;
         return false;
     }
 
