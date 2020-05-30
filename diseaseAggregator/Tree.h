@@ -40,6 +40,11 @@ public:
 
     int countIncidents(Date *entry, Date *exit);
 
+    bool findNewFile(Date *filename) {
+        if(root) return root->findNewFile(filename);
+        else return false;
+    }
+
     void insertItem(Record *rec);
 
     TreeNode* searchItem(int item);

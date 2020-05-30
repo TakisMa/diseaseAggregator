@@ -9,9 +9,14 @@ int signals;
 
 void kill_child(int signum, siginfo_t *info, void *context) {
     signals = signum;
-    /*cout << "signals: " << signals << endl;*/
-    cout << "Child pid: " << getpid() << endl;
+    /*cout << "signals: " << signals << endl;
+    cout << "Child pid: " << getpid() << endl;*/
     kill(getpid(), SIGKILL);
+}
+
+void new_file(int signum, siginfo_t *info, void *context) {
+    signals = SIGUSR1;
+    cout << "inside new_file with signum: " << signum << endl;
 }
 
 void child_int(int signum, siginfo_t *info, void *context) {

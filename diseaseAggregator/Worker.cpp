@@ -24,12 +24,18 @@
 
 
 int main(int argc, char* argv[]) {
-//    struct sigaction act;
-//    sigemptyset(&act.sa_mask);
-//    act.sa_sigaction = kill_child;
-//    act.sa_flags = SA_SIGINFO;
-//    if(sigaction(SIGQUIT, &act, NULL) == -1) cout << "Error with child sigaciton: " << errno << endl;
-//    if(sigaction(SIGINT, &act, NULL) == -1) cout << "Error with child sigaciton: " << errno << endl;
+    struct sigaction act;
+    sigemptyset(&act.sa_mask);
+    act.sa_sigaction = kill_child;
+    act.sa_flags = SA_SIGINFO;
+    if(sigaction(SIGQUIT, &act, NULL) == -1) cout << "Error with child sigaciton: " << errno << endl;
+    if(sigaction(SIGINT, &act, NULL) == -1) cout << "Error with child sigaciton: " << errno << endl;
+
+    struct sigaction act_newFile;
+    sigemptyset(&act_newFile.sa_mask);
+    act_newFile.sa_sigaction = new_file;
+    if(sigaction(SIGUSR1, &act_newFile, NULL) == -1) cout << "Error with child sigaciton: " << errno << endl;
+
     signals = 0;
     int bufferSize = 512, fd , fd2, sent;
     string filePath, word, i, j, k;
@@ -37,6 +43,7 @@ int main(int argc, char* argv[]) {
     string w, countryS;
     char *readbuf, *writebuf;
     char *myfifo, *auxfifo;
+    int success = 0, fail = 0;
 
     ID_Hashtable *idHT = new ID_Hashtable(SIZE);
     Hashtable *diseaseHT = new Hashtable(BUCKET_NUM, BUCKET_SIZE, disease);
@@ -62,6 +69,7 @@ int main(int argc, char* argv[]) {
     while (true) {
         if(read_line(fd, readbuf, bufferSize) != 0) {
             cout << "error in read" << endl;
+            fail++;
             return errno;
         }
         if (strcmp(readbuf, "OK") == 0) break;
@@ -80,17 +88,29 @@ int main(int argc, char* argv[]) {
 
     while(true) {
         if(signals == SIGUSR1) {
-            cout << "Child process: " << getpid() << " killed by signal" << endl;
-            break;
+            cout << "signal caught" << endl;
+            string countries = countryHT->getCountry().c_str();
+            char *c = new char[countries.length() + 1];
+            strcpy(c, countries.c_str());
+            c[countries.length()] = '\0';
+            char *countriesC = strtok(c, "?");
+            while(countriesC != NULL) {
+                initialize_record(filepath, countriesC, diseaseHT, countryHT, idHT, fd2, bufferSize);
+                countriesC = strtok(NULL, "?");
+            }
+            signals = -1;
         }
         int size = 0;
         read(fd, &size, sizeof(int));
         if (read_line(fd, readbuf, size, bufferSize) != 0) {
             cout << "error in read" << endl;
+            fail++;
             return errno;
         }
         string g(readbuf);
-        select_command(diseaseHT, countryHT, idHT, filepath, g, fd2);
+        int tmp = select_command(diseaseHT, countryHT, idHT, filepath, g, fd2);
+        if(tmp > 0) success++;
+        else fail++;
     }
 
 

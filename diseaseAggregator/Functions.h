@@ -11,7 +11,7 @@ using namespace std;
 
 bool check_int(string );
 int checkArguments(int argc, char** argv, int &workersNum, int &bufferSize, string &path);
-void swapD(struct Date *a, struct Date *b);
+void swapD(struct Date *&a, struct Date *&b);
 int partition(struct Date *array[], int low, int high);
 void quickS(struct Date *array[], int low, int high);
 

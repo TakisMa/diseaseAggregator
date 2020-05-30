@@ -36,6 +36,14 @@ public:
 
     void globalDiseaseStats(Date *entry, Date *exit);
 
+    bool findNewFile(Date *filename, char *cur_country) {
+        bool tmp = false;
+        string cc(cur_country);
+        int pos = hashS(cc);
+        if(table[pos]) tmp = table[pos]->findNewFile(filename, cc);
+        return tmp;
+    }
+
     int numPatientAdmissions(string virus, Date *date1, Date *date2, string countries) {
         return table[hashS(virus)]->numPatientAdmissions(virus, date1, date2, countries);
     }

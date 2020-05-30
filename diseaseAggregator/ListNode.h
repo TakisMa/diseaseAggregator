@@ -38,6 +38,16 @@ public:
 
     int countIncidents(Date *entry, Date *exit);
 
+    bool findNewFile(Date *filename, string country) {
+        bool tmp = false;
+        if(record->getCountry() == country) {
+            if(tree) tmp = tree->findNewFile(filename);
+            if(!tmp && next) tmp = next->findNewFile(filename, country);
+        }
+        else if(next) return next->findNewFile(filename, country);
+        return tmp;
+    }
+
     string getCountry() {
         string countries;
         countries += record->getCountry();

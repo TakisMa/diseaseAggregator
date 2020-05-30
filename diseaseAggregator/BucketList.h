@@ -39,6 +39,11 @@ public:
 
     int countIncident(string virus, Date *entry, Date *exit);
 
+    bool findNewFile(Date *filename, string country) {
+        if(first) return first->findNewFile(filename, country);
+        else return false;
+    }
+
     void insertBucketList(Record *rec,type_t t);
 
     Bucket* searchBucketC(string str);

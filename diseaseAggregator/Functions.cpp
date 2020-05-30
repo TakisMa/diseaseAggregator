@@ -80,19 +80,12 @@ bool check_int(string num) { //checks if num is a number
     return true;
 }
 
-void swapD(struct Date *a, struct Date *b) {
-    struct Date *tmp;
-    tmp->year = a->year;
-    tmp->month = a->month;
-    tmp->day = a->day;
-    a->year = b->year;
-    a->month = b->month;
-    a->day = b->day;
-    b->year = tmp->year;
-    b->month = tmp->month;
-    b->day = tmp->day;
-
+void swapD(struct Date *&a, struct Date *&b) {
+    Date *tmp = a;
+    a = b;
+    b = tmp;
 }
+
 
 int partition(struct Date **array, int low, int high) {
     struct Date *pivot = array[high];
@@ -103,7 +96,7 @@ int partition(struct Date **array, int low, int high) {
             swapD(array[i], array[j]);
         }
     }
-    swap(array[i + 1], array[high]);
+    swapD(array[i + 1], array[high]);
     return (i+1);
 }
 
@@ -158,7 +151,7 @@ void write_line(int fd, char *&writebuf, int bufferSize, char *message) {
 }
 
 int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT, int fd2, int bufferSize) {
-    char filename[20];
+    char *filename;
     char *line = NULL;
     std::size_t lenght = 0;
     FILE *fp;
@@ -169,15 +162,25 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
     string summary(countryS);
 
     file_count = sort_files(filepath, file_array);
+    if(file_count < 0) return -1;
     for (int z = 0; z < file_count; z++) {
+        filename = new char[strlen(filepath)+file_array[z]->date.length()+2];
         sprintf(filename, "%s/%s", filepath, file_array[z]->date.c_str());
+        if(countryHT->findNewFile(file_array[z], countryS)) {
+            delete [] filename;
+            continue;
+        }
         fp = fopen(filename, "r");
-        if (!fp) cout << "errno: " << errno << endl;
+        if (!fp) {
+            cout << "error with opening file errno is: " << errno << endl;
+            return -2;
+        }
         summary = summary + "?" + file_array[z]->date + "?";
         while (getline(&line, &lenght, fp) != -1) {
             record = new Record();
             if (!record->initialize(line, file_array[z]->date.c_str(), countryS)) {
                 cout << "Failed to initialize record " << endl;
+                return -3;
             }
             if(idHT->existsID(record->getRecordId()) && record->getState() == "EXIT") {
                 Record *tmp = idHT->searchID(record->getRecordId());
@@ -186,8 +189,10 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
                 delete record;
             }
             else if(!idHT->existsID(record->getRecordId()) && record->getState() == "EXIT") {
-//                cout << "ERROR" << endl;
+                /*cout << "ERROR" << endl;
+                cout << line << endl;*/
                 delete record;
+//                return -3;
             }
             else{
                 idHT->insertID(record);
@@ -208,7 +213,7 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
         if(size-tosend <= bufferSize) tosend += write(fd2, s+tosend, size-tosend);
         else tosend += write(fd2, s+tosend, bufferSize);
     }
-    return 0;
+    return 1;
 }
 int sort_files(char *filepath, Date **&file_array) {
         DIR *dirp;
@@ -220,7 +225,7 @@ int sort_files(char *filepath, Date **&file_array) {
         dirp = opendir(filepath);
         if (!dirp) {
             cout << "Failed to open directory" << endl;
-            return errno;
+            return -1;
         }
         while ((entry = readdir(dirp)) != NULL) {
             if (entry->d_type == DT_REG && strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".")) {
@@ -231,6 +236,10 @@ int sort_files(char *filepath, Date **&file_array) {
 
         file_array = new Date* [file_count];
         dirp = opendir(filepath);
+        if (!dirp) {
+            cout << "Failed to open directory" << endl;
+            return -1;
+        }
         while ((entry = readdir(dirp)) != NULL) {
             if (entry->d_type == DT_REG && strcmp(entry->d_name, "..") != 0 &&
                 strcmp(entry->d_name, ".") != 0) {
@@ -253,6 +262,7 @@ int sort_files(char *filepath, Date **&file_array) {
             }
         }
         quickS(file_array, 0, file_count - 1);
+        for(int z = 0; z<file_count; z++) cout << z << ") " << file_array[z]->date << endl;
         return file_count;
 }
 char *create_fifo(char *fifo_name, pid_t childpid) {

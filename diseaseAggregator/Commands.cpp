@@ -20,21 +20,19 @@ Record *searchPatientRecord(string w, ID_Hashtable *idHT) {
 
 
 int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT, char *filepath, string w, int fd2) {
-//        cout << "Enter command: ";
-    DIR *dirp;
-    struct dirent *entry;
     if(w.empty()) return -1;
     stringstream iss(w);
     iss >> w;
     if(w == "/exit") {
         cout << "exiting" << endl;
-        return -1;
+        return 1;
     }
     else if(w == "/searchPatientRecord") {
         iss >> w;
         Record *tmp = searchPatientRecord(w, idHT);
         if(tmp) cout << tmp->getRecordId() << " " << tmp->getFirstName() << " " << tmp->getLastName() << endl;
         else cout << "ID not found " << endl;
+        return 1;
     }
     else if(w == "/diseaseFrequency") {
         string virusName, date1, date2, country;
@@ -47,8 +45,10 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         if(iss) iss >> date2;
         if(iss) iss >> country;
         total = diseaseFrequency(virusName, date1, date2, country, diseaseHT, fd2);
+        if(total < 0) return -1;
         if(!country.empty()) cout << country << " " << total << endl;
         else cout << total << endl;
+        return 1;
     }
     else if(w == "/listCountries") {
         string countries = countryHT->getCountry().c_str();
@@ -60,6 +60,7 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
             cout << countriesC << " " << getpid() << endl;
             countriesC = strtok(NULL, "?");
         }
+        return 1;
     }
     else if(w == "/numPatientAdmissions") {
         string virusName, date1, date2, country;
@@ -70,8 +71,9 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         if(iss) iss >> date1;
         if(iss) iss >> date2;
         if(iss) iss >> country;
-        numPatientAdmissions(virusName, date1, date2, country, diseaseHT, countryHT);
-
+        int tmp = numPatientAdmissions(virusName, date1, date2, country, diseaseHT, countryHT);
+        if(tmp < 0) return -1;
+        return 1;
     }
     else if(w == "/numPatientDischarges") {
         string virusName, date1, date2, country;
@@ -82,9 +84,9 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         if(iss) iss >> date1;
         if(iss) iss >> date2;
         if(iss) iss >> country;
-        numPatientDischarges(virusName, date1, date2, country, diseaseHT, countryHT);
+        return numPatientDischarges(virusName, date1, date2, country, diseaseHT, countryHT);
     }
-    return 0;
+    return -1;
 }
 
 int diseaseFrequency(string virusName, string date1, string date2, string country, Hashtable *diseaseHT, int fd2) {
@@ -117,12 +119,14 @@ int diseaseFrequency(string virusName, string date1, string date2, string countr
             cout <<"error" << endl;
             delete exit;
             delete entryD;
+            return -1;
         }
     }
     else{
         cout <<"error" << endl;
         delete exit;
         delete entryD;
+        return -1;
     }
     if(country.empty()) total = diseaseHT->diseaseFrequency(virusName, entryD, exit);
     else total = diseaseHT->diseaseFrequencyC(virusName, entryD, exit, country);
@@ -149,7 +153,7 @@ int listCountries(char *filepath) {
     return 0;
 }
 
-void numPatientAdmissions(string virusName, string date1, string date2, string country, Hashtable *diseaseHT, Hashtable *countryHT) {
+int numPatientAdmissions(string virusName, string date1, string date2, string country, Hashtable *diseaseHT, Hashtable *countryHT) {
     Date *entry1 = new Date;
     Date *entry2 = new Date;
     if(date1.length() < 10 || date2.length() < 10) {
@@ -172,17 +176,20 @@ void numPatientAdmissions(string virusName, string date1, string date2, string c
             cout << "Wrong dates " << endl;
             delete entry2;
             delete entry1;
+            return -1;
         }
     }
     else {
         cout << "Wrong dates" << endl;
         delete entry2;
         delete entry1;
+        return -1;
     }
     if(entry1->compare(entry2) > 0) {
         cout << "ERROR: date1 > date2" << endl;
         delete entry2;
         delete entry1;
+        return -1;
     }
     if(country.empty()) {
         istringstream iss(countryHT->getCountry());
@@ -198,14 +205,16 @@ void numPatientAdmissions(string virusName, string date1, string date2, string c
     }
     delete entry2;
     delete entry1;
+    return 1;
 }
 
-void numPatientDischarges(string virusName, string date1, string date2, string country, Hashtable *diseaseHT, Hashtable *countryHT) {
+int numPatientDischarges(string virusName, string date1, string date2, string country, Hashtable *diseaseHT, Hashtable *countryHT) {
     Date *entry1 = new Date;
     Date *entry2 = new Date;
     if(date1.length() < 10 || date2.length() < 10) {
         delete entry2;
         delete entry1;
+        return -1;
     }
     string i=date1.substr(0, 2);
     string j=date1.substr(3, 2);
@@ -223,17 +232,20 @@ void numPatientDischarges(string virusName, string date1, string date2, string c
             cout << "Wrong dates " << endl;
             delete entry2;
             delete entry1;
+            return -1;
         }
     }
     else {
         cout << "Wrong dates" << endl;
         delete entry2;
         delete entry2;
+        return -1;
     }
     if(entry1->compare(entry2) > 0) {
         cout << "ERROR: date1 > date2" << endl;
         delete entry2;
         delete entry1;
+        return -1;
     }
     if(country.empty()) {
         istringstream iss(countryHT->getCountry());
@@ -249,4 +261,5 @@ void numPatientDischarges(string virusName, string date1, string date2, string c
     }
     delete entry2;
     delete entry1;
+    return 1;
 }

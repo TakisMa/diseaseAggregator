@@ -32,10 +32,16 @@ public:
 
     int numPatientDischarges(string virus, Date *date1, Date *date2, string countries);
 
-
     int countIncident(string virus, Date *entry, Date *exit,string country);
 
     int countIncident(string virus, Date *entry, Date *exit);
+
+    bool findNewFile(Date *filename, string country) {
+        bool tmp = false;
+        if(head) tmp = head->findNewFile(filename, country);
+        if(!tmp && next) tmp = next->findNewFile(filename, country);
+        return tmp;
+    }
 
     int getFull() const;
 
