@@ -29,6 +29,7 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         return 1;
     }
     else if(w == "/searchPatientRecord") {
+        //TODO:: να στελνονται μεσω pipe τα αποτελεσματα και να υπολογιζω το λαθος αν δεν βρεθει το ID
         iss >> w;
         Record *tmp = searchPatientRecord(w, idHT);
         if(tmp) cout << tmp->getRecordId() << " " << tmp->getFirstName() << " " << tmp->getLastName() << endl;

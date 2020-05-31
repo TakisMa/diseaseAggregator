@@ -41,7 +41,6 @@ public:
         string cc(cur_country);
         int pos = hashS(cc);
         if(table[pos]) tmp = table[pos]->findNewFile(filename, cc);
-        cout << "tmp = " << tmp << " filename: " << filename->date << " current country: " << cur_country << endl;
         return tmp;
     }
 

@@ -83,6 +83,7 @@ int main(int argc, char* argv[]) {
         }
     }
     write_line(fd2, writebuf, bufferSize, "OK");
+    cout << "record initialized: " << writebuf << " process(" << getpid() << ")" << endl;
 
 
 
@@ -101,6 +102,7 @@ int main(int argc, char* argv[]) {
             signals = -1;
         }
         int size = 0;
+        cout << "process " << getpid() << " waiting for command... " << endl;
         read(fd, &size, sizeof(int));
         if (read_line(fd, readbuf, size, bufferSize) != 0) {
             cout << "error in read" << endl;
