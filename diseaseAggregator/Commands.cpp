@@ -30,10 +30,11 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
     }
     else if(w == "/searchPatientRecord") {
         //TODO:: να στελνονται μεσω pipe τα αποτελεσματα και να υπολογιζω το λαθος αν δεν βρεθει το ID
+        int error = -1;
         iss >> w;
         Record *tmp = searchPatientRecord(w, idHT);
-        if(tmp) cout << tmp->getRecordId() << " " << tmp->getFirstName() << " " << tmp->getLastName() << endl;
-        else cout << "ID not found " << endl;
+        if(tmp) sendEntry(tmp, fd2, bufferSize);
+        else write(fd2, &error, sizeof(int));
         return 1;
     }
     else if(w == "/diseaseFrequency") {
@@ -64,13 +65,23 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         return 1;
     }
     else if(w == "/listCountries") {
+        char *message;
+        int digits;
+        int empty = -1;
         string countries = countryHT->getCountry().c_str();
+        if(countries.empty()) {
+            write(fd2, &empty, sizeof(int));
+            return 0;
+        }
         char *c = new char[countries.length() + 1];
         strcpy(c, countries.c_str());
         c[countries.length()] = '\0';
         char *countriesC = strtok(c, "?");
         while(countriesC != NULL) {
-            cout << countriesC << " " << getpid() << endl;
+            digits = findDigits(getpid());
+            message = new char[strlen(countriesC)+digits+2];
+            sprintf(message, "%s %d", countriesC, getpid());
+            write_line(fd2, writebuf, bufferSize, message);
             countriesC = strtok(NULL, "?");
         }
         return 1;

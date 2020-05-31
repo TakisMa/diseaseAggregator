@@ -85,6 +85,8 @@ int main(int argc, char *argv[]) {
                 cout << "Error with main auxfifo: " << errno << endl;
             }
             fd2[i] = open(auxfifo[i], O_RDONLY);
+
+            cout << childpid[i] << " fd = " << fd[i] << " fd2 = " << fd2[i] << endl;
         }
         if(childpid[i] == 0) {
             if(execvp("./cmake-build-debug/worker", argumentsv) == -1) {
@@ -93,7 +95,6 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    cout << "numWorkers" << numWorkers << endl;
     if((dirp = opendir(cfilepath)) != NULL) {
         int pos = 0;
         while ((entry = readdir(dirp)) != NULL) {
@@ -190,7 +191,6 @@ int main(int argc, char *argv[]) {
                 char *tosend = new char[strlen(cfilepath) + strlen(country_token) + 2];
                 sprintf(tosend, "%s/%s", cfilepath, country_token);
                 write_line(fd[child_pos], writebuf, bufferSize, tosend);
-                cout << "country_token: " << country_token << endl;
                 workerM->insertSummary(country_token, fd[child_pos], fd2[child_pos], childpid[child_pos]);
                 delete[] tosend;
 
@@ -234,22 +234,30 @@ int main(int argc, char *argv[]) {
             if(w == "/exit") {
                 for(int i = 0; i < numWorkers; i++){
                     char *fifo = create_fifo("myfifo", childpid[i]);
+                    close(fd[i]);
                     unlink(fifo);
                     fifo = create_fifo("auxfifo", childpid[i]);
+                    close(fd2[i]);
                     unlink(fifo);
                     kill(childpid[i], SIGKILL);
                     cout << "killed child: " << childpid[i] << endl;
                 }
                 break;
             }
-            else if(word == "/listCountries"){
+            else if(word == "/listCountries" || word == "/searchPatientRecord"){
+                int identifier;
                 char *m = new char[w.length() +1];
                 strcpy(m, w.c_str());
                 m[w.length()] = '\0';
                 for(int i = 0; i < numWorkers; i++) write_line(fd[i], writebuf, bufferSize, m);
-                for(int i = 0; i < numWorkers; i++) read_line(fd2[i], readbuf, bufferSize);
-                delete [] readbuf;
-                delete [] writebuf;
+                for(int i = 0; i < numWorkers; i++) {
+                    read(fd2[i], &identifier, sizeof(int));
+                    if(identifier == -1) continue;
+                    else {
+                        read_line(fd2[i], readbuf, identifier, bufferSize);
+                        cout << readbuf << endl;
+                    }
+                }
             }
             else if(word == "/numPatientAdmissions" || word == "/numPatientDischarges") {
                 char *m = new char[w.length()+1];
@@ -268,7 +276,7 @@ int main(int argc, char *argv[]) {
 
                     /* read & print results from all processes */
                     int *noCountries = new int[numWorkers];
-                    for(int i = 0; i < numWorkers; i++) read(fd2[i], &noCountries, sizeof(int));
+                    for(int i = 0; i < numWorkers; i++) read(fd2[i], &noCountries[i], sizeof(int));
                     for(int j = 0; j < numWorkers; j++){
                         for(int i = 0; i < noCountries[j]; i++){
                             read_line(fd2[j], readbuf, bufferSize);
@@ -285,7 +293,7 @@ int main(int argc, char *argv[]) {
                     cout << readbuf << endl;
                 }
             }
-            else {
+            else if(word == "/diseaseFrequency"){
                 char *m = new char[w.length() +1];
                 strcpy(m, w.c_str());
                 m[w.length()] = '\0';
@@ -296,18 +304,13 @@ int main(int argc, char *argv[]) {
                 delete [] writebuf;
                 delete [] readbuf;
             }
+            else continue;
         }
         else continue;
     }
 
     wait(&wstatus);
 
-    if(close(fd[0]) < 0) {
-        cout << "Error on main process close(fd) with code: " << errno << endl;
-    }
-    if(close(fd2[0]) < 0) {
-        cout << "Error on main process close(fd2) with code: " << errno << endl;
-    }
     return 0;
 }
 

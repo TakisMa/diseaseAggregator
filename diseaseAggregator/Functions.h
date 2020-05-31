@@ -16,6 +16,7 @@ int partition(struct Date *array[], int low, int high);
 void quickS(struct Date *array[], int low, int high);
 int findDigits(int number);
 int countCountries(string allCountries);
+void sendEntry(Record *record, int fd2, int bufferSize);
 
 int read_line(int fd, char *&readbuf, int bufferSize);
 int read_line(int fd, char *&readbuf, int size, int bufferSize);

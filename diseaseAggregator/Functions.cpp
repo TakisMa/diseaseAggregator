@@ -318,3 +318,19 @@ int countCountries(string allCountries) {
     while(getline(iss, token, '?')) countries_count++;
     return countries_count;
 }
+
+void sendEntry(Record *record, int fd2, int bufferSize) {
+    char *entry, *writebuf;
+    int digits = findDigits(record->getRecordId());
+    digits += findDigits(record->getAge());
+    entry = new char[digits+record->getFirstName().length()+record->getLastName().length()+record->getDiseaseId().length()+27];
+    sprintf(entry, "%d %s %s %s %d-%d-%d %d-%d-%d %d",
+            record->getRecordId(),
+            record->getFirstName().c_str(),
+            record->getLastName().c_str(),
+            record->getDiseaseId().c_str(),
+            record->getEntryDate()->day, record->getEntryDate()->month, record->getEntryDate()->year,
+            record->getExitDate()->day, record->getExitDate()->month, record->getExitDate()->year,
+            record->getAge());
+    write_line(fd2,writebuf, bufferSize, entry);
+}
