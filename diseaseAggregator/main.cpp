@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <cstring>
 #include <string>
+#include <sstream>
 #include "Functions.h"
 #include "SummaryManagement.h"
 #include "SignalHandling.h"
@@ -216,7 +217,10 @@ int main(int argc, char *argv[]) {
             cout << "ERROR: " << errno << endl;
             continue;
         }
-        else if(!w.empty()){
+        stringstream iss(w);
+        string word;
+        iss >> word;
+        if(!w.empty()){
             if(w == "/exit") {
                 for(int i = 0; i < numWorkers; i++){
                     char *fifo = create_fifo("myfifo", childpid[i]);
@@ -227,12 +231,40 @@ int main(int argc, char *argv[]) {
                 }
                 break;
             }
-            else if(w == "/listCountries"){
+            else if(word == "/listCountries"){
                 char *m = new char[w.length() +1];
                 strcpy(m, w.c_str());
                 m[w.length()] = '\0';
                 for(int i = 0; i < numWorkers; i++) {
                     write_line(fd[i], writebuf, bufferSize, m);
+                    read_line(fd2[i], readbuf, bufferSize);
+                    cout << readbuf << endl;
+                    delete [] readbuf;
+                    delete [] writebuf;
+                }
+            }
+            else if(word == "/numPatientAdmissions" || word == "/numPatientDischarges") {
+                char *m = new char[w.length()+1];
+                strcpy(m, w.c_str());
+                write_line(fd[0], writebuf, bufferSize, m);
+                string virus, date1, date2, country, com;
+                stringstream iss(w);
+                iss >> com;
+                iss >> virus;
+                iss >> date1;
+                iss >> date2;
+                iss >> country;
+                if(country.empty()) {
+                    int noCountries;
+                    read(fd2[0], &noCountries, sizeof(int));
+                    for(int i = 0; i < noCountries; i++){
+                        read_line(fd2[0], readbuf, bufferSize);
+                        cout << readbuf << endl;
+                    }
+                }
+                else {
+                    read_line(fd2[0], readbuf, bufferSize);
+                    cout << readbuf << endl;
                 }
             }
             else {
@@ -240,6 +272,11 @@ int main(int argc, char *argv[]) {
                 strcpy(m, w.c_str());
                 m[w.length()] = '\0';
                 write_line(fd[0], writebuf, bufferSize, m);
+                delete [] readbuf;
+                read_line(fd2[0], readbuf, bufferSize);
+                cout << readbuf << endl;
+                delete [] writebuf;
+                delete [] readbuf;
             }
         }
         else continue;

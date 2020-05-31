@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
             return errno;
         }
         string g(readbuf);
-        int tmp = select_command(diseaseHT, countryHT, idHT, filepath, g, fd2);
+        int tmp = select_command(diseaseHT, countryHT, idHT, filepath, g, fd2, bufferSize);
         if(tmp > 0) success++;
         else fail++;
     }

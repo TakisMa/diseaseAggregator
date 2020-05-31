@@ -112,9 +112,7 @@ void quickS(struct Date **array, int low, int high) {
 /* Read from fd and copy to readbuf. First message is no bytes to read(stored in size) */
 int read_line(int fd, char *&readbuf, int bufferSize) {
     int size;
-    int count = 0;
     read(fd, &size, sizeof(int));
-//    cout << "read_line received: " << size << " bytes through fd: " << fd <<  endl;
     readbuf = new char[size+1];
     int toread = 0;
     while (toread < size) {
@@ -147,7 +145,6 @@ void write_line(int fd, char *&writebuf, int bufferSize, char *message) {
         if(size-tosend <= bufferSize) tosend += write(fd, writebuf + tosend, size-tosend);
         else tosend += write(fd, writebuf + tosend, bufferSize);
     }
-
 }
 
 int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT, int fd2, int bufferSize) {
@@ -303,4 +300,21 @@ void print_summary(char *sum) {
         else cout << summary << endl;
         summary = strtok(NULL, "?");
     }
+}
+
+int findDigits(int number) {
+    int digits = 0;
+    while(number != 0) {
+        digits ++;
+        number /= 10;
+    }
+    return digits;
+}
+
+int countCountries(string allCountries) {
+    istringstream iss(allCountries);
+    string token;
+    int countries_count = 0;
+    while(getline(iss, token, '?')) countries_count++;
+    return countries_count;
 }

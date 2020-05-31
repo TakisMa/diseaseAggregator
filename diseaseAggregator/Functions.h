@@ -14,6 +14,8 @@ int checkArguments(int argc, char** argv, int &workersNum, int &bufferSize, stri
 void swapD(struct Date *&a, struct Date *&b);
 int partition(struct Date *array[], int low, int high);
 void quickS(struct Date *array[], int low, int high);
+int findDigits(int number);
+int countCountries(string allCountries);
 
 int read_line(int fd, char *&readbuf, int bufferSize);
 int read_line(int fd, char *&readbuf, int size, int bufferSize);

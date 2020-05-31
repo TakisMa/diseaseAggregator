@@ -92,7 +92,8 @@ int Tree::countIncidents(Date *entry, Date *exit, string country) {
 }
 
 int Tree::countIncidents(Date *entry, Date *exit) {
-    return root->countIncidents(entry, exit);
+    if(root) return root->countIncidents(entry, exit);
+    else return 0;
 }
 
 TreeNode *Tree::searchItem(int item) {

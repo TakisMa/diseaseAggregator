@@ -19,8 +19,9 @@ Record *searchPatientRecord(string w, ID_Hashtable *idHT) {
 }
 
 
-int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT, char *filepath, string w, int fd2) {
+int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT, char *filepath, string w, int fd2, int bufferSize) {
     if(w.empty()) return -1;
+    char *writebuf;
     stringstream iss(w);
     iss >> w;
     if(w == "/exit") {
@@ -44,10 +45,21 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         if(iss) iss >> date1;
         if(iss) iss >> date2;
         if(iss) iss >> country;
-        total = diseaseFrequency(virusName, date1, date2, country, diseaseHT, fd2);
+        total = diseaseFrequency(virusName, date1, date2, country, diseaseHT);
         if(total < 0) return -1;
-        if(!country.empty()) cout << country << " " << total << endl;
-        else cout << total << endl;
+        int digits = findDigits(total);
+        if(!country.empty()) {
+            char *message = new char[country.length()+digits+2];
+            sprintf(message, "%s %d", country.c_str(), total);
+            write_line(fd2, writebuf, bufferSize, message);
+            delete [] message;
+        }
+        else {
+            char *message = new char[digits+1];
+            sprintf(message, "%d", total);
+            message[digits] = '\0';
+            write_line(fd2, writebuf, bufferSize, message);
+        }
         return 1;
     }
     else if(w == "/listCountries") {
@@ -71,7 +83,7 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         if(iss) iss >> date1;
         if(iss) iss >> date2;
         if(iss) iss >> country;
-        int tmp = numPatientAdmissions(virusName, date1, date2, country, diseaseHT, countryHT);
+        int tmp = numPatientAdmissions(virusName, date1, date2, country, diseaseHT, countryHT, fd2, bufferSize);
         if(tmp < 0) return -1;
         return 1;
     }
@@ -84,12 +96,12 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         if(iss) iss >> date1;
         if(iss) iss >> date2;
         if(iss) iss >> country;
-        return numPatientDischarges(virusName, date1, date2, country, diseaseHT, countryHT);
+        return numPatientDischarges(virusName, date1, date2, country, diseaseHT, countryHT, fd2, bufferSize);
     }
     return -1;
 }
 
-int diseaseFrequency(string virusName, string date1, string date2, string country, Hashtable *diseaseHT, int fd2) {
+int diseaseFrequency(string virusName, string date1, string date2, string country, Hashtable *diseaseHT) {
     int total = 0;
     Date *entryD = new Date;
     Date *exit = new Date;
@@ -132,7 +144,6 @@ int diseaseFrequency(string virusName, string date1, string date2, string countr
     else total = diseaseHT->diseaseFrequencyC(virusName, entryD, exit, country);
     delete entryD;
     delete exit;
-    write(fd2, &total, sizeof(int));
     return total;
 }
 
@@ -153,13 +164,15 @@ int listCountries(char *filepath) {
     return 0;
 }
 
-int numPatientAdmissions(string virusName, string date1, string date2, string country, Hashtable *diseaseHT, Hashtable *countryHT) {
+int numPatientAdmissions(string virusName, string date1, string date2, string country, Hashtable *diseaseHT, Hashtable *countryHT, int fd2, int bufferSize) {
     Date *entry1 = new Date;
     Date *entry2 = new Date;
     if(date1.length() < 10 || date2.length() < 10) {
         delete entry2;
         delete entry1;
+        return -1;
     }
+    char *writebuf;
     string i=date1.substr(0, 2);
     string j=date1.substr(3, 2);
     string k=date1.substr(6,4);
@@ -192,25 +205,36 @@ int numPatientAdmissions(string virusName, string date1, string date2, string co
         return -1;
     }
     if(country.empty()) {
-        istringstream iss(countryHT->getCountry());
+        string allCountries = countryHT->getCountry();
+        int countries_count = countCountries(allCountries);
+        write(fd2, &countries_count, sizeof(int));
+        stringstream iss(allCountries);
         string token;
+        int digits = 0;
         while(getline(iss, token, '?')) {
             int total = diseaseHT->numPatientAdmissions(virusName, entry1, entry2, token);
-            cout << token << " " << total << endl;
+            digits = findDigits(total);
+            char *message = new char[token.length()+digits+2];
+            sprintf(message, "%s %d", token.c_str(), total);
+            write_line(fd2, writebuf, bufferSize, message);
         }
     }
     else {
         int total = diseaseHT->numPatientAdmissions(virusName, entry1, entry2, country);
-        cout << country << " " << total << endl;
+        int digits = findDigits(total);
+        char *message = new char[country.length()+digits+2];
+        sprintf(message, "%s %d", country.c_str(), total);
+        write_line(fd2, writebuf, bufferSize, message);
     }
     delete entry2;
     delete entry1;
     return 1;
 }
 
-int numPatientDischarges(string virusName, string date1, string date2, string country, Hashtable *diseaseHT, Hashtable *countryHT) {
+int numPatientDischarges(string virusName, string date1, string date2, string country, Hashtable *diseaseHT, Hashtable *countryHT, int fd2, int bufferSize) {
     Date *entry1 = new Date;
     Date *entry2 = new Date;
+    char *writebuf;
     if(date1.length() < 10 || date2.length() < 10) {
         delete entry2;
         delete entry1;
@@ -248,16 +272,26 @@ int numPatientDischarges(string virusName, string date1, string date2, string co
         return -1;
     }
     if(country.empty()) {
-        istringstream iss(countryHT->getCountry());
+        string allCountries = countryHT->getCountry();
+        int countries_count = countCountries(allCountries);
+        write(fd2, &countries_count, sizeof(int));
+        stringstream iss(allCountries);
         string token;
+        int digits = 0;
         while(getline(iss, token, '?')) {
             int total = diseaseHT->numPatientDischarges(virusName, entry1, entry2, token);
-            cout << token << " " << total << endl;
+            digits = findDigits(total);
+            char *message = new char[token.length()+digits+2];
+            sprintf(message, "%s %d", token.c_str(), total);
+            write_line(fd2, writebuf, bufferSize, message);
         }
     }
     else {
         int total = diseaseHT->numPatientDischarges(virusName, entry1, entry2, country);
-        cout << country << " " << total << endl;
+        int digits = findDigits(total);
+        char *message = new char[country.length()+digits+2];
+        sprintf(message, "%s %d", country.c_str(), total);
+        write_line(fd2, writebuf, bufferSize, message);
     }
     delete entry2;
     delete entry1;

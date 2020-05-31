@@ -40,7 +40,8 @@ int ListNode::countIncidents(Date *entry, Date *exit, string country) {
 }
 
 int ListNode::countIncidents(Date *entry, Date *exit) {
-    return tree->countIncidents(entry, exit);
+    if(tree) return tree->countIncidents(entry, exit);
+    else return 0;
 }
 
 void ListNode::setNext(ListNode *next) {

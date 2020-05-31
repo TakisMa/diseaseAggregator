@@ -44,8 +44,7 @@ int TreeNode::countIncidents(Date *entry, Date *exit, string toCheck) {
     if(record->getEntryDate()->compare(entry) == 1 && (record->getEntryDate()->compare(exit)) == -1) {
         if(left_child) l = left_child->countIncidents(entry, exit, toCheck);
         if(right_child) r = right_child->countIncidents(entry, exit, toCheck);
-        if(toCheck == record->getCountry())
-            return (r + l) + 1;
+        if(toCheck == record->getCountry()) return (r + l) + 1;
         else return r + l;
     }
     else if(record->getEntryDate()->compare(entry) == -1) {
@@ -85,9 +84,9 @@ int TreeNode::countIncidents(Date *entry, Date *exit, string toCheck, type_t typ
 
 int TreeNode::countIncidents(Date *entry, Date *exit) {
     int l = 0, r = 0;
-    if(record->getEntryDate()->compare(entry) == 1 && (record->getEntryDate()->compare(exit)) == -1) {
-        if(left_child) l = left_child->countIncidents(entry, exit);
-        if(right_child) r = right_child->countIncidents(entry, exit);
+    if(record->getEntryDate()->compare(entry) >= 0 && (record->getExitDate()->compare(exit)) <= 0) {
+        if(left_child) l += left_child->countIncidents(entry, exit);
+        if(right_child) r += right_child->countIncidents(entry, exit);
         return (r + l) + 1;
     }
     else if(record->getEntryDate()->compare(entry) == -1) {
@@ -98,7 +97,7 @@ int TreeNode::countIncidents(Date *entry, Date *exit) {
         if(left_child) l = left_child->countIncidents(entry, exit);
         return l;
     }
-    else return 0;
+    return 0;
 }
 
 TreeNode *TreeNode::rightRotation() {
