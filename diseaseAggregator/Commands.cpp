@@ -28,6 +28,77 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         cout << "exiting" << endl;
         return 1;
     }
+    else if(w == "/topk-AgeRanges") {
+        int *results;
+        int *checked = new int[4];
+        for(int i = 0; i < 4; i++) checked[i] = 0;
+        string country, virus, date1, date2;
+        int topk;
+        iss >> topk;
+        iss >> country;
+        iss >> virus;
+        iss >> date1;
+        iss >> date2;
+        Date *entryD = new Date;
+        Date *exit = new Date;
+        if(date1.length() < 10 || date2.length() < 10) {
+            delete exit;
+            delete entryD;
+        }
+        string i=date1.substr(0, 2);
+        string j=date1.substr(3, 2);
+        string k=date1.substr(6,4);
+        if(check_int(i) && check_int(j) && check_int(k) ) {
+            entryD->day = stoi(i);
+            entryD->month = stoi(j);
+            entryD->year = stoi(k);
+            if(date2 == "-") {
+                exit->day = 0;
+                exit->month = 0;
+                exit->year = 0;
+            }
+            else if(check_int(i=date2.substr(0, 2)) && check_int(j=date2.substr(3, 2)) && check_int(k=date2.substr(6,4) )) {
+                exit->day = stoi(i);
+                exit->month = stoi(j);
+                exit->year = stoi(k);
+
+            }
+            else{
+                cout <<"error" << endl;
+                delete exit;
+                delete entryD;
+                return -1;
+            }
+        }
+        else{
+            cout <<"error" << endl;
+            delete exit;
+            delete entryD;
+            return -1;
+        }
+        cout << "before function " << endl;
+        results = diseaseHT->getAges(virus, entryD, exit, country);
+        if(results) {
+            cout << "inside for-loop..." << endl;
+            for(int d = 0; d < topk; d++) {
+                int max = results[0];
+                int max_pos = 0;
+                for (int z = 1; z < 4; z++) {
+                    if (checked[z] == 1) continue;
+                    if (results[z] > max) {
+                        max = results[z];
+                        max_pos = z;
+                    }
+                }
+                checked[max_pos] = 1;
+                write(fd2, &max, sizeof(int));
+            }
+        }
+        else {
+            int error = -1;
+            write(fd2, &error, sizeof(int));
+        }
+    }
     else if(w == "/searchPatientRecord") {
         //TODO:: να στελνονται μεσω pipe τα αποτελεσματα και να υπολογιζω το λαθος αν δεν βρεθει το ID
         int error = -1;
@@ -39,7 +110,7 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
     }
     else if(w == "/diseaseFrequency") {
         string virusName, date1, date2, country;
-        int total = 0;
+        int total = -1;
         int c = w.length();
         w = iss.str();
         w = w.substr(c, w.length());
@@ -48,18 +119,15 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         if(iss) iss >> date2;
         if(iss) iss >> country;
         total = diseaseFrequency(virusName, date1, date2, country, diseaseHT);
-        if(total < 0) return -1;
+//        if(total < 0) return -1;
         int digits = findDigits(total);
-        if(!country.empty()) {
-            char *message = new char[country.length()+digits+2];
-            sprintf(message, "%s %d", country.c_str(), total);
-            write_line(fd2, writebuf, bufferSize, message);
-            delete [] message;
+        if(country.empty()) {
+            write(fd2, &total, sizeof(int));
+            return -1;
         }
         else {
-            char *message = new char[digits+1];
-            sprintf(message, "%d", total);
-            message[digits] = '\0';
+            char *message = new char[country.length()+digits+2];
+            sprintf(message, "%s %d", country.c_str(), total);
             write_line(fd2, writebuf, bufferSize, message);
         }
         return 1;

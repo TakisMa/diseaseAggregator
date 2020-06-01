@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
     child_act.sa_flags = SA_SIGINFO | SA_RESTART;
     child_act.sa_sigaction = child_int;
     if(sigaction(SIGCHLD, &child_act, NULL) == - 1) cout << "Error with sigaction: " << errno << endl;
+
     signals = -1;
 
     int wstatus;
@@ -134,8 +135,6 @@ int main(int argc, char *argv[]) {
 
     while(true) {
         if(signals > 0) {
-            cout << "Child with pid: " << signals << " died..." << endl;
-            cout << "countries for dead worker: " << workerM->getAllCountries(signals) << endl;
             char *tmp = new char[workerM->getAllCountries(signals).length() + 1];
             strcpy(tmp, workerM->getAllCountries(signals).c_str());
             tmp[workerM->getAllCountries(signals).length()] = '\0';
@@ -244,6 +243,30 @@ int main(int argc, char *argv[]) {
                 }
                 break;
             }
+            else if(word == "/topk-AgeRanges") {
+                fflush(stdout);
+                int identifier;
+                char *m = new char[w.length() +1];
+                strcpy(m, w.c_str());
+                m[w.length()] = '\0';
+                string virus, country, date1, date2;
+                int k;
+                iss >> k;
+                cout << "k = " << k << endl;
+                if(k > 4) continue;
+                iss >> country;
+                iss >> virus;
+                iss >> date1;
+                iss >> date2;
+                /*char *m = new char[word.length() + virus.length() + date1.length() + date2.length() + 6];
+                sprintf(m, "%s %d %s %s %s", word.c_str(), k, virus.c_str(), date1.c_str(), date2.c_str());*/
+                write_line(workerM->writeFD(country), writebuf, bufferSize, m);
+                for(int i = 0; i < k; i++){
+                    read(workerM->readFD(country), &identifier, sizeof(int));
+                    if(identifier < 0) break;
+                    cout << "identifier = " << identifier << endl;
+                }
+            }
             else if(word == "/listCountries" || word == "/searchPatientRecord"){
                 int identifier;
                 char *m = new char[w.length() +1];
@@ -294,15 +317,30 @@ int main(int argc, char *argv[]) {
                 }
             }
             else if(word == "/diseaseFrequency"){
+                string virus, date1, date2, country;
+                int identifier, total = 0;
+                iss >> virus;
+                iss >> date1;
+                iss >> date2;
+                iss >> country;
+                cout << "country: " << country << endl;
                 char *m = new char[w.length() +1];
                 strcpy(m, w.c_str());
                 m[w.length()] = '\0';
-                write_line(fd[0], writebuf, bufferSize, m);
-                delete [] readbuf;
-                read_line(fd2[0], readbuf, bufferSize);
-                cout << readbuf << endl;
-                delete [] writebuf;
-                delete [] readbuf;
+                if(country.empty()) {
+                    for(int i = 0; i < numWorkers; i++) write_line(fd[i], writebuf, bufferSize, m);
+                    for(int i = 0; i < numWorkers; i++) {
+                        read(fd2[i], &identifier, sizeof(int));
+                        if(identifier < 0) continue;
+                        else total += identifier;
+                    }
+                    cout << total << endl;
+                }
+                else {
+                    write_line(workerM->writeFD(country), writebuf, bufferSize, m);
+                    read_line(workerM->readFD(country), readbuf, bufferSize);
+                    cout << readbuf << endl;
+                }
             }
             else continue;
         }

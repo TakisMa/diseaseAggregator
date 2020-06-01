@@ -31,9 +31,6 @@ public:
         if(first) return first->getCountry();
     }
 
-    int *getAges(string country) {
-        if(first) return first->getAges(country);
-    }
 
     int countIncident(string virus, Date *entry, Date *exit, string country);
 
@@ -42,6 +39,11 @@ public:
     bool findNewFile(Date *filename, string country) {
         if(first) return first->findNewFile(filename, country);
         else return false;
+    }
+
+    int *getAges(string virus, Date *date1, Date *date2, string country) {
+        if(first) return first->getAges(virus, date1, date2, country);
+        else return NULL;
     }
 
     void insertBucketList(Record *rec,type_t t);

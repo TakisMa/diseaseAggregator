@@ -45,6 +45,10 @@ public:
         else return false;
     }
 
+    int getAges(int start, int end, Date *date1, Date *date2, string country) {
+        if(root) return root->getAges(start, end, date1, date2, country);
+    }
+
     void insertItem(Record *rec);
 
     TreeNode* searchItem(int item);

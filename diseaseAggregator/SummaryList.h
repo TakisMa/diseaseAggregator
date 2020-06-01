@@ -17,11 +17,8 @@ public:
         string summary;
         summary = summary + "?" +disease + "?\\";
         for(int i = 0; i < 4; i++) {
-            if(i == 3) {
-                summary = summary + to_string(ages[i]);
-                continue;
-            }
             summary = summary + to_string(ages[i]) + "?";
+            ages[i] = 0;
         }
         if(next) summary += next->getAges();
         else return summary;

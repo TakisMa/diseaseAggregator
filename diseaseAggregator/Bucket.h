@@ -53,11 +53,24 @@ public:
         return next;
     }
 
-    int *getAges(string country) {
+    int *getAges(string virus, Date *date1, Date *date2, string country) {
+        int *tmp = NULL;
         if(head) {
-            if(head->getCountry() == country) return head->getAges();
+            cout << "head exists" << endl;
+            tmp = head->getAges(virus, date1, date2, country);
         }
-        if(next) return next->getAges(country);
+        if(tmp) {
+            cout << "ready to return tmp" << endl;
+            return tmp;
+        }
+        else if(next) {
+            cout << "searching next Bucket" << endl;
+            return next->getAges(virus, date1, date2, country);
+        }
+        else {
+            cout << "returning NULL" << endl;
+            return NULL;
+        }
     }
 
     string getCountry() {

@@ -38,23 +38,9 @@ public:
 
     int countIncidents(Date *entry, Date *exit);
 
-    bool findNewFile(Date *filename, string country) {
-        bool tmp = false;
-        if(record->getCountry() == country) {
-            if(tree) tmp = tree->findNewFile(filename);
-            if(!tmp && next) tmp = next->findNewFile(filename, country);
-        }
-        else if(next) return next->findNewFile(filename, country);
-        return tmp;
-    }
+    bool findNewFile(Date *filename, string country);
 
-    string getCountry() {
-        string countries;
-        countries += record->getCountry();
-        countries += "?";
-        if(next) countries += next->getCountry();
-        return countries;
-    }
+    string getCountry();
 
     Record *getRecord() const {
         return record;
@@ -68,8 +54,35 @@ public:
         if(record->getDiseaseId() == rec->getDiseaseId());
     }
 
-    int *getAges() {
-        return ages;
+    int *getAges(string virus, Date *date1, Date *date2, string country) {
+        int total = 0;
+        int *results = new int[4];
+        for(int i = 0; i < 4; i ++) {
+            total += ages[i];
+            results[i] = 0;
+        }
+        cout << "total is: " << total << endl;
+        if(record->getDiseaseId() == virus) {
+            results[0] = tree->getAges(0, 20, date1, date2, country);
+            cout << "result 0: " << results[0] << endl;
+            results[1] = tree->getAges(21, 40, date1, date2, country);
+            cout << "result 1: " << results[1] << endl;
+            results[2] = tree->getAges(41, 60, date1, date2, country);
+            cout << "result 2: " << results[2] << endl;
+            results[3] = tree->getAges(61, 120, date1, date2, country);
+            cout << "result 3: " << results[3] << endl;
+            for(int i = 0; i < 4; i++) {
+                results[i] = total / results[i];
+                cout << "result " << i << " after division is: " << results[i] << endl;
+            }
+            return results;
+        }
+        else if(next) return next->getAges(virus, date1, date2, country);
+        else {
+            cout << "List will return null" << endl;
+            return NULL;
+        }
+
     }
 
     void setNext(ListNode *next);

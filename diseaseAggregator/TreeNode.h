@@ -44,6 +44,28 @@ public:
         return false;
     }
 
+    int getAges(int startAge, int endAge, Date *date1, Date *date2, string country) {
+        int r = 0, l = 0;
+        if(record->getEntryDate()->compare(date1) == 1 && record->getExitDate()->compare(date2) == -1) {
+            if(left_child) l = left_child->getAges(startAge, endAge, date1, date2, country);
+            if(right_child) r = right_child->getAges(startAge, endAge, date1, date2, country);
+            if(record->getCountry() == country) {
+                if(record->getAge() >= startAge && record->getAge() <= endAge) return (r + l) + 1;
+                else return r + l;
+            }
+            else return r + l;
+        }
+        else if(record->getEntryDate()->compare(date1) == -1) {
+            if(right_child) r = right_child->getAges(startAge, endAge, date1, date2, country);
+            return r;
+        }
+        else if(record->getEntryDate()->compare(date2) == 1) {
+            if(left_child) l = left_child->getAges(startAge, endAge, date1, date2, country);
+            return l;
+        }
+        else return 0;
+    }
+
     TreeNode* rightRotation();
 
     TreeNode* leftRotation();

@@ -85,10 +85,8 @@ int main(int argc, char* argv[]) {
     write_line(fd2, writebuf, bufferSize, "OK");
 
 
-
-    while(true) {
+    while(true){
         if(signals == SIGUSR1) {
-            cout << "signal caught" << endl;
             string countries = countryHT->getCountry().c_str();
             char *c = new char[countries.length() + 1];
             strcpy(c, countries.c_str());

@@ -64,9 +64,9 @@ public:
         return countries;
     }
 
-    int *getAges(string disease, string country) {
-        int pos = hashS(disease);
-        if(table[pos]) return table[pos]->getAges(country);
+    int *getAges(string virus, Date *date1, Date *date2, string country) {
+        int pos = hashS(virus);
+        if(table[pos]) return table[pos]->getAges(virus, date1, date2, country);
         else return NULL;
     }
 

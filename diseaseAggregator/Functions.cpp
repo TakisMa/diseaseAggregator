@@ -156,7 +156,8 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
     int file_count = 0;
     Record *record;
     List *list_head = new List();
-    string summary(countryS);
+    string country(countryS);
+    string summary;
 
     file_count = sort_files(filepath, file_array);
     if(file_count < 0) return -1;
@@ -172,7 +173,8 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
             cout << "error with opening file errno is: " << errno << endl;
             return -2;
         }
-        summary = summary + "?" + file_array[z]->date + "?";
+        summary = summary + file_array[z]->date + "?" + country + "?";
+//        else summary = summary + file_array[z]->date + "?";
         while (getline(&line, &lenght, fp) != -1) {
             record = new Record();
             if (!record->initialize(line, file_array[z]->date.c_str(), countryS)) {
@@ -199,6 +201,7 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
             }
         }
         summary += list_head->getAges(countryS);
+        cout << "summary: " << summary << endl;
         fclose(fp);
     }
     char *s = new char[summary.length() + 1];

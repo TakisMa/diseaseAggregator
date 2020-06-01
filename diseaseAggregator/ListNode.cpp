@@ -104,3 +104,22 @@ int ListNode::numPatientAdmissions(Date *date1, Date *date2, string countries) {
 int ListNode::numPatientDischarges(Date *date1, Date *date2, string countries) {
     return tree->numPatientDischarges(date1, date2, countries);
 }
+
+bool ListNode::findNewFile(Date *filename, string country) {
+    bool tmp = false;
+    if(record->getCountry() == country) {
+        if(tree) tmp = tree->findNewFile(filename);
+        if(!tmp && next) tmp = next->findNewFile(filename, country);
+    }
+    else if(next) return next->findNewFile(filename, country);
+    return tmp;
+}
+
+string ListNode::getCountry() {
+    string countries;
+    countries += record->getCountry();
+    countries += "?";
+    if(next) countries += next->getCountry();
+    return countries;
+}
+
