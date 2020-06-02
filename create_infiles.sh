@@ -5,12 +5,12 @@ if [[ "$#" -lt 5 ]] ; then
 fi
 if ! [[ "$4" =~ ^[0-9]+$ ]]
     then
-        echo "Sorry number of files must be an integer"
+        echo "Number of files must be an integer"
         exit
 fi
 if ! [[ "$5" =~ ^[0-9]+$ ]]
     then
-        echo "Sorry number of files must be an integer"
+        echo "Number of records must be an integer"
         exit
 fi
 
