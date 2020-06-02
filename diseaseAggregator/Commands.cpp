@@ -79,7 +79,6 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         cout << "before function " << endl;
         results = diseaseHT->getAges(virus, entryD, exit, country);
         if(results) {
-            cout << "inside for-loop..." << endl;
             for(int d = 0; d < topk; d++) {
                 int max = results[0];
                 int max_pos = 0;
@@ -100,7 +99,6 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         }
     }
     else if(w == "/searchPatientRecord") {
-        //TODO:: να στελνονται μεσω pipe τα αποτελεσματα και να υπολογιζω το λαθος αν δεν βρεθει το ID
         int error = -1;
         iss >> w;
         Record *tmp = searchPatientRecord(w, idHT);
