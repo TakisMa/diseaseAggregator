@@ -61,7 +61,6 @@ void Bucket::insertBucket(Record *rec, type_t t) {
         ListNode* insertPos = NULL;
         if(t == country) insertPos = head->searchListC(rec->getCountry());
         else if(t == disease) insertPos = head->searchListD(rec->getDiseaseId());
-
         if(insertPos) insertPos->insertList(rec);
         else{
             ListNode* newNode = new ListNode(rec);
@@ -76,7 +75,6 @@ void Bucket::insertBucket(Record *rec, type_t t) {
     }
     sum += sizeof(ListNode);
     if(sum == bucketSize) full = 1;
-
 }
 
 Bucket *Bucket::searchBucketC(string str) {

@@ -79,8 +79,10 @@ BucketList::~BucketList() {
 
 int BucketList::numPatientAdmissions(string virus, Date *date1, Date *date2, string countries) {
     if(first) return first->numPatientAdmissions(virus, date1, date2, countries);
+    else return 0;
 }
 
 int BucketList::numPatientDischarges(string virus, Date *date1, Date *date2, string countries) {
     if(first) return first->numPatientDischarges(virus, date1, date2, countries);
+    else return 0;
 }

@@ -26,10 +26,12 @@ WList::~WList() {
 
 int WBucket::writeFD(string country) {
     if(head) return head->writeFD(country);
+    else return 0;
 }
 
 int WBucket::readFD(string country) {
     if(head) return head->readFD(country);
+    else return 0;
 }
 
 void WBucket::insertSummary(string country, int fd, int fd2, pid_t childpid) {
@@ -50,11 +52,14 @@ WBucket::~WBucket() {
 int WHashtable::writeFD(string country) {
     int pos = hashS(country);
     if(table[pos]) return table[pos]->writeFD(country);
+    else return 0;
 }
 
 int WHashtable::readFD(string country) {
     int pos = hashS(country);
     if(table[pos]) return table[pos]->readFD(country);
+    else return 0;
+
 }
 
 

@@ -156,20 +156,6 @@ TreeNode *TreeNode::insertTreeNode(Record *rec) {
             left_child = new TreeNode(rec);
         }
     }
-    if(isBalanced() > 1 && record->getEntryDate()->compare(rec->getEntryDate()) > 0) {
-        return this->rightRotation();
-    }
-    if(isBalanced() < -1 && record->getEntryDate()->compare(rec->getEntryDate()) < 0) {
-        return this->leftRotation();
-    }
-    if(isBalanced() > 1 && record->getEntryDate()->compare(rec->getEntryDate()) < 0) {
-        left_child = left_child->leftRotation();
-        return this->rightRotation();
-    }
-    if(isBalanced() < -1 && record->getEntryDate()->compare(rec->getEntryDate()) > 0) {
-        right_child = right_child->rightRotation();
-        return this->leftRotation();
-    }
     return this;
 }
 

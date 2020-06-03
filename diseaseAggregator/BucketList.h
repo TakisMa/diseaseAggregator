@@ -29,6 +29,7 @@ public:
 
     string getCountry() {
         if(first) return first->getCountry();
+        else return "";
     }
 
 

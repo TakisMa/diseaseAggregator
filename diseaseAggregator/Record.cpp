@@ -82,6 +82,7 @@ bool Record::initialize(string str, string date, string cou) {
         }
     }
     else {
+        cout << "date is: " << word << endl;
         cout << "Date is not INT " << endl;
         return false;
     }

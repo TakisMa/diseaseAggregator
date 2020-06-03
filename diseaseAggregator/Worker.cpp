@@ -19,8 +19,8 @@
 #include "SignalHandling.h"
 
 #define SIZE 10
-#define BUCKET_NUM 10
-#define BUCKET_SIZE 256
+#define BUCKET_NUM 100
+#define BUCKET_SIZE 1024
 
 
 int main(int argc, char* argv[]) {
@@ -36,8 +36,11 @@ int main(int argc, char* argv[]) {
     act_newFile.sa_sigaction = new_file;
     if(sigaction(SIGUSR1, &act_newFile, NULL) == -1) cout << "Error with child sigaciton: " << errno << endl;
 
+    signal(SIGPIPE, SIG_IGN);
+
     signals = 0;
-    int bufferSize = 512, fd , fd2, sent;
+    int bufferSize = atoi(argv[1]);
+    int fd , fd2, sent;
     string filePath, word, i, j, k;
     char filepath[20];
     string w, countryS;
@@ -65,6 +68,7 @@ int main(int argc, char* argv[]) {
     }
     fd2 = open(auxfifo, O_WRONLY);
     if(fd2 == -1) cout << "error with fd2: " << auxfifo << endl;
+    write_line(fd2, writebuf, bufferSize, "READY");
 
     while (true) {
         if(read_line(fd, readbuf, bufferSize) != 0) {
@@ -72,7 +76,10 @@ int main(int argc, char* argv[]) {
             fail++;
             return errno;
         }
-        if (strcmp(readbuf, "OK") == 0) break;
+        if (strcmp(readbuf, "OK") == 0) {
+            delete [] readbuf;
+            break;
+        }
         else {
             sprintf(filepath, "%s", readbuf);
             char *c = strtok(readbuf, "/");
@@ -80,10 +87,12 @@ int main(int argc, char* argv[]) {
             char *country=new char[strlen(c)+1];
             strcpy(country,c);
             initialize_record(filepath, country, diseaseHT, countryHT, idHT, fd2, bufferSize);
+            delete [] country;
         }
+        delete [] readbuf;
     }
     write_line(fd2, writebuf, bufferSize, "OK");
-
+    delete [] writebuf;
 
     while(true){
         if(signals == SIGUSR1) {
@@ -96,7 +105,13 @@ int main(int argc, char* argv[]) {
                 initialize_record(filepath, countriesC, diseaseHT, countryHT, idHT, fd2, bufferSize);
                 countriesC = strtok(NULL, "?");
             }
+            delete [] c;
             signals = -1;
+        }
+        else if(signals == SIGINT) {
+            delete diseaseHT;
+            delete countryHT;
+            delete idHT;
         }
         int size = 0;
         read(fd, &size, sizeof(int));
@@ -106,6 +121,7 @@ int main(int argc, char* argv[]) {
             return errno;
         }
         string g(readbuf);
+        delete [] readbuf;
         int tmp = select_command(diseaseHT, countryHT, idHT, filepath, g, fd2, bufferSize);
         if(tmp > 0) success++;
         else fail++;

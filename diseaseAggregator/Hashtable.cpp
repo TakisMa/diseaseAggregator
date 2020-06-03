@@ -41,7 +41,8 @@ int Hashtable::diseaseFrequency(string virus, Date *entry, Date *exit) {
 }
 
 int Hashtable::diseaseFrequencyC(string virus, Date *entry, Date *exit, string country) {
-    return table[hashS(virus)]->countIncident(virus, entry, exit, country);
+    if(table[hashS(virus)]) return table[hashS(virus)]->countIncident(virus, entry, exit, country);
+    else return 0;
 }
 
 void Hashtable::insertHashTable(Record *rec) {

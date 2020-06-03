@@ -45,11 +45,15 @@ public:
     }
 
     int numPatientAdmissions(string virus, Date *date1, Date *date2, string countries) {
-        return table[hashS(virus)]->numPatientAdmissions(virus, date1, date2, countries);
+        int pos = hashS(virus);
+        if(table[pos]) return table[pos]->numPatientAdmissions(virus, date1, date2, countries);
+        return 0;
     }
 
     int numPatientDischarges(string virus, Date *date1, Date *date2, string countries) {
-        return table[hashS(virus)]->numPatientDischarges(virus, date1, date2, countries);
+        int pos = hashS(virus);
+        if(table[pos]) return table[hashS(virus)]->numPatientDischarges(virus, date1, date2, countries);
+        return 0;
     }
 
     int diseaseFrequency(string virus, Date *entry, Date *exit);

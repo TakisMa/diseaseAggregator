@@ -28,7 +28,7 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         cout << "exiting" << endl;
         return 1;
     }
-    else if(w == "/topk-AgeRanges") {
+    /*else if(w == "/topk-AgeRanges") {
         int *results;
         int *checked = new int[4];
         for(int i = 0; i < 4; i++) checked[i] = 0;
@@ -97,7 +97,7 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
             int error = -1;
             write(fd2, &error, sizeof(int));
         }
-    }
+    }*/
     else if(w == "/searchPatientRecord") {
         int error = -1;
         iss >> w;
@@ -127,6 +127,8 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
             char *message = new char[country.length()+digits+2];
             sprintf(message, "%s %d", country.c_str(), total);
             write_line(fd2, writebuf, bufferSize, message);
+            delete [] writebuf;
+            delete [] message;
         }
         return 1;
     }
@@ -153,6 +155,7 @@ int select_command(Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idH
         return 1;
     }
     else if(w == "/numPatientAdmissions") {
+        cout << "ENTER" << endl;
         string virusName, date1, date2, country;
         int c = w.length();
         w = iss.str();
@@ -295,6 +298,8 @@ int numPatientAdmissions(string virusName, string date1, string date2, string co
             char *message = new char[token.length()+digits+2];
             sprintf(message, "%s %d", token.c_str(), total);
             write_line(fd2, writebuf, bufferSize, message);
+            delete [] message;
+            delete [] writebuf;
         }
     }
     else {
@@ -303,6 +308,8 @@ int numPatientAdmissions(string virusName, string date1, string date2, string co
         char *message = new char[country.length()+digits+2];
         sprintf(message, "%s %d", country.c_str(), total);
         write_line(fd2, writebuf, bufferSize, message);
+        delete [] message;
+        delete [] writebuf;
     }
     delete entry2;
     delete entry1;
@@ -362,6 +369,8 @@ int numPatientDischarges(string virusName, string date1, string date2, string co
             char *message = new char[token.length()+digits+2];
             sprintf(message, "%s %d", token.c_str(), total);
             write_line(fd2, writebuf, bufferSize, message);
+            delete [] writebuf;
+            delete [] message;
         }
     }
     else {
@@ -370,6 +379,8 @@ int numPatientDischarges(string virusName, string date1, string date2, string co
         char *message = new char[country.length()+digits+2];
         sprintf(message, "%s %d", country.c_str(), total);
         write_line(fd2, writebuf, bufferSize, message);
+        delete [] writebuf;
+        delete [] message;
     }
     delete entry2;
     delete entry1;

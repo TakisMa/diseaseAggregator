@@ -28,13 +28,12 @@ int main(int argc, char *argv[]) {
     child_act.sa_flags = SA_SIGINFO | SA_RESTART;
     child_act.sa_sigaction = child_int;
     if(sigaction(SIGCHLD, &child_act, NULL) == - 1) cout << "Error with sigaction: " << errno << endl;
-
+    signal(SIGPIPE, SIG_IGN);
     signals = -1;
 
     int wstatus;
     string w;
     pid_t *childpid = new pid_t[numWorkers];
-    pid_t parentpid = getpid();
     int dir_count = 0;
     DIR * dirp;
     struct dirent * entry;
@@ -67,7 +66,11 @@ int main(int argc, char *argv[]) {
 
     /* Create/execute children process equal to numWorkers and store pids in childpid array */
     char program[]="./worker";
-    char *argumentsv[] = {program, NULL};
+    int digits = findDigits(bufferSize);
+    char *bufferArg = new char[digits+1];
+    sprintf(bufferArg, "%d", bufferSize);
+    bufferArg[digits] = '\0';
+    char *argumentsv[] = {program, bufferArg, NULL};
     for(int i = 0; i < numWorkers; i++) {
         childpid[i] = fork();
         if(childpid[i] < 0) {
@@ -96,6 +99,12 @@ int main(int argc, char *argv[]) {
             }
         }
     }
+    delete [] bufferArg;
+    for(int i = 0; i< numWorkers; i++) {
+        read_line(fd2[i], readbuf, bufferSize);
+        cout << "readbuf: " << readbuf << endl;
+        delete [] readbuf;
+    }
     if((dirp = opendir(cfilepath)) != NULL) {
         int pos = 0;
         while ((entry = readdir(dirp)) != NULL) {
@@ -107,15 +116,17 @@ int main(int argc, char *argv[]) {
                     sprintf(tosend, "%s/%s", cfilepath, entry->d_name);
                     write_line(fd[pos], writebuf, bufferSize, tosend);
                     delete[] tosend;
+                    delete [] writebuf;
 
                     /* read & print summary statics */
-                    cout << "fd/fd2/pos: " << fd[pos] << " " << fd2[pos] << " " << pos << endl;
+//                    cout << "fd/fd2/pid/pos: " << fd[pos] << " " << fd2[pos] << " " << childpid[pos] << " " << pos << endl;
                     read_line(fd2[pos], readbuf, bufferSize);
                     char *c = new char[strlen(readbuf) + 1];
                     strcpy(c, readbuf);
                     c[strlen(readbuf)] = '\0';
-                    print_summary(c);
+//                    print_summary(c);
 
+                    delete [] c;
                     delete[] readbuf;
                     if(pos == numWorkers - 1) pos = 0;
                     else pos++;
@@ -125,12 +136,21 @@ int main(int argc, char *argv[]) {
         lastElement = pos;
         closedir(dirp);
     }
-    for(int i = 0; i < numWorkers; i++) write_line(fd[i], writebuf, bufferSize, "OK");
+    for(int i = 0; i < numWorkers; i++) {
+        cout << "fifo name: " << myfifo[i] << endl;
+        write_line(fd[i], writebuf, bufferSize, "OK");
+        delete [] writebuf;
+    }
     int pos = 0;
+
     while(true) {
         read_line(fd2[pos], readbuf, bufferSize);
-        if ((strcmp(readbuf, "OK") == 0) && pos == numWorkers-1) break;
+        if ((strcmp(readbuf, "OK") == 0) && pos == numWorkers-1) {
+            delete [] readbuf;
+            break;
+        }
         else if ((strcmp(readbuf, "OK") == 0)) pos++;
+        delete [] readbuf;
     }
 
     while(true) {
@@ -154,10 +174,10 @@ int main(int argc, char *argv[]) {
                 cout << "ERROR finding killed process " << endl;
                 exit(5);
             }
-            char *killedFD = create_fifo("myfifo", childpid[child_pos]);
-            unlink(killedFD);
-            killedFD = create_fifo("auxfifo", childpid[child_pos]);
-            unlink(killedFD);
+//            char *killedFD = create_fifo("myfifo", childpid[child_pos]);
+            unlink(myfifo[child_pos]);
+//            killedFD = create_fifo("auxfifo", childpid[child_pos]);
+            unlink(auxfifo[child_pos]);
             
             childpid[child_pos] = fork();
             if(childpid[child_pos] < 0) {
@@ -192,6 +212,7 @@ int main(int argc, char *argv[]) {
                 write_line(fd[child_pos], writebuf, bufferSize, tosend);
                 workerM->insertSummary(country_token, fd[child_pos], fd2[child_pos], childpid[child_pos]);
                 delete[] tosend;
+                delete [] writebuf;
 
                 read_line(fd2[child_pos], readbuf, bufferSize);
                 char *c = new char[strlen(readbuf) + 1];
@@ -205,15 +226,18 @@ int main(int argc, char *argv[]) {
                 strcpy(tmp, &tmp2[length+1]);
                 tmp[strlen(&tmp2[length+1])] = '\0';
                 country_token = strtok(tmp, "?");
+                delete [] tmp;
                 if(!country_token) break;
                 length += strlen(country_token)+1;
             }
             write_line(fd[child_pos], writebuf, bufferSize, "OK");
+            delete [] writebuf;
             cout << endl;
             while(true) {
-                read_line(fd2[0], readbuf, bufferSize);
+                read_line(fd2[child_pos], readbuf, bufferSize);
                 if (strcmp(readbuf, "OK") == 0) break;
             }
+
             delete [] writebuf;
             delete [] readbuf;
             delete [] tmp2;
@@ -232,15 +256,24 @@ int main(int argc, char *argv[]) {
         if(!w.empty()){
             if(w == "/exit") {
                 for(int i = 0; i < numWorkers; i++){
-                    char *fifo = create_fifo("myfifo", childpid[i]);
+//                    char *fifo = create_fifo("myfifo", childpid[i]);
                     close(fd[i]);
-                    unlink(fifo);
-                    fifo = create_fifo("auxfifo", childpid[i]);
+                    unlink(myfifo[i]);
+
+//                    fifo = create_fifo("auxfifo", childpid[i]);
                     close(fd2[i]);
-                    unlink(fifo);
+                    unlink(auxfifo[i]);
+                    delete[] myfifo[i];
+                    delete[] auxfifo[i];
                     kill(childpid[i], SIGKILL);
                     cout << "killed child: " << childpid[i] << endl;
                 }
+                delete [] myfifo;
+                delete [] auxfifo;
+                delete [] fd;
+                delete [] fd2;
+                delete [] childpid;
+                delete workerM;
                 break;
             }
             else if(word == "/topk-AgeRanges") {
@@ -272,13 +305,18 @@ int main(int argc, char *argv[]) {
                 char *m = new char[w.length() +1];
                 strcpy(m, w.c_str());
                 m[w.length()] = '\0';
-                for(int i = 0; i < numWorkers; i++) write_line(fd[i], writebuf, bufferSize, m);
+                for(int i = 0; i < numWorkers; i++) {
+                    write_line(fd[i], writebuf, bufferSize, m);
+                    delete [] writebuf;
+                }
+                delete [] m;
                 for(int i = 0; i < numWorkers; i++) {
                     read(fd2[i], &identifier, sizeof(int));
                     if(identifier == -1) continue;
                     else {
                         read_line(fd2[i], readbuf, identifier, bufferSize);
                         cout << readbuf << endl;
+                        delete [] readbuf;
                     }
                 }
             }
@@ -293,27 +331,40 @@ int main(int argc, char *argv[]) {
                 iss >> date2;
                 iss >> country;
                 if(country.empty()) {
-//                    int noCountries;
                     /* write command to all processes */
-                    for(int i = 0; i < numWorkers; i++) write_line(fd[i], writebuf, bufferSize, m);
+                    for(int i = 0; i < numWorkers; i++) {
+                        write_line(fd[i], writebuf, bufferSize, m);
+                        delete [] writebuf;
+                    }
+                    delete [] m;
+
 
                     /* read & print results from all processes */
                     int *noCountries = new int[numWorkers];
-                    for(int i = 0; i < numWorkers; i++) read(fd2[i], &noCountries[i], sizeof(int));
+                    for(int i = 0; i < numWorkers; i++) {
+                        read(fd2[i], &noCountries[i], sizeof(int));
+                        cout<<"noCountries " << noCountries[i]<<endl;
+                    }
                     for(int j = 0; j < numWorkers; j++){
+                        cout << noCountries[j] << endl;
                         for(int i = 0; i < noCountries[j]; i++){
                             read_line(fd2[j], readbuf, bufferSize);
                             cout << readbuf << endl;
+                            delete [] readbuf;
                         }
                     }
+                    delete [] noCountries;
                 }
                 else {
                     /* write command to pipe */
                     write_line(workerM->writeFD(country), writebuf, bufferSize, m);
+                    delete [] writebuf;
+                    delete [] m;
 
                     /* read & print result */
                     read_line(workerM->readFD(country), readbuf, bufferSize);
                     cout << readbuf << endl;
+                    delete [] readbuf;
                 }
             }
             else if(word == "/diseaseFrequency"){
@@ -323,12 +374,15 @@ int main(int argc, char *argv[]) {
                 iss >> date1;
                 iss >> date2;
                 iss >> country;
-                cout << "country: " << country << endl;
                 char *m = new char[w.length() +1];
                 strcpy(m, w.c_str());
                 m[w.length()] = '\0';
                 if(country.empty()) {
-                    for(int i = 0; i < numWorkers; i++) write_line(fd[i], writebuf, bufferSize, m);
+                    for(int i = 0; i < numWorkers; i++) {
+                        write_line(fd[i], writebuf, bufferSize, m);
+                        delete [] writebuf;
+                    }
+                    delete [] m;
                     for(int i = 0; i < numWorkers; i++) {
                         read(fd2[i], &identifier, sizeof(int));
                         if(identifier < 0) continue;
@@ -340,6 +394,9 @@ int main(int argc, char *argv[]) {
                     write_line(workerM->writeFD(country), writebuf, bufferSize, m);
                     read_line(workerM->readFD(country), readbuf, bufferSize);
                     cout << readbuf << endl;
+                    delete [] m;
+                    delete [] writebuf;
+                    delete [] readbuf;
                 }
             }
             else continue;

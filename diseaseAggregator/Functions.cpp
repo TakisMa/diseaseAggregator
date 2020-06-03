@@ -111,7 +111,7 @@ void quickS(struct Date **array, int low, int high) {
 
 /* Read from fd and copy to readbuf. First message is no bytes to read(stored in size) */
 int read_line(int fd, char *&readbuf, int bufferSize) {
-    int size;
+    int size = 0;
     read(fd, &size, sizeof(int));
     readbuf = new char[size+1];
     int toread = 0;
@@ -150,6 +150,7 @@ void write_line(int fd, char *&writebuf, int bufferSize, char *message) {
 int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hashtable *countryHT, ID_Hashtable *idHT, int fd2, int bufferSize) {
     char *filename;
     char *line = NULL;
+    char *writebuf;
     std::size_t lenght = 0;
     FILE *fp;
     struct Date **file_array;
@@ -160,6 +161,7 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
     string summary;
 
     file_count = sort_files(filepath, file_array);
+
     if(file_count < 0) return -1;
     for (int z = 0; z < file_count; z++) {
         filename = new char[strlen(filepath)+file_array[z]->date.length()+2];
@@ -196,23 +198,22 @@ int initialize_record(char *filepath, char *countryS, Hashtable *diseaseHT, Hash
             else{
                 idHT->insertID(record);
                 diseaseHT->insertHashTable(record);
+                fflush(stdout);
                 countryHT->insertHashTable(record);
                 list_head = list_head->insertList(record->getCountry(), record->getDiseaseId(), record);
+
             }
         }
         summary += list_head->getAges(countryS);
-        cout << "summary: " << summary << endl;
         fclose(fp);
     }
+//    cout << "summary: " << summary << endl;
+    fflush(stdout);
     char *s = new char[summary.length() + 1];
     strcpy(s, summary.c_str());
-    int size = strlen(s);
-    write(fd2, &size, sizeof(int));
-    int tosend = 0;
-    while(tosend < size) {
-        if(size-tosend <= bufferSize) tosend += write(fd2, s+tosend, size-tosend);
-        else tosend += write(fd2, s+tosend, bufferSize);
-    }
+    write_line(fd2, writebuf, bufferSize, s);
+    delete [] writebuf;
+    delete [] s;
     return 1;
 }
 int sort_files(char *filepath, Date **&file_array) {
@@ -267,13 +268,13 @@ int sort_files(char *filepath, Date **&file_array) {
 char *create_fifo(char *fifo_name, pid_t childpid) {
     char *name = new char[strlen(fifo_name) + 1];
     strcpy(name, fifo_name);
-    name[strlen(fifo_name) + 1] = '\0';
+    name[strlen(fifo_name)] = '\0';
     int digits = 0, total = childpid;
     while(total != 0) {
         total /= 10;
         digits++;
     }
-    char *myfifo = new char[digits + 1 + strlen(name)];
+    char *myfifo = new char[digits + 2 + strlen(name)];
     sprintf(myfifo, "%s_%d", name, childpid);
     delete[] name;
     return myfifo;
